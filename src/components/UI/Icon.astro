@@ -1,0 +1,47 @@
+---
+const { name = 'check', class: className = '' } = Astro.props;
+
+const icons = { 
+  check: `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5">
+      <path d="M20 6L9 17l-5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  `,
+  close: `
+    <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M1.82322 1.82322C1.92085 1.72559 2.07915 1.72559 2.17678 1.82322L8 7.64645L13.8232 1.82322C13.9209 1.72559 14.0791 1.72559 14.1768 1.82322C14.2744 1.92085 14.2744 2.07915 14.1768 2.17678L8.35355 8L14.1768 13.8232C14.2744 13.9209 14.2744 14.0791 14.1768 14.1768C14.0791 14.2744 13.9209 14.2744 13.8232 14.1768L8 8.35355L2.17678 14.1768C2.07915 14.2744 1.92085 14.2744 1.82322 14.1768C1.72559 14.0791 1.72559 13.9209 1.82322 13.8232L7.64645 8L1.82322 2.17678C1.72559 2.07915 1.72559 1.92085 1.82322 1.82322Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `,
+  plus: `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `,
+  automation: `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10.5 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V10.5M14.3 19.6L15.3 19.2M15 3V10.5M15.2 16.9L14.3 16.6M16.6 21.7L16.9 20.8M16.8 15.3L16.4 14.3M19.1 15.2L19.4 14.3M19.6 21.7L19.2 20.7M20.7 16.8L21.7 16.4M21.7 19.4L20.8 19.1M9 3V21M21 18C21 19.6569 19.6569 21 18 21C16.3431 21 15 19.6569 15 18C15 16.3431 16.3431 15 18 15C19.6569 15 21 16.3431 21 18Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  `,
+  analytics: `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 19C9 20.6569 7.65685 22 6 22C4.34315 22 3 20.6569 3 19C3 17.3431 4.34315 16 6 16C7.65685 16 9 17.3431 9 19ZM9 19H17.5C18.4283 19 19.3185 18.6313 19.9749 17.9749C20.6313 17.3185 21 16.4283 21 15.5C21 14.5717 20.6313 13.6815 19.9749 13.0251C19.3185 12.3687 18.4283 12 17.5 12H6.5C5.57174 12 4.6815 11.6313 4.02513 10.9749C3.36875 10.3185 3 9.42826 3 8.5C3 7.57174 3.36875 6.6815 4.02513 6.02513C4.6815 5.36875 5.57174 5 6.5 5H15M15 5C15 6.65685 16.3431 8 18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  `,
+  'ai-assistant': `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 5H3M12 19H3M14 3V7M16 17V21M21 12H12M21 19H16M21 5H14M8 10V14M8 12H3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+  `,
+  'digital-literacy': `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 6L20 20M12 6V20M8 8V20M4 4V20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `
+}
+---
+
+<Fragment set:html={icons[name] || icons.check} />

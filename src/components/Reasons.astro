@@ -1,0 +1,418 @@
+---
+const {
+  variant = "reasons", // "reasons" or "manufacturers"
+  title = "Почему клиенты возвращаются к нам?",
+  subtitle = "Дизайнерские радиаторы, которым доверяют профессионалы",
+} = Astro.props;
+
+const manufacturers = [
+  { id: "sollira", name: "Sollira" },
+  { id: "kzto", name: "KZTO" },
+  { id: "vasco", name: "Vasco" },
+  { id: "carisa", name: "Carisa" },
+  { id: "rifar", name: "Rifar" },
+];
+
+const slides = [
+  { image: "/images/carousel/Rectangle 153.png", alt: "Интерьер 1" },
+  { image: "/images/carousel/Rectangle 154.png", alt: "Интерьер 2" },
+  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
+  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
+  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
+  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
+  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
+];
+---
+
+<section
+  class={`reasons ${variant === "manufacturers" ? "reasons--manufacturers" : ""}`}
+  id="reasons"
+>
+  <div class="reasons__container">
+    {
+      variant === "reasons" ? (
+        <div class="reasons__header">
+          <div class="reasons__title-box">
+            <h2 class="reasons__title">{title}</h2>
+          </div>
+          <div class="reasons__list-box">
+            <ul class="reasons__list">
+              <li class="reasons__item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="var(--color-primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>Консультация специалистов</span>
+              </li>
+              <li class="reasons__item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="var(--color-primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>Различный ценовой диапазон товаров</span>
+              </li>
+              <li class="reasons__item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="var(--color-primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>Двухэтажный шоурум в центре города</span>
+              </li>
+              <li class="reasons__item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="var(--color-primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span>
+                  Свои сантехнические бригады, стаж более 10 лет монтажа
+                  отопительных систем любой сложности
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div class="manufacturers-header">
+          <h2 class="reasons__title">{title}</h2>
+          <p class="reasons__subtitle">{subtitle}</p>
+
+          <div class="reasons__tabs">
+            {manufacturers.map((brand, index) => (
+              <button
+                class={`brand-tab ${index === 0 ? "active" : ""}`}
+                data-brand={brand.id}
+              >
+                {brand.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <!-- Слайдер (общий для обоих вариантов, но разные стили) -->
+    <div class="reasons__carousel swiper-reasons">
+      <div class="swiper-wrapper">
+        {
+          slides.map((slide) => (
+            <div class="swiper-slide">
+              <div
+                class={variant === "manufacturers" ? "slide-card-manuf" : ""}
+              >
+                <img src={slide.image} alt={slide.alt} class="reasons__img" />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="reasons__controls">
+        <button class="reasons__nav-btn reasons__nav-btn--prev">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div class="reasons__pagination"></div>
+        <button class="reasons__nav-btn reasons__nav-btn--next">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+          >
+            <path d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    {
+      variant === "manufacturers" && (
+        <div class="reasons__footer">
+          <button class="reasons__cta" data-modal="formModal">
+            Заказать подбор радиаторов под проект
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style lang="scss">
+  .reasons {
+    padding: 80px 0;
+    background-color: var(--color-white);
+    overflow: hidden;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    // --- Variant: Reasons (Original) ---
+    &__header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      margin-bottom: var(--space-16);
+
+      @media (min-width: 1024px) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+    }
+
+    &__title {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 700;
+      color: var(--color-dark);
+      line-height: 1.1;
+      max-width: 900px;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+
+    &__item {
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-start;
+      svg {
+        flex-shrink: 0;
+        margin-top: 4px;
+      }
+      span {
+        font-size: var(--text-lg);
+        line-height: 1.4;
+        color: var(--color-dark);
+      }
+    }
+
+    // --- Variant: Manufacturers (New) ---
+    &--manufacturers {
+      .manufacturers-header {
+        text-align: center;
+        margin-bottom: 48px;
+        .reasons__title {
+          margin: 0 auto 24px;
+        }
+      }
+
+      .reasons__subtitle {
+        font-size: 20px;
+        color: #111111;
+        opacity: 0.8;
+        margin-bottom: 40px;
+      }
+
+      .reasons__tabs {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .brand-tab {
+        padding: 12px 32px;
+        border-radius: 100px;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        background: transparent;
+        font-size: 16px;
+        color: #111111;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        &.active {
+          background: #111111;
+          color: #fff;
+          border-color: #111111;
+        }
+      }
+
+      .slide-card-manuf {
+        aspect-ratio: 1/1;
+        border-radius: 24px;
+        overflow: hidden;
+        .reasons__img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .reasons__pagination {
+        max-width: 400px;
+        height: 2px !important;
+        background: rgba(17, 17, 17, 0.08);
+        :global(.swiper-pagination-progressbar-fill) {
+          background: #de6d20 !important;
+        }
+      }
+
+      .reasons__cta {
+        background: #111111;
+        color: #ffffff;
+        padding: 24px 48px;
+        border-radius: 100px;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        margin-top: 60px;
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+    }
+
+    &__carousel {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      @media (min-width: 768px) {
+        overflow: visible;
+      }
+    }
+
+    &__img {
+      width: 384px;
+      height: 384px;
+      object-fit: cover;
+      border-radius: var(--radius-2xl);
+    }
+
+    &__controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-8);
+      margin-top: var(--space-10);
+    }
+
+    &__nav-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-full);
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      color: #9ca3af;
+      &:hover {
+        border-color: #111111;
+        color: #111111;
+      }
+    }
+
+    &__pagination {
+      width: 100% !important;
+      max-width: 400px;
+      height: 2px !important;
+      background: #e5e7eb;
+      position: relative !important;
+      :global(.swiper-pagination-progressbar-fill) {
+        background: var(--color-primary) !important;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .swiper-slide {
+    width: auto !important;
+    @media (max-width: 767px) {
+      width: 100% !important;
+    }
+  }
+</style>
+
+<script>
+  import Swiper from "swiper";
+  import { Navigation, Pagination, Autoplay } from "swiper/modules";
+  import "swiper/css";
+  import "swiper/css/navigation";
+  import "swiper/css/pagination";
+
+  function initReasonsSlider() {
+    new Swiper(".swiper-reasons", {
+      modules: [Navigation, Pagination, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: false,
+      navigation: {
+        nextEl: ".reasons__nav-btn--next",
+        prevEl: ".reasons__nav-btn--prev",
+      },
+      pagination: {
+        el: ".reasons__pagination",
+        type: "progressbar",
+      },
+      breakpoints: {
+        768: { slidesPerView: "auto" },
+        1024: { slidesPerView: "auto" },
+      },
+    });
+
+    // Modal trigger for CTA
+    const cta = document.querySelector(".reasons__cta");
+    if (cta) {
+      cta.addEventListener("click", () => {
+        const modalId = cta.getAttribute("data-modal");
+        const modal = document.getElementById(modalId);
+        if (modal) modal.classList.add("active");
+      });
+    }
+
+    // Tabs active state
+    const tabs = document.querySelectorAll(".brand-tab");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+      });
+    });
+  }
+
+  initReasonsSlider();
+  document.addEventListener("astro:after-swap", initReasonsSlider);
+</script>

@@ -1,0 +1,146 @@
+---
+import ContentTypography from './ContentTypography.astro';
+
+const caseData = {
+  title: "Внедрение системы ИИ-агентов на производственном предприятии",
+  tags: ["Автоматизация", "Производство", "ИИ-агенты"],
+  results: [
+    { value: "45%", postfix: "", text: "Снижение издержек при реализации новых процессов" },
+    { value: "+18%", postfix: "", text: "Всего общий эффективный объем производства (изв.)" },
+    { value: "-25", postfix: "ч/нед", text: "Всего общий эффективный объем производства (изв.)" },
+    { value: "-15%", postfix: "", text: "Снижение затрат на производство" },
+    { value: "3", postfix: "случая", text: "Предварительные затраты на производство и первый месяц" },
+    { value: "-32%", postfix: "", text: "Сокращение времени запуска новых заводов в производство" }
+  ],
+  // HTML-контент из CMS (WordPress)
+  contentHtml: `
+    <h2>Предыстория</h2>
+    <p>Клиент — среднее производственное предприятие в области металлообработки. Сотрудники промышленных лизировщиков, частными металлургическими предприятиями оборудования массивного деревообрабатывающего цеха. В отличие от других компаний, Русией сборка данных и ремонтов утраченные металлы вели к потерям времени, перерасходу ресурсов и срыву сроков заказов.</p>
+    
+    <h2>Задача</h2>
+    <p>Автоматизировать процессы мониторинга, планирования и защиты для передачи от реактивного к прецизионному и проактивному управлению производством.</p>
+    
+    <h2>Решение</h2>
+    <p><strong>Елена внедрена хосписная автоматизирующая ИИ-агентов:</strong></p>
+    <ol>
+      <li><strong>Агент мониторинга оборудования.</strong> В режиме 24/7 анализировал данные с датчиков станков (инфраструктура, температура, нагрузка). Выявил аномалии и прогнозировал вероятность выхода узла из строя.</li>
+      <li><strong>Агент планирования и диспетчеризации.</strong> На основе данных от агента мониторинга, текущих запасов и наличия сырья автоматически корректировал производительный график, перепланировал задачи между станками, формировал и отправлял записи на технологические.</li>
+      <li><strong>Агент логистики сырья.</strong> Контролировал остаток заготовок и полуфабрикатов. Автоматически формировал задания для внутрицехового транспорта, оптимизировал маршруты, чтобы обеспечить стабильный контроль качества и минимум износа изделий.</li>
+    </ol>
+    
+    <h2>Как это работает</h2>
+    <p>Агенты действовали автономно, но синхронизировались. Например, при обнаружении 'автономной мониторинге' признаков скорой поломки фрезерного станка, 'агент планирования' мгновенно перезагружался его задачи на другие доступные станки, а 'агент логистики' обеспечивал доставку материала к новым точкам обработки. Руководитель цеха получал уведомление о ситуации и готовом плане действий, а не сырье данные.</p>
+    
+    <h2>Результаты</h2>
+    <ul>
+      <li>Снижение издержек при реализации новых процессов</li>
+      <li>Снижение затрат на производство</li>
+      <li>Соблюдение 25 часов в неделю у мастеров и менеджеров</li>
+      <li>Сохранение логистических издержек на 15%</li>
+      <li>Предотвращение аварии кабелей сервисных финансовых потерь и простоев</li>
+    </ul>
+  `
+};
+---
+
+<style lang="scss" is:global>
+.case-page {
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  color: var(--color-white);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 150px;
+  max-width: 860px;
+
+  &-title {
+    font-size: var(--text-4xl);
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    @media (min-width: 760px) {
+        font-size: var(--text-5xl);
+    }
+  }
+
+  &-tags-container {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  &-tag {
+    background-color: rgba(255, 255, 255, 0.05);
+    font-size: 0.875rem;
+    border-radius: var(--radius-xl);
+    padding: 0.5rem 1rem;
+    color: var(--color-white);
+  }
+
+  &-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  &-result-item {
+    border-radius: var(--radius-lg);
+    
+    .case-page-result-value-container {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .case-page-result-value {
+      font-size: 2.5rem;
+      font-weight: var(--font-bold);
+    }
+    
+    .case-page-result-postfix {
+      font-size: 1.5rem;
+      font-weight: var(--font-bold);
+    }
+    
+    .case-page-result-description {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+  }
+}
+</style>
+
+<div class="case-page">
+  <h1 class="case-page-title">{caseData.title}</h1>
+  
+  <div class="case-page-tags-container">
+    {caseData.tags.map((tag) => (
+      <span class="case-page-tag">{tag}</span>
+    ))}
+  </div>
+
+  <!-- Ключевые результаты (структурированные данные) -->
+  <div class="case-page-section">
+    <h2 class="case-page-section-title" style="font-size: 1.5rem; font-weight: var(--font-medium); margin-bottom: 1rem;">Ключевые результаты</h2>
+    <div class="case-page-results-grid">
+      {caseData.results.map((result) => (
+        <div class="case-page-result-item">
+          <div class="case-page-result-value-container">
+            <span class="case-page-result-value">{result.value}</span>
+            {result.postfix && <span class="case-page-result-postfix">{result.postfix}</span>}
+          </div>
+          <div class="case-page-result-description">
+            {result.text}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Контент из CMS с типографикой -->
+  <ContentTypography set:html={caseData.contentHtml} />
+</div>

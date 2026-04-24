@@ -1,0 +1,429 @@
+---
+// components/StagesOfWork.astro
+
+const stages = [
+  {
+    number: 1,
+    title: "Подготовка коммерческого предложения",
+    text: "На этом этапе проводится детальный сбор требований заказчика, формируется техническое задание (ТЗ), декомпозируются задачи и оцениваются трудозатраты."
+  },
+  {
+    number: 2,
+    title: "Исследование и разработка",
+    text: "На этом этапе проводится детальный сбор требований заказчика, формируется техническое задание (ТЗ), декомпозируются задачи и оцениваются трудозатраты."
+  },
+  {
+    number: 3,
+    title: "Тестирование",
+    text: "На этапе тестирования проводится испытания на основе заранее зафиксированных тестовых данных и критериев приемки."
+  },
+  {
+    number: 4,
+    title: "Внедрение",
+    text: "Перед внедрением команда инспектирует инфраструктуру заказчика. Решение внедряется в контейнеризированной среде для оперативной интеграции."
+  }
+];
+---
+
+<style lang="scss" is:global>
+.stages-section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem 1rem 2.5rem;
+  padding-top: 5rem;
+  max-width: var(--container-max);
+  
+  @media (min-width: 768px) {
+    padding: 1rem 1rem 2.5rem;
+    padding-top: var(--space-20);
+  }
+}
+
+.stages-header {
+  margin-bottom: 3rem;
+  
+  @media (min-width: 768px) {
+    margin-bottom: 4rem;
+  }
+}
+
+.stages-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  
+  @media (min-width: 768px) {
+    font-size: var(--text-3xl);
+  }
+}
+
+.stages-container {
+  position: relative;
+}
+
+/* Центральная анимированная линия - только для десктопа */
+.timeline-line-container {
+  display: none;
+  
+  @media (min-width: 768px) {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    width: 2px;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+}
+
+.timeline-line-bg {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  width: 100%;
+}
+
+.timeline-line-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-accent-light, var(--color-accent)) 100%);
+  height: 0%;
+  will-change: height;
+  box-shadow: 0 0 10px var(--color-accent), 0 0 30px rgba(var(--color-accent-rgb), 0.5);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-accent), 0 0 20px var(--color-accent);
+  }
+  
+  &.is-complete::after {
+    animation: pulse-end 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse-end {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-50%) scale(1.5);
+    opacity: 0.7;
+  }
+}
+
+.stage-item {
+  position: relative;
+  padding-bottom: 3rem;
+  
+  &:last-child {
+    padding-bottom: 0;
+  }
+  
+  @media (min-width: 768px) {
+    padding-bottom: 5rem;
+    
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.desktop-stage {
+  display: none;
+  
+  @media (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.text-content {
+  width: 50%;
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  
+  .stage-item:nth-child(even) & {
+    transform: translateX(30px);
+    
+    &.is-visible {
+      transform: translateX(0);
+    }
+  }
+  
+  .text-content-inner {
+    max-width: 36rem;
+    padding: 1.5rem;
+  }
+}
+
+.stages-number {
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  
+  .number-circle {
+    width: 3rem;
+    height: 3rem;
+    position: relative;
+    z-index: 10;
+  }
+}
+
+.number-circle-inner {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background-color: var(--color-dark);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    transition: all 0.4s ease;
+  }
+  
+  &.is-active {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    box-shadow: 0 0 20px var(--color-accent), 0 0 40px rgba(var(--color-accent-rgb), 0.4);
+    transform: scale(1.15);
+    
+    &::before {
+      border-color: rgba(var(--color-accent-rgb), 0.5);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+  }
+  
+  &.is-past {
+    border-color: var(--color-accent);
+    background-color: rgba(var(--color-dark-rgb), 1);
+    
+    .number-text {
+      color: var(--color-accent);
+    }
+  }
+  
+  .number-text {
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+    font-size: 1.125rem;
+    transition: color 0.3s ease;
+  }
+  
+  &.is-active .number-text {
+    color: var(--color-dark);
+    font-weight: 800;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.spacer {
+  width: 50%;
+}
+
+.mobile-stage {
+  display: flex;
+  
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.mobile-number-container {
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  width: 3rem;
+  height: 3rem;
+}
+
+.mobile-content {
+  flex: 1;
+}
+
+.mobile-title {
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  margin-bottom: 1rem;
+}
+
+.mobile-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: var(--leading-relaxed);
+}
+
+.desktop-title {
+  font-size: 1.25rem;
+  font-weight: var(--font-semibold);
+  margin-bottom: 1rem;
+  
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+}
+
+.desktop-text {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  line-height: var(--leading-relaxed);
+}
+
+/* Порядок элементов для десктопной версии */
+.stage-item:nth-child(odd) .desktop-stage .text-content {
+  display: flex;
+  order: 3;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.stage-item:nth-child(odd) .desktop-stage .stages-number {
+  order: 2;
+}
+
+.stage-item:nth-child(odd) .desktop-stage .spacer {
+  order: 1;
+}
+
+.stage-item:nth-child(even) .desktop-stage .spacer {
+  order: 3;
+}
+
+.stage-item:nth-child(even) .desktop-stage .stages-number {
+  order: 2;
+}
+
+.stage-item:nth-child(even) .desktop-stage .text-content {
+  display: flex;
+  justify-content: flex-end;
+  order: 1;
+  text-align: right;
+}
+
+/* Мобильная линия */
+.mobile-line {
+  position: absolute;
+  left: 1.5rem;
+  top: 3rem;
+  width: 2px;
+  height: calc(100% - 3rem);
+  background-color: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  
+  @media (min-width: 768px) {
+    display: none;
+  }
+  
+  .mobile-line-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-accent);
+    height: 0%;
+    will-change: height;
+    box-shadow: 0 0 8px var(--color-accent);
+  }
+}
+
+.stage-item:last-child .mobile-line {
+  display: none;
+}
+</style>
+
+<section class="stages-section" id="stages-section">
+  <div class="stages-header">
+    <h2 class="stages-title">Этапы работы с нами</h2>
+  </div>
+  
+  <div class="stages-container">
+    <!-- Центральная анимированная линия -->
+    <div class="timeline-line-container">
+      <div class="timeline-line-bg"></div>
+      <div class="timeline-line-progress" id="timeline-progress"></div>
+    </div>
+    
+    {stages.map((stage, index) => (
+      <div class="stage-item" data-index={index}>
+        <!-- Мобильная линия -->
+        <div class="mobile-line">
+          <div class="mobile-line-progress" data-line-index={index}></div>
+        </div>
+        
+        <div class="desktop-stage">
+          <div class="text-content" data-content={index}>
+            <div class="text-content-inner">
+              <h3 class="desktop-title">{stage.title}</h3>
+              <p class="desktop-text">{stage.text}</p>
+            </div>
+          </div>
+          
+          <div class="stages-number">
+            <div class="number-circle">
+              <div class="number-circle-inner" data-circle={index}>
+                <span class="number-text">{stage.number}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="spacer"></div>
+        </div>
+        
+        <div class="mobile-stage">
+          <div class="mobile-number-container">
+            <div class="number-circle-inner" data-circle-mobile={index}>
+              <span class="number-text">{stage.number}</span>
+            </div>
+          </div>
+          
+          <div class="mobile-content">
+            <h3 class="mobile-title">{stage.title}</h3>
+            <p class="mobile-text">{stage.text}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

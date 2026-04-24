@@ -1,0 +1,203 @@
+---
+import Icon from './UI/Icon.astro';
+const {
+  title = '',
+} = Astro.props;
+---
+<style lang="scss" is:global>
+/* Swiper контейнер */
+.swiper-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  width: 100%;
+  height: auto;
+  padding: 0 1rem;
+  flex-shrink: 0;
+}
+
+/* Swiper навигация */
+.swiper-control {
+  position: relative;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 768px) {
+    margin-top: 4rem;
+  }
+}
+
+.swiper-nav-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 50%;
+  width: 3.5rem;
+  height: 3.5rem;
+  min-width: 3rem;
+  
+  min-height: 3rem;
+  transition: all var(--transition-base);
+  position: relative;
+  top: auto;
+  transform: none;
+  z-index: 10;
+  cursor: pointer;
+  margin: 0;
+  
+  &:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  &::after {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  &.swiper-button-disabled {
+    opacity: 0.35;
+    cursor: auto;
+    pointer-events: none;
+  }
+}
+
+.swiper-button-prev {
+  order: 1;
+  &::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23111111'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 19l-7-7 7-7' /%3E%3C/svg%3E");
+  }
+}
+
+.swiper-button-next {
+ order: 3;
+  &::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23111111'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 5l7 7-7 7' /%3E%3C/svg%3E");
+  }
+}
+
+/* Пагинация */
+.swiper-pagination {
+  position: relative !important;
+  bottom: auto !important;
+  display: flex;
+  justify-content: center;
+  order: 2;
+  width: 100%;
+  max-width: 20rem;
+}
+
+.swiper-pagination-bullet {
+  max-width: 5rem;
+  width: 100%;
+  height: 2px;
+  background: #E5E7EB;
+  border-radius: 0;
+  transition: all var(--transition-base);
+  opacity: 1;
+  display: block;
+  margin: 0 !important;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--color-accent);
+  // transform: scale(1.2);
+}
+
+/* Прогресс бар */
+.progress-bar {
+  width: 0;
+  height: 0.125rem;
+  background: var(--color-primary);
+  transition: width 5000ms linear;
+  
+  .swiper-slide-active & {
+    width: 100%;
+  }
+}
+
+.carousel-section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem 0 2.5rem;
+  max-width: var(--container-max);
+  @media (min-width: 768px) {
+    padding: 2.5rem 0 5rem;
+  }
+}
+
+.carousel-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .carousel-header-content {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+}
+
+.carousel-title {
+  font-size: var(--text-4xl);
+  margin-bottom: 1.5rem;
+  line-height: var(--leading-tight);
+  margin-top: 5rem;
+  font-weight: bold;
+  
+  @media (min-width: 768px) {
+    font-size: var(--text-5xl);
+  }
+}
+</style>
+
+<section class="carousel-section">
+  <div class="carousel-header">
+    <div class="carousel-header-content">
+      <h2 class="carousel-title">
+        { title }
+      </h2>
+    </div>
+    <!-- Карусель Swiper -->
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <slot />
+      </div>
+      <!-- Навигационные кнопки -->
+      <div class="swiper-control">
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Пагинация -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </div>
+</section>

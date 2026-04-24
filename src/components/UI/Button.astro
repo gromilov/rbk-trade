@@ -1,0 +1,91 @@
+---
+const { variant = 'primary', children, openForm, className, hasBlur, href = undefined } = Astro.props;
+---
+{  !href ?  
+    <button class={`btn ${variant} ${hasBlur ? 'blur-btn' : ''} ${className}`}>
+      <slot>{children}</slot>
+    </button> 
+  :
+  <a href={href} class={`btn ${variant} ${hasBlur ? 'blur-btn' : ''} ${className}`}>
+    <slot>{children}</slot>
+  </a> 
+
+
+}
+
+<style lang="scss" is:global>
+.btn {
+  display: inline-block;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  font-size: var(--text-sm);
+  transition: all var(--transition-base);
+  width: 100%;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  
+  @media (min-width: 768px) {
+    width: auto;
+  }
+  
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  
+  &.secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &.dark {
+    background-color: var(--color-dark);
+    color: var(--color-white);
+    
+    &:hover {
+      background-color: var(--color-primary);
+    }
+  }
+  
+  &.blur-btn {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(32px);
+    border: none;
+    height: 40px;
+    width: 195px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(16px);
+      z-index: -1;
+    }
+    
+    > * {
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      color: var(--color-white);
+      letter-spacing: 0em;
+      padding-left: var(--space-4);
+    }
+  }
+}
+</style>

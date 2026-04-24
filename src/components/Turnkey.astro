@@ -1,0 +1,120 @@
+---
+---
+
+<section class="turnkey">
+  <div class="turnkey__container">
+    <div class="turnkey__header">
+      <h2 class="turnkey__title">Мы работаем «под ключ»</h2>
+      <p class="turnkey__subtitle">
+        У нас вы можете не только купить радиатор, но и сразу заказать все комплектующие (запорное оборудование, сифоны, вентиляционные решетки) и полотенцесушители для ванной.
+      </p>
+    </div>
+
+    <div class="turnkey__grid">
+      <!-- Этап 1 -->
+      <div class="turnkey__item">
+        <div class="turnkey__icon-wrapper">
+          <img src="/images/icons/Group 1171277575.svg" alt="Замер" class="turnkey__icon" />
+        </div>
+        <p class="turnkey__text">Выезд специалиста на замеры и консультацию (бесплатно по Казани).</p>
+      </div>
+
+      <!-- Этап 2 -->
+      <div class="turnkey__item">
+        <div class="turnkey__icon-wrapper">
+          <img src="/images/icons/Group 1171277575-1.svg" alt="Доставка" class="turnkey__icon" />
+        </div>
+        <p class="turnkey__text">Доставка в удобное для вас время.</p>
+      </div>
+
+      <!-- Этап 3 -->
+      <div class="turnkey__item">
+        <div class="turnkey__icon-wrapper">
+          <img src="/images/icons/Group 1171277575-2.svg" alt="Монтаж" class="turnkey__icon" />
+        </div>
+        <p class="turnkey__text">Профессиональная установка напольных, настенных или внутрипольных моделей.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+.turnkey {
+  padding: var(--space-20) 0;
+  background-color: var(--color-white);
+
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  &__header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--space-12);
+  }
+
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-6);
+
+    @media (min-width: 768px) {
+      font-size: var(--text-5xl);
+    }
+  }
+
+  &__subtitle {
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-dark);
+    opacity: 0.8;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-8);
+    // background-color: var(--color-light); // Опционально для легкого выделения
+    // border-radius: var(--radius-xl);
+  }
+
+  &__icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background-color: var(--color-light);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-6);
+    color: var(--color-primary);
+
+    svg {
+       width: 32px;
+       height: 32px;
+    }
+  }
+
+  &__text {
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-dark);
+    font-weight: var(--font-medium);
+  }
+}
+</style>

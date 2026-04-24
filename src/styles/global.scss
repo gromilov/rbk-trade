@@ -1,0 +1,441 @@
+// 1. Импорт зависимостей
+@import 'variables';
+/* ============================================
+   ГЛОБАЛЬНЫЕ СТИЛИ SCSS ДЛЯ ПРОЕКТА
+   
+   Структура:
+   1.  Конфигурация и переменные
+   2.  Генерация цветовой палитры
+   3.  CSS переменные (Design Tokens)
+   4.  Шрифты (Font Faces)
+   5.  Базовый сброс стилей (Reset)
+   6.  Утилитарные классы (Utilities)
+   7.  Компоненты
+   8.  Анимации
+   9.  Миксины (Helpers)
+   
+   Использование в промптах: копируйте нужные секции
+   ============================================ */
+
+/* ========================
+   1. КОНФИГУРАЦИЯ
+   ======================== */
+
+// Импорт зависимостей (если разделено)
+
+@import 'color-generator';
+$primary: #102A42;
+$bg: #1A1A1A;
+
+// Конфигурация цветов (основная палитра)
+$colors: (
+  // Основные цвета
+  'primary':    #E07024,    // Оранжевый
+  'secondary':  #111111,    // Темный
+  'accent':     #E07024,    // Акцентный
+  
+  // Нейтральные цвета
+  'dark':       #111111,    // Темный текст
+  'light':      #F9FAFB,    // Светлый фон
+  'white':      #FFFFFF,    // Белый
+  'black':      #000000,    // Черный
+  
+  // Системные цвета
+  'success':    #10B981,
+  'error':      #EF4444,
+  'warning':    #F59E0B,
+  'info':       #3B82F6,
+);
+
+/* ========================
+   2. ГЕНЕРАЦИЯ ЦВЕТОВ
+   ======================== */
+
+// Функция для преобразования HEX в RGB
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+// Миксин для генерации цветовых вариантов с прозрачностью
+@mixin generate-color-variants($name, $color, $opacities: (5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95)) {
+  // Базовая переменная
+  --color-#{$name}: #{$color};
+  --color-#{$name}-rgb: #{hex-to-rgb($color)};
+  
+  // Варианты с прозрачностью
+  @each $opacity in $opacities {
+    --color-#{$name}-#{$opacity}: rgba(#{hex-to-rgb($color)}, #{$opacity * 0.01});
+  }
+}
+
+// Генерация всей палитры
+@include generate-color-palette($colors);
+
+/* ========================
+   3. CSS ПЕРЕМЕННЫЕ (Design Tokens)
+   ======================== */
+
+:root {
+  /* ---------- Типография ---------- */
+  // Шрифты
+  --font-primary: 'Articulat CF', sans-serif;
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  
+  // Размеры шрифтов (шкала от 12px до 72px)
+  --text-xs:     0.75rem;    // 12px
+  --text-sm:     0.875rem;   // 14px
+  --text-base:   1rem;       // 16px (базовый)
+  --text-lg:     1.125rem;   // 18px
+  --text-xl:     1.25rem;    // 20px
+  --text-2xl:    1.5rem;     // 24px
+  --text-3xl:    1.75rem;   // 30px
+  --text-4xl:    2.25rem;    // 36px
+  --text-5xl:    3rem;       // 48px
+  --text-6xl:    3.75rem;    // 60px
+  --text-7xl:    4.5rem;     // 72px
+  
+  // Межстрочные интервалы (Line Heights)
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose:   2;
+  
+  // Насыщенность шрифтов (Font Weights)
+  --font-light:   300;
+  --font-normal:  400;
+  --font-medium:  500;
+  --font-semibold:600;
+  --font-bold:    700;
+  --font-extrabold:800;
+  
+  /* ---------- Отступы (Spacing) ---------- */
+  // Базовый шаг: 4px (0.25rem)
+  --space-unit:   0.25rem;
+  --space-0:      0;
+  --space-1:      calc(var(--space-unit) * 1);   // 4px
+  --space-2:      calc(var(--space-unit) * 2);   // 8px
+  --space-3:      calc(var(--space-unit) * 3);   // 12px
+  --space-4:      calc(var(--space-unit) * 4);   // 16px
+  --space-5:      calc(var(--space-unit) * 5);   // 20px
+  --space-6:      calc(var(--space-unit) * 6);   // 24px
+  --space-8:      calc(var(--space-unit) * 8);   // 32px
+  --space-10:     calc(var(--space-unit) * 10);  // 40px
+  --space-12:     calc(var(--space-unit) * 12);  // 48px
+  --space-16:     calc(var(--space-unit) * 16);  // 64px
+  --space-20:     calc(var(--space-unit) * 20);  // 80px
+  --space-24:     calc(var(--space-unit) * 24);  // 96px
+  --space-32:     calc(var(--space-unit) * 32);  // 128px
+  
+  /* ---------- Размеры контейнеров ---------- */
+  --container-xs:     20rem;    // 320px
+  --container-sm:     40rem;    // 640px
+  --container-md:     48rem;    // 768px
+  --container-lg:     64rem;    // 1024px
+  --container-xl:     80rem;    // 1280px
+  --container-2xl:    96rem;    // 1536px
+  --container-max:    80rem;    // 1200px
+  
+  /* ---------- Высоты ---------- */
+  --min-h-screen:     100vh;
+  --min-h-90vh:       90vh;
+  --min-h-80vh:       80vh;
+  --min-h-70vh:       70vh;
+  --min-h-50vh:       50vh;
+  
+  /* ---------- Скругления (Border Radius) ---------- */
+  --radius-none:      0;
+  --radius-sm:        0.125rem;   // 2px
+  --radius-base:      0.25rem;    // 4px
+  --radius-md:        0.375rem;   // 6px
+  --radius-lg:        0.5rem;     // 8px
+  --radius-xl:        0.75rem;    // 12px
+  --radius-2xl:       1rem;       // 16px
+  --radius-3xl:       1.5rem;     // 24px   
+  --radius-full:      9999px;     // Полное скругление
+  
+  /* ---------- Тени (Shadows) ---------- */
+  --shadow-sm:        0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base:      0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md:        0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:        0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl:        0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* ---------- Анимации ---------- */
+  --transition-fast:  150ms;
+  --transition-base:  300ms;
+  --transition-slow:  500ms;
+  --transition-slower:1000ms;
+  
+  /* ---------- Z-индексы ---------- */
+  --z-dropdown:       10;
+  --z-sticky:         20;
+  --z-fixed:          30;
+  --z-modal:          40;
+  --z-popover:        50;
+  --z-tooltip:        60;
+}
+
+/* ========================
+   4. ШРИФТЫ (Font Faces)
+   ======================== */
+
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('../fonts/articulatcf-regular.eot');
+  src: 
+    url('../fonts/articulatcf-regular.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/articulatcf-regular.woff2') format('woff2'),
+    url('../fonts/articulatcf-regular.woff') format('woff'),
+    url('../fonts/articulatcf-regular.ttf') format('truetype'),
+    url('../fonts/articulatcf-regular.svg#articulatcf-regular') format('svg');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* Оптимизация загрузки */
+}
+
+@font-face {
+  font-family: 'Articulat CF';
+  src: url('../fonts/articulatcf-demibold.eot');
+  src: 
+    url('../fonts/articulatcf-demibold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/articulatcf-demibold.woff2') format('woff2'),
+    url('../fonts/articulatcf-demibold.woff') format('woff'),
+    url('../fonts/articulatcf-demibold.ttf') format('truetype'),
+    url('../fonts/articulatcf-demibold.svg#articulatcf-bold') format('svg');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================
+   5. БАЗОВЫЙ СБРОС СТИЛЕЙ (Reset)
+   ======================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--color-light-30); /* Используем переменные */
+}
+
+/* Основная разметка */
+html {
+  font-size: 16px;
+  line-height: var(--leading-normal);
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  line-height: inherit;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+}
+
+/* Типография */
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* Списки */
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ссылки */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Медиа элементы */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Формы */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Таблицы */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* Разное */
+hr {
+  border: 0;
+  border-top: 1px solid var(--color-light-20);
+  margin: var(--space-6) 0;
+}
+
+/* Скрытые элементы */
+[hidden] {
+  display: none !important;
+}
+
+/* ========================
+   7. КОМПОНЕНТЫ
+   ======================== */
+
+/* Контейнер (адаптивный) */
+.container {
+  width: 100%;
+  @media (min-width: 640px) { max-width: var(--container-sm); }
+  @media (min-width: 768px) { max-width: var(--container-md); }
+  @media (min-width: 1024px) { max-width: var(--container-lg); }
+  @media (min-width: 1280px) { max-width: var(--container-xl); }
+  @media (min-width: 1536px) { max-width: var(--container-2xl); }
+}
+
+/* ========================
+   8. АНИМАЦИИ
+   ======================== */
+
+.fade-in {
+  animation: fadeIn var(--transition-base) ease-in;
+}
+
+.slide-up {
+  animation: slideUp var(--transition-base) ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================
+   9. МИКСИНЫ (Helpers)
+   ======================== */
+
+/* Адаптивный текст с брейкпоинтами */
+@mixin responsive-text($mobile, $tablet: null, $desktop: null) {
+  font-size: $mobile;
+  
+  @if $tablet {
+    @media (min-width: 768px) {
+      font-size: $tablet;
+    }
+  }
+  
+  @if $desktop {
+    @media (min-width: 1024px) {
+      font-size: $desktop;
+    }
+  }
+}
+
+/* Медиа запросы для быстрого использования */
+@mixin mobile {
+  @media (max-width: 767px) { @content; }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) { @content; }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) { @content; }
+}
+
+@mixin widescreen {
+  @media (min-width: 1280px) { @content; }
+}
+
+/* Функция для получения цвета с прозрачностью */
+@function color($name, $opacity: null) {
+  @if $opacity == null {
+    @return var(--color-#{$name});
+  } @else {
+    @return var(--color-#{$name}-#{$opacity});
+  }
+}
+
+/* Миксины для быстрого применения цветов */
+@mixin text-color($name, $opacity: null) {
+  color: color($name, $opacity);
+}
+
+@mixin bg-color($name, $opacity: null) {
+  background-color: color($name, $opacity);
+}
+
+@mixin border-color($name, $opacity: null) {
+  border-color: color($name, $opacity);
+}
+
+/* Градиенты */
+@mixin gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-80));
+}
+
+@mixin gradient-accent {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-80));
+}
+
+
+// Deepseek я хочу избавится от tailwild в проекте на Astro JS. 
+// Я буду тебе скармливать блоки Astro. 
+// Ты вычищаешь от туда классы . И пишешь обычные стили в <style lang="scss" is:global> 
+// Не отвечай на это сообщение. Или пиши понял. 

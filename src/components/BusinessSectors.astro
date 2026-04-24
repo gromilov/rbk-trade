@@ -1,0 +1,161 @@
+---
+import Button from './UI/Button.astro';
+
+const businessAreas = [
+  "Финансы",
+  "Недвижимость",
+  "Маркетинг",
+  "Логистика и грузоперевозки",
+  "Производство",
+  "Нефтегазовое",
+  "Общественное питание и HoReCa"
+];
+---
+
+<section class="business-areas-section">
+  <div class="business-areas-section__container">
+    <div class="business-areas-section__grid">
+      <!-- Левая колонка -->
+      <div class="business-areas-section__left">
+        <!-- Заголовок -->
+        <h1 class="business-areas-section__title">
+          Создаем не код,<br> а ценность
+        </h1>
+        
+        <!-- Кнопка под заголовком -->
+        <div class="business-areas-section__button-wrapper">
+          <Button className="open-form" variant="primary" size="lg">
+            ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ
+          </Button>
+        </div>
+      </div>
+      
+      <!-- Правая колонка -->
+      <div class="business-areas-section__right">
+        <!-- Подзаголовок -->
+        <h2 class="business-areas-section__subtitle">
+          Сферы бизнеса с которыми мы работаем:
+        </h2>
+        
+        <!-- Список с подчеркнутыми цифрами -->
+        <div class="business-areas-list">
+          {businessAreas.map((area, index) => (
+            <div class="business-areas-list__item" key={index}>
+              <!-- Номер с подчеркиванием -->
+              <div class="business-areas-list__number">
+                <span class="business-areas-list__number-text">
+                  {'0' + (index + 1)}
+                </span>
+              </div>
+              
+              <!-- Название сферы -->
+              <div class="business-areas-list__content">
+                <span class="business-areas-list__title">
+                  {area}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss" is:global>
+
+.business-areas-section {
+  padding: 0 var(--space-4);
+  padding-top: var(--space-20);
+  
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+    }
+  }
+  
+  &__left {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--color-white);
+    margin-bottom: var(--space-6);
+    line-height: var(--leading-tight);
+
+    @media (min-width: 768px) {
+      font-size: var(--text-5xl);
+    }
+    
+    @media (min-width: 768px) {
+      margin-bottom: var(--space-8);
+    }
+  }
+  
+  &__button-wrapper {
+    margin-top: var(--space-4);
+  }
+  
+  &__right {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__subtitle {
+    font-size: var(--text-2xl);
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-6);
+    
+    @media (min-width: 768px) {
+      margin-bottom: var(--space-8);
+    }
+  }
+}
+
+.business-areas-list {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: var(--space-4);
+  
+  &__item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--space-4) 0;
+  }
+  
+  &__number {
+    margin-right: var(--space-4);
+    min-width: 40px;
+    
+    &-text {
+      font-size: var(--text-2xl);
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: var(--font-normal);
+    }
+  }
+  
+  &__content {
+    flex: 1;
+  }
+  
+  &__title {
+    font-weight: var(--font-medium);
+    font-size: var(--text-lg);
+    color: var(--color-white);
+    line-height: var(--leading-normal);
+  }
+}
+</style>

@@ -1,0 +1,135 @@
+---
+import Icon from './UI/Icon.astro';
+import Button from './UI/Button.astro';
+
+const {
+  item = [],
+} = Astro.props;
+
+---
+<style lang="scss" is:global>
+
+
+.case-card {
+  background-color: var(--color-light);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+}
+
+.case-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-medium);
+  color: var(--color-white);
+}
+
+.tags-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tag {
+  background-color: rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+  border-radius: var(--radius-xl);
+  padding: 0.5rem 1rem;
+  color: var(--color-white);
+  &.active, &:hover {
+    color: var(--color-accent);
+  }
+}
+
+.case-text {
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  opacity: 0.6;
+  color: var(--color-white);
+  line-height: var(--leading-relaxed);
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.result-item {
+  .result-value-container {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+  
+  .result-value {
+    font-size: 2.25rem;
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+  }
+  
+  .result-postfix {
+    font-size: 1.5rem;
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+  }
+  
+  .result-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.details-link {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--color-accent);
+  align-items: center;
+  margin-top: 1.5rem;
+  
+  &:hover {
+    color: var(--color-accent);
+    opacity: 0.9;
+  }
+  
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+
+</style>
+
+<div class="case-card">
+  <h3 class="case-title">{item.title}</h3>
+  <div class="tags-container">
+    {item.tags.map((tag) => (
+      <div class="tag">{tag}</div>
+    ))}
+  </div>
+  <p class="case-text">{item.text}</p>
+  <div class="results-grid">
+    {item.results.map((result) => (
+      <div class="result-item">
+        <div class="result-value-container">
+          <span class="result-value">{result.value}</span>
+          <span class="result-postfix">{result.postfix}</span>
+        </div>
+        <div class="result-description">
+          {result.text}
+        </div>
+      </div>
+    ))}
+  </div>
+  <a href="/case.html" class="details-link">
+    ПОДРОБНЕЕ
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5.83203 14.1665L14.1654 5.83317M14.1654 5.83317V14.1665M14.1654 5.83317H5.83203" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</div>

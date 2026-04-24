@@ -1,0 +1,139 @@
+---
+import Button from './UI/Button.astro';
+
+const {
+  title,
+  buttonText = 'ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ',
+  backgroundLeft = '/images/baner-bg-left.png',
+  backgroundRight = '/images/baner-bg-right.png',
+  className = ''
+} = Astro.props;
+---
+
+<section class={`banner ${className}`}>
+  <div class="banner__container">
+    <div class="banner__inner">
+      <!-- Фоновое изображение слева -->
+      <div class="banner__background banner__background--left">
+        <img 
+          src={backgroundLeft}
+          alt="Фоновое изображение слева" 
+          class="banner__background-image"
+          width="400"
+          height="300"
+          loading="lazy"
+        />
+      </div>
+      
+      <!-- Фоновое изображение справа -->
+      <div class="banner__background banner__background--right">
+        <img 
+          src={backgroundRight}
+          alt="Фоновое изображение справа" 
+          class="banner__background-image"
+          width="400"
+          height="300"
+          loading="lazy"
+        />
+      </div>
+      
+      <!-- Контент -->
+      <div class="banner__content">
+        <h2 
+          class="banner__title"
+          set:html={title}
+        ></h2>
+        <Button className="open-form banner__button">
+          {buttonText}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss" is:global>
+
+
+.banner {
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0;
+    @media (min-width: 768px) {
+      padding: 1rem;
+    }
+   
+  }
+  
+  &__inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-8) var(--space-4);
+    background-color: var(--color-light);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-3xl);
+    min-height: 420px;
+    padding: 1rem;
+    
+    
+    @media (min-width: 768px) {
+      padding: var(--space-10) var(--space-8);
+    }
+  }
+  
+  &__background {
+    position: absolute;
+    z-index: 1;
+    
+    &--left {
+      bottom: 0;
+      left: 0;
+      
+      @media (max-width: 767px) {
+        display: none;
+      }
+    }
+    
+    &--right {
+      top: 0;
+      right: 0;
+    }
+    
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      max-width: 400px;
+      max-height: 300px;
+    }
+  }
+  
+  &__content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    line-height: var(--leading-tight);
+    color: var(--color-white);
+    margin-bottom: var(--space-6);
+    
+    @media (min-width: 768px) {
+      font-size: var(--text-4xl);
+    }
+    
+    @media (min-width: 1024px) {
+      font-size: var(--text-5xl);
+    }
+  }
+  
+  &__button {
+    margin: 0 auto;
+  }
+}
+</style>

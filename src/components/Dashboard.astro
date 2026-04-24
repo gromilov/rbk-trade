@@ -1,0 +1,164 @@
+---
+import Icon from './UI/Icon.astro';
+import Button from './UI/Button.astro';
+
+const features = [
+  {
+    title: "Регулярная поддержка",
+    text: "Сопровождаем проект на всех этапах, помогаем внедрять новые функции и интеграции.",
+    icon: "/images/support-icon.svg"
+  },
+  {
+    title: "Экспертиза в ИИ",
+    text: "Наши специалисты имеют опыт в ML, NLP, CV, аналитике данных и интеграциях.",
+    icon: "/images/ai-expertise-icon.svg"
+  },
+  {
+    title: "Гарантия качества",
+    text: "Каждый ИИ-ассистент проходит многоуровневое тестирование — от понимания контекста до реакции на сложные запросы.",
+    icon: "/images/quality-icon.svg"
+  },
+  {
+    title: "Прозрачность",
+    text: "Мы работаем по договору — предоставляем вам возможность всегда быть в курсе всех процессов.",
+    icon: "/images/transparency-icon.svg"
+  },
+];
+---
+<style lang="scss" is:global>
+.advantages-section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--space-20) 1rem 2.5rem;
+  max-width: var(--container-max);
+  
+  @media (min-width: 768px) {
+    padding: var(--space-20) 1rem  var(--space-10);
+  }
+}
+
+.advantages-header {
+  text-align: center;
+  margin-bottom: 5rem;
+  max-width: 64rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.advantages-title {
+  font-size: var(--font-bold);
+  font-weight: var(--font-bold);
+  margin-bottom: 1.5rem;
+  line-height: var(--leading-tight);
+  font-size: var(--text-3xl);
+  
+  
+  @media (min-width: 768px) {
+    font-size: var(--text-5xl);;
+  }
+  .accent-text {
+    color: var(--color-accent);
+  }
+}
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  @media (min-width: 1280px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.advantage-card {
+  background-color: rgba(35, 35, 35, 0.7); // --color-light with 70% opacity
+  border-radius: var(--radius-2xl);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0.1;
+  }
+}
+
+.advantage-content {
+  position: relative;
+  z-index: 10;
+}
+
+.advantage-icon {
+  margin-bottom: 1rem;
+  
+  img {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.advantage-title {
+  font-size: 1rem;
+  font-weight: var(--font-medium);
+  margin-bottom: 1rem;
+  
+  @media (min-width: 768px) {
+    font-size: 1.125rem;
+  }
+}
+
+.advantage-text {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: var(--leading-relaxed);
+}
+.advantages-button-wrapper {
+  text-align: center;
+  margin-top: var(--space-16);
+}
+</style>
+
+<section class="advantages-section">
+  <div class="advantages-header">
+    <h2 class="advantages-title">Преимущества работы 
+      <br> с <span class="accent-text">NexCoreHub</span></h2>
+  </div>
+  <div class="advantages-grid">
+    {features.map((feature, index) => (
+      <div class="advantage-card" key={index}>
+        <div class="advantage-content">
+          <!-- Иконка сверху от заголовка -->
+          <div class="advantage-icon">
+            <img src={feature.icon} alt={feature.title} />
+          </div>
+          
+          <h3 class="advantage-title">{feature.title}</h3>
+          <p class="advantage-text">{feature.text}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+  <div class="advantages-button-wrapper">
+     
+    <Button className="open-form" variant="primary" size="lg">
+      ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ
+    </Button>
+  </div>
+
+  
+</section>

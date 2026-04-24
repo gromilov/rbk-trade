@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Team from '../components/Team.astro';
+import Result from '../components/Result.astro';
+import Steps from '../components/Steps.astro';
+import FAQ from '../components/FAQ.astro';
+import BusinessSectors from '../components/BusinessSectors.astro';
+import About from '../components/About.astro';
+import Turnkey from '../components/Turnkey.astro';
+import Advantages from '../components/Advantages.astro';
+import Partners from '../components/Partners.astro';
+import Certificates from '../components/Certificates.astro';
+import Stores from '../components/Stores.astro';
+import Reasons from '../components/Reasons.astro';
+import Footer from '../components/Footer.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import Dashboard from '../components/Dashboard.astro';
+import Auto from '../components/Auto.astro';
+import AutoMobile from '../components/AutoMobile.astro';
+import Carousel from '../components/Carousel.astro';
+import Banner from '../components/Banner.astro';
+import OurSolutions from '../components/OurSolutions.astro';
+import Cases from '../components/Cases.astro';
+import Contact from '../components/Contact.astro';
+import Modal from '../components/UI/Modal.astro';
+import Form from '../components/Form.astro';
+import Tools from '../components/Tools.astro';
+import Review from '../components/Review.astro';
+//  Контент 
+
+const itemsReview = [
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+];
+---
+
+<Layout title="О компании | РБК Трейд">
+  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
+    <Header />
+    <Hero 
+      title='Продаем дизайнерские радиаторы и конвекторы в Казани с 2010 года' 
+      list={[
+        "В нашем каталоге: ретро-модели, внутрипольные конвекторы, трубчатые и цветные радиаторы.",
+        "Замер, доставка, монтаж — под ключ.",
+        "Два шоурума с живыми экспонатами и бесплатной парковкой"
+      ]}
+      bgImage="/images/radiators/hero-about.png"
+    />
+    <About />
+    <Turnkey />
+    <Reasons />
+    <Advantages />
+    <Partners />
+    <Certificates />
+    <Stores />
+
+    <!-- <Banner title='Выведите бизнес на новый <br> уровень эффективности!' /> -->
+    <!-- <Cases /> -->
+    <!-- <FAQ /> -->
+    <Contact />
+    <Footer />
+    <Modal id="formModal">
+      <Form />
+    </Modal>
+    <!-- <Form  id="privacy-policy">
+      <PrivacyPolicy />
+    </Form> -->
+  </div>
+</Layout>
+

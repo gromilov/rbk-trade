@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Cases from '../components/Cases.astro';
+import Contact from '../components/Contact.astro';
+import Carousel from '../components/Carousel.astro';
+import Modal from '../components/UI/Modal.astro';
+import Form from '../components/Form.astro';
+import Case from '../components/Case.astro';
+import CasesPage from '../components/CasesPage.astro';
+import PrivacyPolicy from '../content/privacy-policy.md';
+---
+
+<Layout>
+  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
+    <Header />
+    <CasesPage />
+    <Contact />
+    <Footer />
+    <Modal id="formModal">
+      <Form />
+    </Modal>
+  </div>
+</Layout>
+

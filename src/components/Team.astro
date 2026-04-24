@@ -1,0 +1,156 @@
+---
+import Button from './UI/Button.astro';
+
+const businessAreas = [
+  ["Технический<br> директор", 1],
+  ["Менеджер<br> по продукту", 1],
+  ["Менеджера<br> проекта", 2],
+  ["Backend/ML<br> инженера", 4],
+  ["Frontend<br> инженера", 3],
+  ["QA-специалиста", 2],
+  ["Бизнес<br> аналитика", 2],
+  ["Системный<br> аналитик", 1],
+];
+---
+<style lang="scss" is:global>
+.team-section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1rem 1rem 2.5rem;
+  padding-top: var(--space-20);
+  max-width: var(--container-max);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  
+  @media (min-width: 768px) {
+    gap: 3rem;
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.team-left-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-title {
+  font-size: 3rem;
+  font-weight: var(--font-bold);
+  color: var(--color-white);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  
+  
+  @media (min-width: 768px) {
+    font-size: 3.75rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.team-description {
+  font-size: 1.25rem;
+  max-width: 560px;
+  line-height: var(--leading-relaxed);
+  margin-top: 1rem;
+  
+  @media (min-width: 768px) {
+    margin-top: 1.5rem;
+  }
+}
+
+.team-right-column {
+  width: 100%;
+}
+
+.team-list-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  
+  @media (min-width: 768px) {
+    gap: 1.5rem;
+  }
+}
+
+.team-list-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.team-number {
+  margin-right: 1rem;
+  
+  .number-value {
+    font-size: 3rem;
+    color: var(--color-white);
+    
+    
+    @media (min-width: 768px) {
+      font-size: 3.75rem;
+    }
+  }
+}
+
+.team-role {
+  line-height: 100%;
+  
+  .role-text {
+    font-size: 1.125rem;
+    color: var(--color-white);
+    line-height: 1.1;
+    
+    @media (min-width: 768px) {
+      font-size: 1.25rem;
+    }
+  }
+}
+</style>
+
+<section class="team-section">
+  <div class="team-grid">
+    <!-- Левая колонка -->
+    <div class="team-left-column">
+      <!-- Заголовок -->
+      <h1 class="team-title">
+        Команда
+      </h1>
+      <!-- Кнопка под заголовком -->
+      <div class="team-description">
+        Мы объединяем специалистов с разным опытом в AI и цифровых продуктах, чтобы создавать практичные и масштабируемые решения для бизнеса.
+      </div>
+    </div>
+    <!-- Правая колонка -->
+    <div class="team-right-column">
+      <!-- Список с подчеркнутыми цифрами -->
+      <div class="team-list-grid">
+        { businessAreas.map((area, index) => (
+          <div class="team-list-item" key={index}>
+            <!-- Номер с подчеркиванием -->
+            <div class="team-number">
+              <span class="number-value">
+               ×{area[1]}
+              </span>
+            </div>
+            
+            <div class="team-role">
+              <span class="role-text" set:html={area[0]}>
+               
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

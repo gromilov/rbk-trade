@@ -1,0 +1,164 @@
+---
+import Button from "./UI/Button.astro";
+const {
+  title,
+  text,
+  list = [], // Массив строк или объектов для списка
+  buttonText = "ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ",
+  buttonLink = "#contact",
+  bgImage = "/images/radiators/hero-main.png",
+} = Astro.props;
+---
+
+<section class="hero" style={`background-image: url('${bgImage}')`}>
+  <div class="hero__container">
+    <div class="hero__content">
+      <h1 class="hero__title" set:html={title} />
+
+      {text && <p class="hero__text" set:html={text} />}
+
+      {
+        list && list.length > 0 && (
+          <ul class="hero__list">
+            {list.map((item) => (
+              <li class="hero__list-item">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 13L9 17L19 7"
+                    stroke="var(--color-primary)"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span set:html={item} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <!-- <div class="hero__actions">
+        <Button className="open-form" variant="primary">{buttonText}</Button>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<style lang="scss" is:global>
+  .hero {
+    position: relative;
+    min-height: var(--min-h-screen);
+    @media (max-width: 767px) {
+      min-height: var(--min-h-70vh);
+    }
+    background-color: var(--color-dark);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: var(--space-20) 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 0, 0, 0.2) 100%
+      );
+      z-index: 1;
+    }
+
+    &__container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__content {
+      text-align: left;
+      max-width: 800px;
+    }
+
+    &__title {
+      font-size: var(--text-6xl);
+      font-weight: var(--font-bold);
+      line-height: 1.1;
+      color: var(--color-white);
+      margin-bottom: var(--space-4);
+
+      @media (max-width: 1024px) {
+        font-size: var(--text-5xl);
+      }
+
+      @media (max-width: 768px) {
+        font-size: var(--text-4xl);
+      }
+    }
+
+    &__text {
+      font-size: var(--text-xl);
+      color: var(--color-white);
+      opacity: 0.9;
+      margin-bottom: var(--space-10);
+      max-width: 700px;
+      line-height: 1.4;
+
+      @media (max-width: 768px) {
+        font-size: var(--text-lg);
+      }
+    }
+
+    &__list {
+      margin-bottom: var(--space-10);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      max-width: 700px;
+    }
+
+    &__list-item {
+      font-size: var(--text-lg);
+      color: var(--color-white);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+
+      svg {
+        flex-shrink: 0;
+        margin-top: 4px;
+      }
+
+      span {
+        line-height: 1.4;
+      }
+
+      @media (max-width: 768px) {
+        font-size: var(--text-base);
+      }
+    }
+
+    &__actions {
+      display: flex;
+      justify-content: flex-start;
+      gap: var(--space-4);
+    }
+  }
+</style>

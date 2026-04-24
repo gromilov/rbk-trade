@@ -1,0 +1,127 @@
+---
+import Button from './UI/Button.astro';
+---
+
+<section class="work-process" id="how-we-work">
+  <div class="work-process__container">
+    <div class="work-process__grid">
+      <div class="work-process__content">
+        <h2 class="work-process__title">Как мы работаем</h2>
+        <div class="work-process__list">
+          <div class="work-process__item">
+            <span class="work-process__number">01</span>
+            <p class="work-process__text">Вы присылаете планировку или референсы стиля</p>
+          </div>
+          <div class="work-process__item">
+            <span class="work-process__number">02</span>
+            <p class="work-process__text">Мы подбираем 2–3 варианта радиаторов под бюджет</p>
+          </div>
+          <div class="work-process__item">
+            <span class="work-process__number">03</span>
+            <p class="work-process__text">Отправляем КП + 3D-модели + референсы</p>
+          </div>
+          <div class="work-process__item">
+            <span class="work-process__number">04</span>
+            <p class="work-process__text">Передаём координаты нашей монтажной бригады</p>
+          </div>
+          <div class="work-process__item">
+            <span class="work-process__number">05</span>
+            <p class="work-process__text">После монтажа — фото для вашего портфолио</p>
+          </div>
+        </div>
+        <div class="work-process__actions">
+            <Button className="open-form" variant="dark">ОБСУДИТЬ ПРОЕКТ</Button>
+        </div>
+      </div>
+
+      <div class="work-process__image-wrapper">
+         <img src="/images/radiators/work-process-new.png" alt="Процесс работы" class="work-process__image" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+.work-process {
+  padding: var(--space-20) 0;
+  background-color: var(--color-white);
+
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-8);
+
+    @media (min-width: 768px) {
+      font-size: var(--text-5xl);
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-12);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    padding: var(--space-5) 0;
+    border-top: 1px solid rgba(17, 17, 17, 0.16);
+    
+    &:last-child {
+        border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+    }
+  }
+
+  &__number {
+    font-size: var(--text-xl);
+    font-weight: var(--font-medium);
+    color: var(--color-dark);
+    opacity: 0.32;
+    min-width: 32px;
+  }
+
+  &__text {
+    font-size: var(--text-lg);
+    color: var(--color-dark);
+    line-height: 1.4;
+  }
+
+  &__actions {
+      margin-top: var(--space-4);
+  }
+
+  &__image-wrapper {
+    width: 100%;
+    border-radius: var(--radius-3xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+}
+</style>

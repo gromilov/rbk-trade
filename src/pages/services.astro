@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Result from '../components/Result.astro';
+import Steps from '../components/Steps.astro';
+import FAQ from '../components/FAQ.astro';
+import Footer from '../components/Footer.astro';
+import ProcessSteps from '../components/ProcessSteps.astro';
+import Dashboard from '../components/Dashboard.astro';
+import Carousel from '../components/Carousel.astro';
+import Banner from '../components/Banner.astro';
+import Cases from '../components/Cases.astro';
+import Contact from '../components/Contact.astro';
+import Modal from '../components/UI/Modal.astro';
+import Form from '../components/Form.astro';
+import Review from '../components/Review.astro';
+import ServicesPage from '../components/ServicesPage.astro';
+
+const itemsReview = [
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+
+  {
+    name: "Максим С.",
+    position: "Президент АО «АвтоВАЗ»",
+    text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
+    image: "/images/Avatar.png"
+  },
+];
+---
+
+<Layout>
+  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
+    <Header />
+    <Hero 
+      title='ИИ-ассистенты для управления проектами и процессами' 
+      text='Встраивание AI-помощников в корпоративные системы для анализа эффективности рабочих процессов, выявления узких мест, автоматического создания задач и формирования отчетов.'
+    />
+    <ProcessSteps />
+    <ServicesPage />
+    <Cases />
+    <Banner title='Начните с малого - внедрите<br> ИИ-агента в один процесс!' />
+    <Steps />
+    <Result />
+    <Banner 
+      title='Готовы автоматизировать бизнес <br> с помощью ИИ-агентов?'
+    />
+    <Carousel title="Отзывы">
+      {itemsReview.map((item, index) => (
+        <div class="swiper-slide">
+          <Review item={item} />
+        </div>
+      ))}
+    </Carousel>
+    <Dashboard />
+    <Banner title='Выведите бизнес на новый <br> уровень эффективности!' />
+    <FAQ />
+    <Contact />
+    <Footer />
+    <Modal id="formModal">
+      <Form />
+    </Modal>
+  </div>
+</Layout>
+

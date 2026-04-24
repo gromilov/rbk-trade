@@ -1,0 +1,199 @@
+---
+import Button from './UI/Button.astro';
+
+export interface Props {
+  title?: string;
+  buttonText?: string;
+  backgroundImage?: string;
+  className?: string;
+}
+
+const {
+  title = 'Получить консультацию',
+  text = 'Заполните форму и наши специалисты свяжуться с вами',
+  buttonText = 'ОТПРАВИТЬ',
+ 
+  className = ''
+} = Astro.props;
+---
+
+<div class={`modal-contact-form ${className}`}>
+  
+  
+  <h2 class="modal-contact-form-title">
+    {title}
+  </h2>
+
+  <div class="modal-contact-form-text">{text}</div>
+
+  <form class="modal-contact-form-fields">
+    <div class="modal-contact-form-grid">
+      <label class="modal-contact-form-field">
+        <span class="modal-contact-form-label">Ваше имя</span>
+        <input 
+          class="modal-contact-form-input"
+          type="text"
+          placeholder=""
+          required
+        />
+      </label>
+      
+      <label class="modal-contact-form-field">
+        <span class="modal-contact-form-label">Номер телефона</span>
+        <input 
+          class="modal-contact-form-input"
+          type="tel"
+          placeholder=""
+          required
+        />
+      </label>
+    </div>
+
+    <label class="modal-contact-form-field">
+      <span class="modal-contact-form-label">Расскажите о вашем проекте (необязательно)</span>
+      <textarea 
+        rows="4"
+        class="modal-contact-form-textarea"
+        placeholder=""
+      ></textarea>
+    </label>
+
+    <label class="modal-contact-form-checkbox">
+      <input 
+        type="checkbox" 
+        class="modal-contact-form-checkbox-input"
+        required
+      />
+      <span class="modal-contact-form-checkbox-text">
+        Даю согласие на <a href="#" class="modal-contact-form-checkbox-link">обработку персональных данных</a>
+      </span>
+    </label>
+
+    <Button type="submit" className="modal-contact-form-submit">
+      {buttonText}
+    </Button>
+  </form>
+</div>
+
+<style>
+  .modal-contact-form {
+    position: relative;
+    border-radius: 1rem;
+    background: var(--color-dark);
+    color: white;
+    overflow: hidden;
+  }
+
+  .modal-contact-form-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    opacity: 0.3;
+    z-index: 0;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .modal-contact-form-title {
+    position: relative;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    z-index: 1;
+  }
+
+  .modal-contact-form-text {
+    color: var(--color-white-70);
+    padding-bottom: 1rem;
+  }
+
+  .modal-contact-form-fields {
+    position: relative;
+    z-index: 1;
+  }
+
+  .modal-contact-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .modal-contact-form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  .modal-contact-form-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-contact-form-input,
+  .modal-contact-form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    
+    &:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .modal-contact-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .modal-contact-form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .modal-contact-form-checkbox-input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.125rem;
+    accent-color: var(--color-accent);
+  }
+
+  .modal-contact-form-checkbox-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .modal-contact-form-submit {
+    width: 100%;
+  }
+</style>

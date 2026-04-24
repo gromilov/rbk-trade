@@ -1,0 +1,246 @@
+---
+import Icon from './UI/Icon.astro';
+import Button from './UI/Button.astro';
+
+const solutions = [
+  {
+    title: "Автоматизация рутинных операций (RPA + AI)",
+    text: "Разработка и внедрение программ-роботов для автоматического выполнения повторяющихся задач: обработка счетов, проверка документов, перенос данных между системами.",
+    iconName: "automation"
+  },
+  {
+    title: "BI-аналитика и предиктивное моделирование",
+    text: "Разработка аналитических систем для прогнозирования тенденций, выявления закономерностей и поддержки принятия решений на основе данных.",
+    iconName: "analytics"
+  },
+  {
+    title: "ИИ-ассистенты для управления проектами и процессами",
+    text: "Встраивание AI-помощников в корпоративные системы для анализа эффективности рабочих процессов, выявления узких мест, автоматического создания задач и формирования отчетов.",
+    iconName: "ai-assistant"
+  },
+  {
+    title: "Платформы для повышения цифровой грамотности и Data-Driven культуры",
+    text: "Корпоративные программы, обучающие сотрудников работе с данными и аналитикой без техподдержки.",
+    iconName: "digital-literacy"
+  },
+];
+---
+
+<section class="solutions-section">
+  <div class="solutions-section__container">
+    <!-- Заголовочный блок -->
+    <div class="solutions-section__header">
+      <!-- Текстовый блок в две колонки -->
+      <div class="solutions-section__intro">
+        <!-- Левая колонка -->
+        <div class="solutions-section__intro-left">
+          <h1 class="solutions-section__title">Наши решения</h1>
+          <p class="solutions-section__subtitle">
+            Помогаем компаниям автоматизировать рутинные процессы и повышать эффективность работы
+          </p>
+        </div>
+        
+        <!-- Правая колонка -->
+        <div class="solutions-section__intro-right">
+          <p class="solutions-section__description">
+            Мы разрабатываем и внедряем ИИ-системы, которые берут на себя выполнение рутинных операций, освобождая время сотрудников для более важных и творческих задач. Наши решения на базе ИИ способны обрабатывать документы, анализировать данные и выполнять множество других действий быстрее, чем человек.
+          </p>
+          <div class="solutions-section__button-wrapper">
+            <Button className="open-form" variant="primary" size="lg">
+              ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Карточки решений -->
+    <div class="solutions-section__grid">
+      {solutions.map((solution, index) => (
+        <div 
+          class="solutions-card"
+          key={index}
+        >
+          <!-- Иконка -->
+          <div class="solutions-card__icon-wrapper">
+            <div class="solutions-card__icon-border">
+              <Icon 
+                name={solution.iconName} 
+                class="solutions-card__icon" 
+              />
+            </div>
+          </div>
+          
+          <!-- Заголовок -->
+          <h3 class="solutions-card__title">
+            {solution.title}
+          </h3>
+          
+          <!-- Текст -->
+          <p class="solutions-card__text">
+            {solution.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style lang="scss" is:global>
+.solutions-section {
+  padding:  var(--space-4);
+  padding-top: var(--space-20);
+  
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+  }
+  
+  &__header {
+    margin-bottom: var(--space-6);
+  }
+  
+  &__intro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+    margin-bottom: var(--space-6);
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-12);
+    }
+  }
+  
+  &__intro-left {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-6);
+    text-align: left;
+    
+    @media (min-width: 768px) {
+      font-size: var(--text-4xl);
+      margin-bottom: var(--space-8);
+    }
+  }
+  
+  &__subtitle {
+    font-size: var(--text-2xl);
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-4);
+    
+    @media (min-width: 768px) {
+      margin-bottom: var(--space-6);
+    }
+  }
+  
+  &__intro-right {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__description {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.7);
+    line-height: var(--leading-relaxed);
+    
+    @media (min-width: 768px) {
+      font-size: var(--text-lg);
+    }
+  }
+  
+  &__button-wrapper {
+    margin-top: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+  }
+}
+
+.solutions-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-base);
+  
+  &:hover {
+    border-color: rgba(var(--color-accent-rgb), 0.3);
+    background-color: rgba(var(--color-accent-rgb), 0.05);
+  }
+  
+  @media (min-width: 768px) {
+    padding: var(--space-8);
+  }
+  
+  &__icon-wrapper {
+    margin-bottom: var(--space-4);
+    
+    @media (min-width: 768px) {
+      margin-bottom: var(--space-6);
+    }
+  }
+  
+  &__icon-border {
+    display: inline-flex;
+    width: 56px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    transition: all var(--transition-base);
+    
+    .solutions-card:hover & {
+      background-color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+  }
+  
+  &__icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-white);
+    transition: color var(--transition-base);
+    
+    .solutions-card:hover & {
+      color: var(--color-black);
+    }
+  }
+  
+  &__title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-4);
+    
+    @media (min-width: 768px) {
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-6);
+    }
+  }
+  
+  &__text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: var(--text-base);
+    line-height: var(--leading-relaxed);
+    
+    @media (min-width: 768px) {
+      font-size: var(--text-lg);
+    }
+  }
+}
+</style>

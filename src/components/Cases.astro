@@ -1,0 +1,309 @@
+---
+import Icon from './UI/Icon.astro';
+import Button from './UI/Button.astro';
+import Case from './Case.astro';
+
+const casesItems = [
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+  {
+    title: "Внедрение системы ИИ-агентов на производственном предприятии",
+    tags: ["Франчайзинг", "B2B", "Москва",],
+    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
+    results: [
+      {
+        value: "-45%",
+        text: "Снижение незапланированных простоев оборудования",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "+18%",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "",
+      },
+      {
+        value: "–25",
+        text: "Рост общей эффективности оборудования (OEE)",
+        prefix: "",
+        postfix: "ч/нед",
+      }
+    ]
+  },
+];
+---
+<style lang="scss" is:global>
+.cases-section {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--container-max);
+  padding: 1rem 1rem 2.5rem;
+  
+  @media (min-width: 768px) {
+    padding: 2.5rem 1rem 5rem;
+  }
+}
+
+.cases-title {
+  font-size: var(--text-5xl);
+  text-align: center;
+  margin-bottom: 4rem;
+  font-weight: bold;
+  margin-top: 5rem;
+  font-size: var(--text-4xl);
+  
+  
+  @media (min-width: 768px) {
+    font-size: var(--text-5xl);
+  }
+  @media (min-width: 768px) {
+    font-size: 3.75rem;
+  }
+}
+
+.cases-grid {
+  margin-left: auto;
+  margin-right: auto;
+  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.case-card {
+  background-color: var(--color-light);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+}
+
+.case-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-medium);
+  color: var(--color-white);
+}
+
+.tags-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tag {
+  background-color: rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+  border-radius: var(--radius-xl);
+  padding: 0.5rem 1rem;
+  color: var(--color-white);
+}
+
+.case-text {
+  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  opacity: 0.6;
+  color: var(--color-white);
+  line-height: var(--leading-relaxed);
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.result-item {
+  .result-value-container {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+  
+  .result-value {
+    font-size: 2.25rem;
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+  }
+  
+  .result-postfix {
+    font-size: 1.5rem;
+    color: var(--color-white);
+    font-weight: var(--font-bold);
+  }
+  
+  .result-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.details-link {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  color: var(--color-accent);
+  align-items: center;
+  margin-top: 1.5rem;
+  
+  &:hover {
+    color: var(--color-accent);
+    opacity: 0.9;
+  }
+  
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.cases-button-container {
+  margin-top: 4rem;
+  width: 100%;
+  text-align: center;
+}
+</style>
+
+<section class="cases-section">
+  <h2 class="cases-title">Кейсы</h2>
+  <div class="cases-grid">
+    {casesItems.map((item) => (
+     <Case item={item} />
+    ))}
+  </div>
+  <div class="cases-button-container">
+    <Button href="/cases.html" variant="secondary">
+      БОЛЬШЕ КЕЙСОВ
+    </Button>
+  </div>
+</section>

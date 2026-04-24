@@ -1,0 +1,94 @@
+---
+---
+
+<section class="about" id="about">
+  <div class="about__container">
+    <div class="about__grid">
+      <!-- Изображение -->
+      <div class="about__image-wrapper">
+        <img src="/images/radiators/about.png" alt="О компании RBK Trade" class="about__image" />
+      </div>
+
+      <!-- Контент -->
+      <div class="about__content">
+        <h2 class="about__title">О компании</h2>
+        <div class="about__text">
+          <p>
+            Компания ООО «РБК Трейд» — это не просто магазин отопительного оборудования в Казани. Мы предлагаем вам взглянуть на радиаторы и конвекторы иначе: как на полноценные произведения дизайнерского искусства, которые эффектно дополняют интерьер и создают уют.
+          </p>
+          <p>
+            В нашем ассортименте — не скучные белые панели, а продуманные решения для любого стиля. Для ценителей классики — ретро-радиаторы в духе авангардизма и модернизма. Для современных интерьеров — дизайнерские радиаторы из натурального дерева, стекла и ярких цветов. А если нужен минимализм — внутрипольные конвекторы, которые оставляют видимой только красивую решетку в полу.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+.about {
+  padding: var(--space-20) 0;
+  background-color: var(--color-white);
+
+  &__container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+    align-items: center;
+
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__image-wrapper {
+    width: 100%;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  &__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--font-bold);
+    color: var(--color-dark);
+    margin-bottom: var(--space-8);
+    position: relative;
+
+    @media (min-width: 768px) {
+      font-size: var(--text-5xl);
+    }
+  }
+
+  &__text {
+    p {
+      font-size: var(--text-base);
+      line-height: var(--leading-relaxed);
+      color: var(--color-dark);
+      opacity: 0.9;
+      margin-bottom: var(--space-6);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      @media (min-width: 768px) {
+        font-size: var(--text-lg);
+      }
+    }
+  }
+}
+</style>

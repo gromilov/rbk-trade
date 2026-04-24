@@ -1,0 +1,382 @@
+---
+import Button from "./UI/Button.astro";
+
+// Данные для меню
+const menuItems = [
+  { id: "services", title: "Наши услуги", link: "/services.html" },
+  { id: "cases", title: "Наши работы", link: "/cases.html" },
+  { id: "stores", title: "Магазины", link: "/#stores" },
+  { id: "stores", title: "+7 (843) 212-13-23", link: "tel:+7 (843) 212-13-23" },
+  { id: "stores", title: "+7 (843) 253-38-15", link: "tel:+7 (843) 253-38-15" },
+];
+---
+
+<header class="header">
+  <div class="header__container">
+    <!-- Логотип -->
+    <a href="/" class="header__logo">
+      <img
+        src="/images/logo-rbk.png"
+        alt="RBK Trade"
+        class="header__logo-img"
+      />
+    </a>
+
+    <!-- Правая часть: Меню и Иконки -->
+    <div class="header__right">
+      <nav class="header__desktop-nav">
+        {
+          menuItems.map((item) => (
+            <a href={`${item.link}`} class="header__nav-link">
+              {item.title}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="header__icons">
+        <a
+          href="https://t.me/your_handle"
+          class="header__icon-link"
+          target="_blank"
+        >
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="0.5"
+              y="0.5"
+              width="47"
+              height="47"
+              rx="23.5"
+              stroke="#F6F6F6"></rect>
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M13.0413 23.7973C18.8714 21.2408 22.7685 19.5885 24.7326 18.7779C30.2821 16.4708 31.4357 16.0655 32.1839 16.0343C32.3398 16.0343 32.7139 16.0655 32.9634 16.2525C33.1504 16.4084 33.2128 16.6267 33.244 16.7825C33.2751 16.9384 33.3063 17.2814 33.2751 17.562C32.9634 20.7108 31.6851 28.4115 30.9992 31.9345C30.7186 33.431 30.1574 33.9298 29.6274 33.9922C28.4739 34.0857 27.5697 33.2128 26.4474 32.4957C24.7015 31.3422 23.7038 30.6251 21.9891 29.5027C20.0249 28.1933 21.3032 27.4762 22.4256 26.3227C22.7061 26.0109 27.8503 21.3655 27.9439 20.9291C27.9439 20.8667 27.975 20.6797 27.8503 20.5861C27.7256 20.4926 27.5697 20.5238 27.445 20.5549C27.258 20.5861 24.4521 22.4567 18.9961 26.1356C18.1855 26.6968 17.4684 26.9462 16.8137 26.9462C16.0966 26.9462 14.7249 26.5409 13.696 26.198C12.4489 25.7927 11.4513 25.5744 11.5448 24.8885C11.6072 24.5456 12.106 24.1715 13.0413 23.7973Z"
+              fill="white"></path>
+          </svg>
+        </a>
+        <a href="#" class="header__icon-link">
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              x="0.5"
+              y="0.5"
+              width="47"
+              height="47"
+              rx="23.5"
+              stroke="white"></rect>
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M24.2464 35.3498C21.9962 35.3498 20.9505 35.0213 19.1328 33.7073C17.983 35.1856 14.3422 36.3408 14.1834 34.3643C14.1834 32.8807 13.8549 31.6269 13.4826 30.2581C13.0392 28.5718 12.5355 26.6939 12.5355 23.9729C12.5355 17.4741 17.8681 12.585 24.1862 12.585C30.5097 12.585 35.4646 17.715 35.4646 24.0331C35.4858 30.2535 30.4667 35.3167 24.2464 35.3498ZM24.3395 18.2023C21.2626 18.0435 18.8645 20.1733 18.3334 23.513C17.8954 26.2779 18.6729 29.6449 19.3354 29.8201C19.6529 29.8968 20.4523 29.2507 20.9505 28.7525C21.7743 29.3217 22.7337 29.6635 23.7318 29.7435C26.92 29.8969 29.6442 27.4697 29.8582 24.285C29.9828 21.0935 27.5281 18.3904 24.3395 18.2078V18.2023Z"
+              fill="white"></path>
+          </svg>
+        </a>
+
+        <!-- Бургер для мобильных (справа) -->
+        <button class="header__burger" id="burger-button">
+          <span class="header__burger-line"></span>
+          <span class="header__burger-line"></span>
+          <span class="header__burger-line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- Мобильное меню -->
+  <div class="header__mobile-menu header__mobile-menu--hidden" id="mobile-menu">
+    <div class="header__mobile-header">
+      <button class="header__mobile-close" id="close-menu">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18 6L6 18M6 6L18 18"
+            stroke="var(--color-dark)"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+
+      <a href="/" class="header__mobile-logo">
+        <img
+          src="/images/logo-rbk.png"
+          alt="RBK Trade"
+          class="header__logo-img header__logo-img--mobile"
+        />
+      </a>
+
+      <!-- <div class="header__mobile-social">
+        <a href="#" class="header__social-link">
+          <img src="/images/Telegram.svg" alt="Telegram" />
+        </a>
+        <a href="#" class="header__social-link"> 
+          <img src="/images/WP.svg" alt="WhatsApp" />
+        </a>
+      </div> -->
+    </div>
+
+    <!-- Мобильная навигация -->
+    <nav class="header__mobile-nav">
+      {
+        menuItems.map((item) => (
+          <a
+            href={`#${item.id}`}
+            class="header__mobile-nav-link"
+            onclick="document.getElementById('mobile-menu').classList.add('header__mobile-menu--hidden')"
+          >
+            {item.title}
+          </a>
+        ))
+      }
+    </nav>
+
+    <!-- Действие в мобильном меню -->
+    <div class="header__mobile-contacts">
+      <Button className="open-form" variant="primary"
+        >ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ</Button
+      >
+    </div>
+  </div>
+</header>
+
+<style lang="scss" is:global>
+  .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed);
+    padding: var(--space-6) var(--space-4);
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    &__icons {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    &__icon-link {
+      display: flex;
+      transition: transform var(--transition-fast);
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      svg {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    &__burger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.125rem;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      padding: var(--space-2);
+
+      @media (max-width: 767px) {
+        display: flex;
+      }
+    }
+
+    &__burger-line {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: var(--color-white);
+    }
+
+    &__logo {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+
+      img {
+        height: 40px;
+        width: auto;
+      }
+
+      &__logo-img--mobile {
+        filter: invert(
+          1
+        ); // Инвертируем белый в черный для белого мобильного меню
+      }
+    }
+
+    &__desktop-nav {
+      display: none;
+
+      @media (min-width: 768px) {
+        display: flex;
+        align-items: center;
+        gap: var(--space-6);
+        // background: rgba(255, 255, 255, 0.1);
+        // backdrop-filter: blur(8px);
+        // padding: var(--space-4) var(--space-8);
+        // border-radius: var(--radius-xl);
+      }
+    }
+
+    &__nav-link {
+      font-size: var(--text-sm);
+      color: var(--color-white);
+      transition: color var(--transition-fast);
+      // text-transform: uppercase;
+      font-weight: var(--font-medium);
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    // Стили больше не нужны, так как мы удалили контент
+    &__contacts,
+    &__phone,
+    &__consult-btn,
+    &__social,
+    &__social-link {
+      display: none !important;
+    }
+
+    /* Мобильное меню */
+    &__mobile-menu {
+      position: fixed;
+      top: -16px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-white);
+      color: var(--color-dark);
+      padding: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      z-index: var(--z-modal);
+      // border-radius: var(--radius-xl);
+      // border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: var(--space-4);
+
+      @media (min-width: 768px) {
+        display: none !important;
+      }
+
+      &--hidden {
+        display: none;
+      }
+    }
+
+    &__mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__mobile-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--space-1);
+      color: var(--color-white);
+    }
+
+    &__mobile-logo {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+
+      img {
+        height: 32px;
+        width: auto;
+      }
+    }
+
+    &__mobile-social {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    &__mobile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      text-align: center;
+      padding: var(--space-8) 0;
+      margin-top: auto;
+    }
+
+    &__mobile-nav-link {
+      font-size: var(--text-4xl);
+      color: var(--color-dark);
+      transition: color var(--transition-fast);
+
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    &__mobile-contacts {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+      padding-top: var(--space-4);
+      width: 100%;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    &__mobile-phone {
+      font-size: var(--text-4xl);
+      color: var(--color-dark);
+      // margin-bottom: var(--space-4);
+    }
+  }
+</style>
+
+<script>
+  document
+    .getElementById("burger-button")
+    .addEventListener("click", function () {
+      const menu = document.getElementById("mobile-menu");
+      menu.classList.toggle("header__mobile-menu--hidden");
+    });
+
+  document.getElementById("close-menu").addEventListener("click", function () {
+    const menu = document.getElementById("mobile-menu");
+    menu.classList.toggle("header__mobile-menu--hidden");
+  });
+</script>
