@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import Projects from "../../components/Projects.astro";
+import Reasons from "../../components/Reasons.astro";
+import Stores from "../../components/Stores.astro";
+import WorkProcess from "../../components/WorkProcess.astro";
+import Gallery from "../../components/Gallery.astro";
+import Carousel from "../../components/Carousel.astro";
+import Review from "../../components/Review.astro";
+import Designers from "../../components/Designers.astro";
+import FAQ from "../../components/FAQ.astro";
+import Contact from "../../components/Contact.astro";
+import Footer from "../../components/Footer.astro";
+import Modal from "../../components/UI/Modal.astro";
+import Form from "../../components/Form.astro";
+
+//  Контент
+const itemsReview = [
+  {
+    name: "Дмитрий В.",
+    position: "Технический директор БЦ 'Омега'",
+    text: "Оперативно подобрали мощные радиаторы для отопления офисных помещений. Сертификаты и закрывающие документы предоставили в тот же день. Монтаж выполнен строго в нерабочее время.",
+    image: "/images/Avatar.png",
+  },
+  {
+    name: "Игорь Р.",
+    position: "Застройщик ЖК 'Сказка'",
+    text: "Заказывали оптовую партию радиаторов для нового ЖК. Работают быстро, отличные скидки за объем и гибкий график поставок. Надежные партнеры.",
+    image: "/images/Avatar.png",
+  },
+];
+---
+
+<Layout title="Коммерческая недвижимость | РБК Трейд">
+  <div class="max-w-[100%] overflow-x-hidden relative">
+    <Header />
+    <Hero
+      title="Тепловые решения<br>для коммерческой недвижимости"
+      text="Проектирование и поставка мощного отопительного оборудования для торговых центров, офисов и производств."
+      buttonText="ОСТАВИТЬ ЗАЯВКУ БИЗНЕСУ"
+      bgImage="/images/radiators/hero-main.png"
+    />
+    <Projects />
+    
+    <Reasons
+      variant="manufacturers"
+      title="Поставляем оборудование от проверенных заводов"
+    />
+    <Stores />
+    
+    <WorkProcess 
+      title="Работа с бизнес-объектами"
+      steps={[
+        { number: "01", text: "Анализ проектной документации и теплопотерь" },
+        { number: "02", text: "Подбор промышленных радиаторов по нормативам" },
+        { number: "03", text: "Согласование спецификаций и сметы" },
+        { number: "04", text: "Оптовая поставка и логистика на объект" },
+        { number: "05", text: "Монтаж, опрессовка и сдача технадзору" }
+      ]}
+      buttonText="ЗАПРОСИТЬ РАСЧЕТ ПРОЕКТА"
+    />
+
+    <Gallery />
+    
+    <Carousel title="Отзывы партнеров">
+      {itemsReview.map((item) => (
+          <div class="swiper-slide">
+            <Review item={item} />
+          </div>
+      ))}
+    </Carousel>
+
+    <Designers 
+      title="Почему бизнес выбирает нас"
+      subtitle="Прозрачные условия, работаем с НДС, предоставляем полный пакет закрывающих документов."
+      items={[
+        { text: "Оптовые скидки на оборудование", icon: "/images/icons/design/Group 1171277575.svg" },
+        { text: "Строгое соблюдение сроков поставки", icon: "/images/icons/design/Group 1171277576.svg" },
+        { text: "Полная техническая документация и сертификаты", icon: "/images/icons/design/Group 1171277576-1.svg" },
+        { text: "Гарантийное и постгарантийное обслуживание", icon: "/images/icons/design/Group-1171277576-2.svg" }
+      ]}
+      buttonText="ПОЛУЧИТЬ ПРАЙС"
+    />
+
+    <FAQ />
+    <Contact title="Ответим на заявку в течение часа" />
+
+    <Footer />
+    <Modal id="formModal">
+      <Form title="Заявка для бизнеса" buttonText="ОТПРАВИТЬ" />
+    </Modal>
+  </div>
+</Layout>

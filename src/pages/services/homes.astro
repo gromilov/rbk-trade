@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import Projects from "../../components/Projects.astro";
+import Reasons from "../../components/Reasons.astro";
+import Stores from "../../components/Stores.astro";
+import WorkProcess from "../../components/WorkProcess.astro";
+import Gallery from "../../components/Gallery.astro";
+import Carousel from "../../components/Carousel.astro";
+import Review from "../../components/Review.astro";
+import Designers from "../../components/Designers.astro";
+import FAQ from "../../components/FAQ.astro";
+import Contact from "../../components/Contact.astro";
+import Footer from "../../components/Footer.astro";
+import Modal from "../../components/UI/Modal.astro";
+import Form from "../../components/Form.astro";
+
+//  Контент
+const itemsReview = [
+  {
+    name: "Ольга Н.",
+    position: "Владелица квартиры",
+    text: "Искали красивые радиаторы в гостиную после ремонта. Ребята помогли подобрать цвет и идеально вписали их под наши новые обои. Установка заняла пару часов, за собой всё убрали!",
+    image: "/images/Avatar.png",
+  },
+  {
+    name: "Евгений С.",
+    position: "Хозяин частного дома",
+    text: "Построили дом, нужно было отопление под ключ. Менеджеры сами всё посчитали, организовали доставку и монтаж. Теперь дома тепло, а радиаторы выглядят очень современно.",
+    image: "/images/Avatar.png",
+  },
+];
+---
+
+<Layout title="Квартиры и дома | РБК Трейд">
+  <div class="max-w-[100%] overflow-x-hidden relative">
+    <Header />
+    <Hero
+      title="Стильные радиаторы<br>для вашего дома"
+      text="Тепло, уют и дизайн, который идеально впишется в ваш интерьер. Делаем под ключ: от замера до уборки мусора."
+      buttonText="ВЫБРАТЬ РАДИАТОР"
+      bgImage="/images/radiators/hero-home.png"
+    />
+    <Projects />
+    
+    <Reasons
+      variant="manufacturers"
+      title="Только проверенные европейские бренды"
+    />
+    <Stores />
+    
+    <WorkProcess 
+      title="Этапы создания уюта"
+      steps={[
+        { number: "01", text: "Бесплатная консультация и выезд замерщика" },
+        { number: "02", text: "Подбор радиаторов под ваш стиль и бюджет" },
+        { number: "03", text: "Оформление заказа и согласование даты" },
+        { number: "04", text: "Аккуратный монтаж и подключение к сети" },
+        { number: "05", text: "Чистота после работ и проверка давления" }
+      ]}
+      buttonText="БЕСПЛАТНЫЙ ЗАМЕР"
+    />
+
+    <Gallery />
+    
+    <Carousel title="Отзывы наших клиентов">
+      {itemsReview.map((item) => (
+          <div class="swiper-slide">
+            <Review item={item} />
+          </div>
+      ))}
+    </Carousel>
+
+    <Designers 
+      title="Почему нам доверяют тепло дома"
+      subtitle="Никаких хлопот — мы берем всю работу на себя. Вам остается только наслаждаться результатом."
+      items={[
+        { text: "Помогаем с выбором цвета и дизайна", icon: "/images/icons/design/Group 1171277575.svg" },
+        { text: "Аккуратный и чистый монтаж", icon: "/images/icons/design/Group 1171277576.svg" },
+        { text: "Официальная гарантия на работы оборудования", icon: "/images/icons/design/Group 1171277576-1.svg" },
+        { text: "Работаем без предоплаты за монтаж", icon: "/images/icons/design/Group-1171277576-2.svg" }
+      ]}
+      buttonText="УЗНАТЬ ПОДРОБНЕЕ"
+    />
+
+    <FAQ />
+    <Contact title="Оставьте заявку на бесплатный замер" />
+
+    <Footer />
+    <Modal id="formModal">
+      <Form title="Записаться на замер" buttonText="ОСТАВИТЬ ЗАЯВКУ" />
+    </Modal>
+  </div>
+</Layout>

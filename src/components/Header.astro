@@ -1,5 +1,4 @@
 ---
-export const prerender = false;
 import Button from "./UI/Button.astro";
 import db from "../lib/db";
 
@@ -14,12 +13,11 @@ const menuItems = [
   { 
     id: "services", 
     title: "Наши услуги", 
-    link: "/services.html",
+    link: "/services/designers.html",
     subItems: [
-      { title: "Монтаж", link: "/services/installation.html" },
-      { title: "Проектирование", link: "/services/design.html" },
-      { title: "Подбор оборудования", link: "/services/selection.html" },
-      { title: "Доставка", link: "/services/delivery.html" },
+      { title: "Дизайнерам интерьера", link: "/services/designers.html" },
+      { title: "Коммерческая недвижимость", link: "/services/commercial.html" },
+      { title: "Квартиры и дома", link: "/services/homes.html" },
     ]
   },
   { id: "cases", title: "Наши работы", link: "/cases.html" },

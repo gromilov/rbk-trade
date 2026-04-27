@@ -1,15 +1,12 @@
 ---
 import Button from "./UI/Button.astro";
 
-const businessAreas = [
-  "Финансы",
-  "Недвижимость",
-  "Маркетинг",
-  "Логистика и грузоперевозки",
-  "Производство",
-  "Нефтегазовое",
-  "Общественное питание и HoReCa",
-];
+const {
+  title = "Результат",
+  description = "Вы получите интеллектуальную систему автоматизации, которая возьмет на себя выполнение рутинных задач или наоборот глубокую аналитику бизнеса, повысив производительность и эффективность бизнеса",
+  buttonText = "ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ",
+  image = "/images/shema.svg"
+} = Astro.props;
 ---
 
 <style lang="scss" is:global>
@@ -80,26 +77,22 @@ const businessAreas = [
     <!-- Левая колонка -->
     <div class="result-left-column">
       <!-- Заголовок -->
-      <h1 class="result-title">Результат</h1>
+      <h1 class="result-title" set:html={title} />
 
-      <div class="result-description">
-        Вы получите интеллектуальную систему автоматизации, которая возьмет на
-        себя выполнение рутинных задач или наоборот глубокую аналитику бизнеса,
-        повысив производительность и эффективность бизнеса
-      </div>
+      <div class="result-description" set:html={description} />
       <!-- Кнопка под заголовком -->
       <div class="result-button-container">
         <Button className="open-form" variant="primary" size="lg">
-          ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ
+          {buttonText}
         </Button>
       </div>
     </div>
     <!-- Правая колонка -->
     <div class="result-right-column">
       <img
-        src="/images/shema.svg"
+        src={image}
         class="result-image"
-        alt="Схема работы системы"
+        alt={title.replace(/<[^>]*>?/gm, '')}
       />
     </div>
   </div>

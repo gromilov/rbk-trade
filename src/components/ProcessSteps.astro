@@ -1,6 +1,8 @@
 ---
 // Данные для этапов
-const steps = [
+const { steps: propSteps } = Astro.props;
+
+const steps = propSteps || [
   {
     number: "54",
     text: "Сокращение затрат"

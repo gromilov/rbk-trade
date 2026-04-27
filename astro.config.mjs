@@ -4,7 +4,6 @@ const { format } = htmlFormatterPkg;
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import node from '@astrojs/node';
-import tailwind from '@astrojs/tailwind';
 
 // Функция для рекурсивного поиска HTML файлов
 function findHtmlFiles(dir, fileList = []) {
@@ -29,7 +28,7 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
-  integrations: [tailwind()],
+  integrations: [],
   build: {
     assets: 'assets',
     format: 'preserve'

@@ -2,7 +2,13 @@
 import Icon from './UI/Icon.astro';
 import Button from './UI/Button.astro';
 
-const features = [
+const {
+  title = "Преимущества работы <br> с <span class=\"accent-text\">NexCoreHub</span>",
+  buttonText = "ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ",
+  features: propFeatures
+} = Astro.props;
+
+const features = propFeatures || [
   {
     title: "Регулярная поддержка",
     text: "Сопровождаем проект на всех этапах, помогаем внедрять новые функции и интеграции.",
@@ -135,8 +141,7 @@ const features = [
 
 <section class="advantages-section">
   <div class="advantages-header">
-    <h2 class="advantages-title">Преимущества работы 
-      <br> с <span class="accent-text">NexCoreHub</span></h2>
+    <h2 class="advantages-title" set:html={title} />
   </div>
   <div class="advantages-grid">
     {features.map((feature, index) => (
@@ -156,7 +161,7 @@ const features = [
   <div class="advantages-button-wrapper">
      
     <Button className="open-form" variant="primary" size="lg">
-      ПОЛУЧИТЬ КОНСУЛЬТАЦИЮ
+      {buttonText}
     </Button>
   </div>
 

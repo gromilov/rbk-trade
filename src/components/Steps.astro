@@ -1,7 +1,12 @@
 ---
 // components/StagesOfWork.astro
 
-const stages = [
+const {
+  title = "Этапы работы с нами",
+  stages: propStages
+} = Astro.props;
+
+const stages = propStages || [
   {
     number: 1,
     title: "Подготовка коммерческого предложения",
@@ -375,7 +380,7 @@ const stages = [
 
 <section class="stages-section" id="stages-section">
   <div class="stages-header">
-    <h2 class="stages-title">Этапы работы с нами</h2>
+    <h2 class="stages-title" set:html={title} />
   </div>
   
   <div class="stages-container">

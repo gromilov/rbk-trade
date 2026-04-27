@@ -1,6 +1,11 @@
 ---
 import db from "../lib/db";
-const faqs = db.prepare('SELECT * FROM faqs ORDER BY sort_order ASC').all();
+
+const { faqs: propFaqs } = Astro.props;
+let faqs = propFaqs;
+if (!faqs || faqs.length === 0) {
+  faqs = db.prepare('SELECT * FROM faqs ORDER BY sort_order ASC').all();
+}
 ---
 <section class="faq" id="faq">
   <div class="faq__container">

@@ -1,41 +1,40 @@
 ---
 import Button from './UI/Button.astro';
+
+const {
+  title = "Как мы работаем",
+  steps = [
+    { number: "01", text: "Вы присылаете планировку или референсы стиля" },
+    { number: "02", text: "Мы подбираем 2–3 варианта радиаторов под бюджет" },
+    { number: "03", text: "Отправляем КП + 3D-модели + референсы" },
+    { number: "04", text: "Передаём координаты нашей монтажной бригады" },
+    { number: "05", text: "После монтажа — фото для вашего портфолио" }
+  ],
+  buttonText = "ОБСУДИТЬ ПРОЕКТ",
+  image = "/images/radiators/work-process-new.png"
+} = Astro.props;
 ---
 
 <section class="work-process" id="how-we-work">
   <div class="work-process__container">
     <div class="work-process__grid">
       <div class="work-process__content">
-        <h2 class="work-process__title">Как мы работаем</h2>
+        <h2 class="work-process__title" set:html={title} />
         <div class="work-process__list">
-          <div class="work-process__item">
-            <span class="work-process__number">01</span>
-            <p class="work-process__text">Вы присылаете планировку или референсы стиля</p>
-          </div>
-          <div class="work-process__item">
-            <span class="work-process__number">02</span>
-            <p class="work-process__text">Мы подбираем 2–3 варианта радиаторов под бюджет</p>
-          </div>
-          <div class="work-process__item">
-            <span class="work-process__number">03</span>
-            <p class="work-process__text">Отправляем КП + 3D-модели + референсы</p>
-          </div>
-          <div class="work-process__item">
-            <span class="work-process__number">04</span>
-            <p class="work-process__text">Передаём координаты нашей монтажной бригады</p>
-          </div>
-          <div class="work-process__item">
-            <span class="work-process__number">05</span>
-            <p class="work-process__text">После монтажа — фото для вашего портфолио</p>
-          </div>
+          {steps.map(step => (
+            <div class="work-process__item">
+              <span class="work-process__number">{step.number}</span>
+              <p class="work-process__text" set:html={step.text} />
+            </div>
+          ))}
         </div>
         <div class="work-process__actions">
-            <Button className="open-form" variant="dark">ОБСУДИТЬ ПРОЕКТ</Button>
+            <Button className="open-form" variant="dark">{buttonText}</Button>
         </div>
       </div>
 
       <div class="work-process__image-wrapper">
-         <img src="/images/radiators/work-process-new.png" alt="Процесс работы" class="work-process__image" />
+         <img src={image} alt="Процесс работы" class="work-process__image" />
       </div>
     </div>
   </div>

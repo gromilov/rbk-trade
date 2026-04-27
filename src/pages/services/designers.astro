@@ -1,84 +1,99 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Result from '../components/Result.astro';
-import Steps from '../components/Steps.astro';
-import FAQ from '../components/FAQ.astro';
-import Footer from '../components/Footer.astro';
-import ProcessSteps from '../components/ProcessSteps.astro';
-import Dashboard from '../components/Dashboard.astro';
-import Carousel from '../components/Carousel.astro';
-import Banner from '../components/Banner.astro';
-import Cases from '../components/Cases.astro';
-import Contact from '../components/Contact.astro';
-import Modal from '../components/UI/Modal.astro';
-import Form from '../components/Form.astro';
-import Review from '../components/Review.astro';
-import ServicesPage from '../components/ServicesPage.astro';
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+import Hero from "../../components/Hero.astro";
+import Projects from "../../components/Projects.astro";
+import Partners from "../../components/Partners.astro";
+import Reasons from "../../components/Reasons.astro";
+import Stores from "../../components/Stores.astro";
+import WorkProcess from "../../components/WorkProcess.astro";
+import Gallery from "../../components/Gallery.astro";
+import Carousel from "../../components/Carousel.astro";
+import Review from "../../components/Review.astro";
+import Designers from "../../components/Designers.astro";
+import FAQ from "../../components/FAQ.astro";
+import Contact from "../../components/Contact.astro";
+import Footer from "../../components/Footer.astro";
+import Modal from "../../components/UI/Modal.astro";
+import Form from "../../components/Form.astro";
+
+//  Контент
 
 const itemsReview = [
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 ];
 ---
 
-<Layout>
-  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
+<Layout title="РБК Трейд | Дизайнерские радиаторы в Казани">
+  <div class="max-w-[100%] overflow-x-hidden relative">
     <Header />
-    <Hero 
-      title='ИИ-ассистенты для управления проектами и процессами' 
-      text='Встраивание AI-помощников в корпоративные системы для анализа эффективности рабочих процессов, выявления узких мест, автоматического создания задач и формирования отчетов.'
+    <Hero
+      title="Дизайнерские радиаторы<br>для интерьеров любой сложности"
+      text="Поставка и установка отопительного оборудования в Казани и по всему Татарстану"
+      buttonText="ПЕРЕЙТИ В КАТАЛОГ"
+      bgImage="/images/radiators/hero-home.png"
     />
-    <ProcessSteps />
-    <ServicesPage />
-    <Cases />
-    <Banner title='Начните с малого - внедрите<br> ИИ-агента в один процесс!' />
-    <Steps />
-    <Result />
-    <Banner 
-      title='Готовы автоматизировать бизнес <br> с помощью ИИ-агентов?'
+    <Projects />
+    <!-- Почему дизайнеры доверяют нам -->
+    <Reasons
+      variant="manufacturers"
+      title="Работаем с лучшими производителями радиаторов"
     />
+    <Stores />
+    <WorkProcess />
+    <!-- Как мы работаем -->
+    <Gallery />
+    <!-- Наши работы -->
     <Carousel title="Отзывы">
-      {itemsReview.map((item, index) => (
-        <div class="swiper-slide">
-          <Review item={item} />
-        </div>
-      ))}
+      {
+        itemsReview.map((item, index) => (
+          <div class="swiper-slide">
+            <Review item={item} />
+          </div>
+        ))
+      }
     </Carousel>
-    <Dashboard />
-    <Banner title='Выведите бизнес на новый <br> уровень эффективности!' />
+    <Designers />
+    <!-- Дизайнерам интерьеров -->
     <FAQ />
-    <Contact />
+    <Contact title="Рассчитаем ваш проект за 1 день" />
+
+    <!-- <Banner title='Выведите бизнес на новый <br> уровень эффективности!' /> -->
+    <!-- <Cases /> -->
+    <!-- <FAQ /> -->
+
     <Footer />
     <Modal id="formModal">
       <Form />
     </Modal>
+    <!-- <Form  id="privacy-policy">
+      <PrivacyPolicy />
+    </Form> -->
   </div>
 </Layout>
-
