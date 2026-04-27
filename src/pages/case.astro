@@ -1,186 +1,351 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Cases from '../components/Cases.astro';
-import Contact from '../components/Contact.astro';
-import Carousel from '../components/Carousel.astro';
-import Modal from '../components/UI/Modal.astro';
-import Form from '../components/Form.astro';
-import Case from '../components/Case.astro';
-import CasePage from '../components/CasePage.astro';
-const casesItems = [
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-  {
-    title: "Внедрение системы ИИ-агентов на производственном предприятии",
-    tags: ["Франчайзинг", "B2B", "Москва",],
-    text: "Производственное предприятие в сфере металлообработки внедрило систему ИИ-агентов для интеллектуального управления производством.",
-    results: [
-      {
-        value: "-45%",
-        text: "Снижение незапланированных простоев оборудования",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "+18%",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "",
-      },
-      {
-        value: "–25",
-        text: "Рост общей эффективности оборудования (OEE)",
-        prefix: "",
-        postfix: "ч/нед",
-      }
-    ]
-  },
-];
-//  Контент 
-import PrivacyPolicy from '../content/privacy-policy.md';
+export const prerender = false;
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Stores from "../components/Stores.astro";
+import FAQ from "../components/FAQ.astro";
+import Contact from "../components/Contact.astro";
+import BannerNew from "../components/BannerNew.astro";
+import db from "../lib/db";
+
+const slug = Astro.url.searchParams.get("slug");
+
+if (!slug) {
+  return Astro.redirect('/cases.html');
+}
+
+const project = db.prepare(`
+  SELECT c.*, t.name as type_label, m.name as manufacturer_label 
+  FROM cases c
+  LEFT JOIN types t ON c.type_id = t.id
+  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
+  WHERE c.slug = ?
+`).get(slug);
+
+if (!project) {
+  return Astro.redirect('/cases.html');
+}
+
+// Получаем галерею
+const gallery = db.prepare('SELECT image_path FROM case_images WHERE case_id = ?').all(project.id).map(img => img.image_path);
+const allImages = [project.main_image, ...gallery];
+
+// Парсим задачи
+let tasks = [];
+try { tasks = JSON.parse(project.tasks || '[]'); } catch(e) { tasks = []; }
+
 ---
 
-<Layout>
-  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
-    <Header />
-    <CasePage />
-    <Carousel title="Другие кейсы">
-      {casesItems.map((item, index) => (
-        <div class="swiper-slide">
-          <Case item={item} />
+<Layout title={`${project.title} | Проекты RBK Trade`}>
+  <Header theme="dark" />
+
+  <main class="case-single">
+    <!-- Hero проекта -->
+    <section class="case-hero">
+      <div class="case-hero__container">
+        <h1 class="case-hero__title">{project.title}</h1>
+        <p class="case-hero__subtitle">{project.subtitle}</p>
+        <div class="case-hero__tags">
+          <span class="tag">{project.type_label}</span>
+          <span class="tag">{project.manufacturer_label}</span>
         </div>
-      ))}
-    </Carousel>
+
+        <div class="case-gallery">
+          <div class="case-gallery__main">
+            <img src={allImages[0]} alt={project.title} />
+          </div>
+          {allImages.length > 1 && (
+            <div class="case-gallery__grid">
+              {allImages.slice(1, 4).map(img => (
+                <div class="case-gallery__item">
+                  <img src={img} alt="Gallery item" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- Описание проекта -->
+    <section class="case-description">
+      <div class="case-description__container">
+        <h2 class="case-description__title">Описание проекта</h2>
+        <div class="case-description__grid">
+          <div class="case-description__left">
+            <h3>Проделанные работы:</h3>
+            <ul class="case-tasks">
+              {tasks.map(task => (
+                <li class="case-tasks__item">{task}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="case-description__right">
+            <div class="case-result">
+                <h4>Итог:</h4>
+                <p>{project.result_text}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Отзыв заказчика -->
+    <section class="case-review">
+      <div class="case-review__container">
+        <h2 class="case-review__title">Отзыв заказчика</h2>
+        <div class="case-review__card">
+            <div class="case-review__quote-icon">
+                <svg width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M88 0.766104L85.9294 15.9282C80.5459 15.5128 76.6118 16.6205 74.1271 19.2514C71.6423 21.8822 70.1239 25.4131 69.5718 29.8441C69.0196 34.275 68.8816 39.0521 69.1576 44.1753H88V88H52.5929V35.8674C52.5929 23.1285 55.7678 13.5743 62.1176 7.2048C68.6055 0.835343 77.2329 -1.31089 88 0.766104ZM35.4071 0.766104L33.3365 15.9282C27.9529 15.5128 24.0188 16.6205 21.5341 19.2514C19.0494 21.8822 17.531 25.4131 16.9788 29.8441C16.4267 34.275 16.2886 39.0521 16.5647 44.1753H35.4071V88H0V35.8674C0 23.1285 3.1749 13.5743 9.52471 7.2048C16.0126 0.835343 24.64 -1.31089 35.4071 0.766104Z" fill="url(#paint0_linear_case_quote)"/>
+                    <defs>
+                      <linearGradient id="paint0_linear_case_quote" x1="44" y1="0" x2="44" y2="88" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#E7E5E4"/>
+                        <stop offset="1" stop-color="#E7E5E4" stop-opacity="0.5"/>
+                      </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="case-review__content">
+                <p class="case-review__text">
+                    {project.review_text}
+                </p>
+                <p class="case-review__author">{project.review_author}</p>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <BannerNew 
+      title="Обсудим ваш проект? Напишите нам"
+      bgColor="#B33C2F"
+      bgImage="/images/Group 1171277658.png" 
+      imagePosition="side"
+      showSocial={true}
+    />
+
+    <Stores />
+    <FAQ />
     <Contact />
-    <Footer />
-    <Modal id="formModal">
-      <Form />
-    </Modal>
-  </div>
+  </main>
+
+  <Footer />
 </Layout>
 
+<style lang="scss">
+  .case-single {
+    padding-top: 140px;
+    background-color: #FFFFFF;
+  }
+
+  .case-hero {
+    padding: 60px 0 80px;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+      text-align: center;
+    }
+
+    &__title {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 24px;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+      color: #525152;
+      margin-bottom: 32px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &__tags {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 60px;
+
+      .tag {
+        padding: 8px 24px;
+        background-color: #F6F6F6;
+        border-radius: 100px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111111;
+      }
+    }
+  }
+
+  .case-gallery {
+    &__main {
+      width: 100%;
+      height: 600px;
+      border-radius: 24px;
+      overflow: hidden;
+      margin-bottom: 24px;
+
+      img { width: 100%; height: 100%; object-fit: cover; }
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__item {
+      height: 380px;
+      border-radius: 24px;
+      overflow: hidden;
+      img { width: 100%; height: 100%; object-fit: cover; }
+    }
+  }
+
+  .case-description {
+    padding: 100px 0;
+
+    &__container {
+        max-width: var(--container-max);
+        margin: 0 auto;
+        padding: 0 var(--space-4);
+    }
+
+    &__title {
+        font-size: 48px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 40px;
+
+        @media (max-width: 991px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__left {
+        background-color: #F6F6F6;
+        padding: 48px;
+        border-radius: 24px;
+
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+    }
+  }
+
+  .case-tasks {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__item {
+        position: relative;
+        padding-left: 32px;
+        line-height: 1.5;
+        color: #111111;
+        font-weight: 500;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            background: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 13L9 17L19 7' stroke='%23DE6D20' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
+        }
+    }
+  }
+
+  .case-result {
+    background-color: var(--color-primary); // Или #DE6D20 по макету
+    padding: 48px;
+    border-radius: 24px;
+    color: white;
+    height: 100%;
+
+    h4 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    p {
+        font-size: clamp(20px, 3vw, 28px);
+        font-weight: 600;
+        line-height: 1.3;
+    }
+  }
+
+  .case-review {
+    padding: 100px 0;
+
+    &__container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 var(--space-4);
+    }
+
+    &__title {
+        font-size: 48px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    &__card {
+        text-align: center;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__quote-icon {
+        margin-bottom: -40px; // Negative margin to make content overlap
+        position: relative;
+        z-index: 1;
+        opacity: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__content {
+        position: relative;
+        z-index: 2;
+    }
+
+    &__text {
+        font-size: clamp(18px, 3vw, 24px);
+        line-height: 1.5;
+        color: #111111;
+        margin-bottom: 32px;
+        font-weight: 500;
+        max-width: 900px;
+    }
+
+    &__author {
+        font-weight: 700;
+        opacity: 0.5;
+        font-size: 16px;
+    }
+  }
+</style>

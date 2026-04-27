@@ -1,0 +1,140 @@
+---
+export const prerender = false;
+import ManagerLayout from "../../layouts/ManagerLayout.astro";
+import db from "../../lib/db";
+
+// Получаем текущие настройки
+const settingsRaw = db.prepare('SELECT * FROM settings').all();
+const settings = Object.fromEntries(settingsRaw.map(s => [s.key, s.value]));
+---
+
+<ManagerLayout title="Общие настройки">
+  <form id="settingsForm" class="settings-form">
+    <div class="settings-section">
+      <h3 class="settings-section__title">Контакты</h3>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Телефон 1</label>
+          <input type="text" name="phone_1" value={settings.phone_1} />
+        </div>
+        <div class="form-group">
+          <label>Телефон 2</label>
+          <input type="text" name="phone_2" value={settings.phone_2} />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" name="email" value={settings.email} />
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3 class="settings-section__title">Соцсети и Мессенджеры</h3>
+      
+      <div class="form-group">
+        <label>Telegram (ссылка)</label>
+        <input type="text" name="telegram" value={settings.telegram} placeholder="https://t.me/..." />
+      </div>
+      <div class="form-group">
+        <label>WhatsApp / Max (ссылка)</label>
+        <input type="text" name="whatsapp" value={settings.whatsapp} placeholder="https://wa.me/..." />
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary btn-save" id="saveBtn">
+      Сохранить изменения
+    </button>
+  </form>
+</ManagerLayout>
+
+<script>
+  const form = document.getElementById('settingsForm') as HTMLFormElement;
+  const saveBtn = document.getElementById('saveBtn') as HTMLButtonElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!saveBtn) return;
+    
+    saveBtn.disabled = true;
+    saveBtn.innerText = 'Сохранение...';
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const res = await fetch('/api/manager/settings', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const result = await res.json();
+      if (result.success) {
+        saveBtn.innerText = '✅ Сохранено!';
+        setTimeout(() => {
+          saveBtn.disabled = false;
+          saveBtn.innerText = 'Сохранить изменения';
+        }, 2000);
+      } else {
+        alert('Ошибка: ' + result.error);
+        saveBtn.disabled = false;
+        saveBtn.innerText = 'Сохранить изменения';
+      }
+    } catch (err) {
+      alert('Ошибка соединения с сервером');
+      saveBtn.disabled = false;
+      saveBtn.innerText = 'Сохранить изменения';
+    }
+  });
+</script>
+
+<style lang="scss">
+  .settings-form {
+    display: grid;
+    gap: 24px;
+  }
+
+  .settings-section {
+    background: #FFFFFF;
+    padding: 32px;
+    border-radius: 32px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: 640px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  .btn-save {
+    width: 100%;
+    box-shadow: 0 10px 20px var(--color-primary-20);
+    transition: all 0.2s ease;
+    
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+  }
+</style>

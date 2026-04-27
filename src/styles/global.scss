@@ -184,13 +184,13 @@ $colors: (
 
 @font-face {
   font-family: 'Articulat CF';
-  src: url('../fonts/articulatcf-regular.eot');
+  src: url('/fonts/articulatcf-regular.eot');
   src: 
-    url('../fonts/articulatcf-regular.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/articulatcf-regular.woff2') format('woff2'),
-    url('../fonts/articulatcf-regular.woff') format('woff'),
-    url('../fonts/articulatcf-regular.ttf') format('truetype'),
-    url('../fonts/articulatcf-regular.svg#articulatcf-regular') format('svg');
+    url('/fonts/articulatcf-regular.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/articulatcf-regular.woff2') format('woff2'),
+    url('/fonts/articulatcf-regular.woff') format('woff'),
+    url('/fonts/articulatcf-regular.ttf') format('truetype'),
+    url('/fonts/articulatcf-regular.svg#articulatcf-regular') format('svg');
   font-weight: 400;
   font-style: normal;
   font-display: swap; /* Оптимизация загрузки */
@@ -198,13 +198,13 @@ $colors: (
 
 @font-face {
   font-family: 'Articulat CF';
-  src: url('../fonts/articulatcf-demibold.eot');
+  src: url('/fonts/articulatcf-demibold.eot');
   src: 
-    url('../fonts/articulatcf-demibold.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/articulatcf-demibold.woff2') format('woff2'),
-    url('../fonts/articulatcf-demibold.woff') format('woff'),
-    url('../fonts/articulatcf-demibold.ttf') format('truetype'),
-    url('../fonts/articulatcf-demibold.svg#articulatcf-bold') format('svg');
+    url('/fonts/articulatcf-demibold.eot?#iefix') format('embedded-opentype'),
+    url('/fonts/articulatcf-demibold.woff2') format('woff2'),
+    url('/fonts/articulatcf-demibold.woff') format('woff'),
+    url('/fonts/articulatcf-demibold.ttf') format('truetype'),
+    url('/fonts/articulatcf-demibold.svg#articulatcf-bold') format('svg');
   font-weight: 700;
   font-style: normal;
   font-display: swap;

@@ -3,6 +3,8 @@ import htmlFormatterPkg from 'html-formatter';
 const { format } = htmlFormatterPkg;
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
+import node from '@astrojs/node';
+import tailwind from '@astrojs/tailwind';
 
 // Функция для рекурсивного поиска HTML файлов
 function findHtmlFiles(dir, fileList = []) {
@@ -23,6 +25,11 @@ function findHtmlFiles(dir, fileList = []) {
 }
 
 export default defineConfig({
+  output: 'server',
+  adapter: node({
+    mode: 'standalone',
+  }),
+  integrations: [tailwind()],
   build: {
     assets: 'assets',
     format: 'preserve'

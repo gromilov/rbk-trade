@@ -1,0 +1,278 @@
+---
+export const prerender = false;
+import ManagerLayout from "../../../layouts/ManagerLayout.astro";
+import db from "../../../lib/db";
+---
+
+<ManagerLayout title="Добавить магазин">
+  <div class="edit-page">
+    <div class="edit-header">
+      <a href="/manager/stores" class="btn-back">← К списку</a>
+      <h2 class="edit-title">Новый шоу-рум</h2>
+    </div>
+
+    <div class="edit-grid">
+      <div class="edit-main">
+        <div class="card">
+          <div class="form-group">
+            <label>Название магазина</label>
+            <input type="text" id="title" placeholder="Напр. Казань, ТЦ Савиново" class="input-large" />
+          </div>
+
+          <div class="form-group">
+            <label>Адрес</label>
+            <input type="text" id="address" placeholder="Полный адрес" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Телефон (можно несколько через запятую)</label>
+              <input type="text" id="phone" placeholder="+7..." />
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" id="email" placeholder="shop@mail.ru" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>График работы</label>
+            <textarea id="work_time" rows="3" placeholder="Пн-Пт: 09:00 - 20:00..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Ссылка на Яндекс.Карту (iframe src)</label>
+            <input type="text" id="map_url" placeholder="https://yandex.ru/map-widget/..." />
+          </div>
+        </div>
+      </div>
+
+      <div class="edit-side">
+        <div class="card">
+          <label>Фото магазина</label>
+          <div class="img-uploader" id="uploader">
+            <div class="img-preview" id="preview">
+               <span>Перетащите фото или кликните</span>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" hidden />
+          </div>
+        </div>
+
+        <button class="btn-save" id="saveBtn">Создать шоу-рум</button>
+      </div>
+    </div>
+  </div>
+</ManagerLayout>
+
+<script>
+  let imagePath = '';
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  const uploader = document.getElementById('uploader');
+  const preview = document.getElementById('preview');
+  const saveBtn = document.getElementById('saveBtn');
+
+  uploader?.addEventListener('click', () => fileInput.click());
+
+  fileInput?.addEventListener('change', async (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    if (preview) preview.innerHTML = '<span>Загрузка...</span>';
+
+    const base64 = await resizeImage(file);
+    const res = await fetch('/api/manager/upload', {
+      method: 'POST',
+      body: JSON.stringify({ image: base64, name: file.name }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    
+    if (data.url) {
+      imagePath = data.url;
+      if (preview) {
+        preview.innerHTML = `<img src="${data.url}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />`;
+      }
+    }
+  });
+
+  async function resizeImage(file: File, maxWidth = 1200): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  saveBtn?.addEventListener('click', async () => {
+    const data = {
+      title: (document.getElementById('title') as HTMLInputElement).value,
+      address: (document.getElementById('address') as HTMLInputElement).value,
+      phone: (document.getElementById('phone') as HTMLInputElement).value,
+      email: (document.getElementById('email') as HTMLInputElement).value,
+      work_time: (document.getElementById('work_time') as HTMLTextAreaElement).value,
+      map_url: (document.getElementById('map_url') as HTMLInputElement).value,
+      image_path: imagePath
+    };
+
+    if (!data.title) return alert('Введите название магазина');
+
+    saveBtn.innerText = 'Создание...';
+    (saveBtn as HTMLButtonElement).disabled = true;
+
+    try {
+      const res = await fetch('/api/manager/save-store', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (res.ok) {
+        window.location.href = '/manager/stores';
+      } else {
+        alert('Ошибка при сохранении');
+        saveBtn.innerText = 'Создать шоу-рум';
+        (saveBtn as HTMLButtonElement).disabled = false;
+      }
+    } catch (err) {
+      alert('Ошибка соединения');
+      saveBtn.innerText = 'Создать шоу-рум';
+      (saveBtn as HTMLButtonElement).disabled = false;
+    }
+  });
+</script>
+
+<style lang="scss">
+  .edit-page {
+    max-width: 1200px;
+  }
+
+  .edit-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    
+    .btn-back {
+      text-decoration: none;
+      color: #999;
+      font-weight: 700;
+      &:hover { color: #111; }
+    }
+    
+    .edit-title {
+      font-size: 32px;
+      font-weight: 800;
+    }
+  }
+
+  .edit-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 32px;
+    @media (max-width: 991px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .card {
+    background: white;
+    padding: 32px;
+    border-radius: 32px;
+    border: 1px solid rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+    &:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: #F6F6F6;
+      border: 1px solid transparent;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-family: inherit;
+      &:focus { border-color: #DE6D20; outline: none; background: white; }
+    }
+
+    .input-large {
+      font-size: 24px;
+      font-weight: 800;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
+  }
+
+  .img-uploader {
+    margin-top: 12px;
+    height: 300px;
+    border: 2px dashed #EEE;
+    border-radius: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover { border-color: #DE6D20; background: #FFF9F5; }
+
+    .img-preview {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-weight: 600;
+    }
+  }
+
+  .btn-save {
+    width: 100%;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 24px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    
+    &:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+    &:disabled { opacity: 0.5; transform: none; }
+  }
+</style>

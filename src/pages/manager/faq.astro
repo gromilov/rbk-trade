@@ -1,0 +1,136 @@
+---
+import ManagerLayout from "../../layouts/ManagerLayout.astro";
+import db from "../../lib/db";
+
+// Обработка POST для сохранения
+if (Astro.request.method === "POST") {
+  const data = await Astro.request.formData();
+  const id = data.get("id");
+  const question = data.get("question");
+  const answer = data.get("answer");
+  const action = data.get("action");
+
+  if (action === "delete" && id) {
+    db.prepare('DELETE FROM faqs WHERE id = ?').run(id);
+  } else if (id) {
+    db.prepare('UPDATE faqs SET question = ?, answer = ? WHERE id = ?').run(question, answer, id);
+  } else {
+    db.prepare('INSERT INTO faqs (question, answer) VALUES (?, ?)').run(question, answer);
+  }
+}
+
+const faqs = db.prepare('SELECT * FROM faqs ORDER BY sort_order ASC').all();
+---
+
+<ManagerLayout title="Управление FAQ">
+  <div class="faq-manager">
+    <!-- Форма добавления -->
+    <div class="form-card">
+      <h3 class="form-card__title">Добавить новый вопрос</h3>
+      <form method="POST" class="form-add">
+        <input type="text" name="question" placeholder="Вопрос" required />
+        <textarea name="answer" placeholder="Ответ" required rows="3"></textarea>
+        <button type="submit" class="btn-primary">Добавить</button>
+      </form>
+    </div>
+
+    <!-- Список -->
+    <div class="faq-list">
+      {faqs.map(faq => (
+        <form method="POST" class="faq-item">
+          <input type="hidden" name="id" value={faq.id} />
+          <input type="text" name="question" value={faq.question} class="faq-item__q" />
+          <textarea name="answer" class="faq-item__a" rows="3">{faq.answer}</textarea>
+          <div class="faq-item__actions">
+            <button type="submit" class="btn-update">Обновить</button>
+            <button type="submit" name="action" value="delete" class="btn-delete" onclick="return confirm('Удалить?')">Удалить</button>
+          </div>
+        </form>
+      ))}
+    </div>
+  </div>
+</ManagerLayout>
+
+<style lang="scss">
+  .faq-manager {
+    display: grid;
+    gap: 32px;
+  }
+
+  .form-card {
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--color-primary);
+    }
+  }
+
+  .form-add {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 16px;
+  }
+
+  .faq-item {
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__q {
+      font-weight: 800 !important;
+      border-bottom: 1px solid #EEE !important;
+      border-radius: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-bottom: 12px;
+      background: transparent !important;
+    }
+
+    &__a {
+      font-size: 14px !important;
+      color: #666;
+      background: transparent !important;
+      border: none !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    &__actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .btn-update {
+      flex: 1;
+      background: #F6F6F6;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-delete {
+      background: #FEF2F2;
+      color: #EF4444;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  }
+</style>

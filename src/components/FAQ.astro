@@ -1,112 +1,33 @@
+---
+import db from "../lib/db";
+const faqs = db.prepare('SELECT * FROM faqs ORDER BY sort_order ASC').all();
+---
 <section class="faq" id="faq">
   <div class="faq__container">
     <h2 class="faq__title">Вопросы-ответы</h2>
     
     <div class="faq__list">
-      <!-- Item 1 -->
-      <div class="faq__item" data-faq-item>
-        <button class="faq__trigger" aria-expanded="false">
-          <span class="faq__question">Можно ли получить 3D-модель радиатора до покупки?</span>
-          <div class="faq__icon">
-            <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
-                <rect width="20" height="2" fill="currentColor"/>
-            </svg>
-          </div>
-        </button>
-        <div class="faq__content">
-          <div class="faq__answer-wrapper">
-            <p class="faq__answer">Да, высылаем .obj, .3ds, .stp.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Item 2 -->
-      <div class="faq__item" data-faq-item>
-        <button class="faq__trigger" aria-expanded="false">
-          <span class="faq__question">Работаете ли вы с проектами за пределами Казани?</span>
-          <div class="faq__icon">
-            <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
-                <rect width="20" height="2" fill="currentColor"/>
-            </svg>
-          </div>
-        </button>
-        <div class="faq__content">
-          <div class="faq__answer-wrapper">
-            <p class="faq__answer">Да, мы работаем по всей России и СНГ. Отправка осуществляется транспортными компаниями.</p>
+      {faqs.map((faq) => (
+        <div class="faq__item" data-faq-item>
+          <button class="faq__trigger" aria-expanded="false">
+            <span class="faq__question">{faq.question}</span>
+            <div class="faq__icon">
+              <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
+                  <rect width="20" height="2" fill="currentColor"/>
+              </svg>
+            </div>
+          </button>
+          <div class="faq__content">
+            <div class="faq__answer-wrapper">
+              <p class="faq__answer">{faq.answer}</p>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Item 3 -->
-      <div class="faq__item" data-faq-item>
-        <button class="faq__trigger" aria-expanded="false">
-          <span class="faq__question">Красите ли вы радиаторы в любой цвет RAL?</span>
-          <div class="faq__icon">
-            <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
-                <rect width="20" height="2" fill="currentColor"/>
-            </svg>
-          </div>
-        </button>
-        <div class="faq__content">
-          <div class="faq__answer-wrapper">
-            <p class="faq__answer">Да, возможна покраска в любой цвет по палитре RAL (более 200 оттенков) с различной текстурой.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Item 4 -->
-      <div class="faq__item" data-faq-item>
-        <button class="faq__trigger" aria-expanded="false">
-          <span class="faq__question">Есть ли радиаторы под встроенный монтаж?</span>
-          <div class="faq__icon">
-            <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
-                <rect width="20" height="2" fill="currentColor"/>
-            </svg>
-          </div>
-        </button>
-        <div class="faq__content">
-          <div class="faq__answer-wrapper">
-            <p class="faq__answer">Да, у нас большой ассортимент внутрипольных конвекторов, которые идеально подходят для больших окон в пол.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Item 5 -->
-      <div class="faq__item" data-faq-item>
-        <button class="faq__trigger" aria-expanded="false">
-          <span class="faq__question">Даете ли скидку дизайнерам?</span>
-          <div class="faq__icon">
-            <svg class="faq__icon-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            <svg class="faq__icon-minus" width="20" height="2" viewBox="0 0 20 2" fill="none">
-                <rect width="20" height="2" fill="currentColor"/>
-            </svg>
-          </div>
-        </button>
-        <div class="faq__content">
-          <div class="faq__answer-wrapper">
-            <p class="faq__answer">Для дизайнеров и архитекторов у нас действуют специальные условия сотрудничества и система лояльности.</p>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

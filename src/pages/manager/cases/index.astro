@@ -1,0 +1,184 @@
+---
+export const prerender = false;
+import ManagerLayout from "../../../layouts/ManagerLayout.astro";
+import db from "../../../lib/db";
+
+const projects = db.prepare(`
+  SELECT c.*, t.name as type_name, m.name as manufacturer_name 
+  FROM cases c
+  LEFT JOIN types t ON c.type_id = t.id
+  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
+  ORDER BY c.created_at DESC
+`).all();
+---
+
+<ManagerLayout title="Управление проектами">
+  <div class="projects-actions">
+    <div class="projects-count">{projects.length} объектов в списке</div>
+    <a href="/manager/cases/add" class="btn-add">
+      <span>+</span> Новый проект
+    </a>
+  </div>
+
+  <div class="projects-list">
+    {projects.length === 0 ? (
+      <div class="empty-state">
+        <div class="empty-state__icon">📭</div>
+        <div class="empty-state__text">Пока нет ни одного проекта</div>
+        <p class="empty-state__sub">Добавьте свой первый проект, чтобы он появился на сайте</p>
+      </div>
+    ) : (
+      projects.map((item) => (
+        <div class="project-item">
+          <div class="project-item__img">
+            {item.main_image ? (
+              <img src={item.main_image} alt="" />
+            ) : (
+              <div class="project-item__img-placeholder">🖼️</div>
+            )}
+          </div>
+          <div class="project-item__info">
+            <h4 class="project-item__title">{item.title}</h4>
+            <div class="project-item__tags">
+              <span class="tag tag--light">{item.type_name || 'Без типа'}</span>
+              <span class="tag tag--orange">{item.manufacturer_name || 'Без бренда'}</span>
+            </div>
+          </div>
+          <div class="project-item__actions">
+            <a href={`/manager/cases/edit?id=${item.id}`} class="btn-icon">
+              ✏️
+            </a>
+            <button class="btn-icon btn-icon--danger" onclick={`if(confirm('Удалить проект?')) window.location.href='/api/manager/delete-case?id=${item.id}'`}>
+              🗑️
+            </button>
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+</ManagerLayout>
+
+<style lang="scss">
+  .projects-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .projects-count {
+    color: #999;
+    font-size: 14px;
+  }
+
+  .btn-add {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    span { font-size: 20px; line-height: 1; }
+  }
+
+  .projects-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .project-item {
+    background: #FFFFFF;
+    padding: 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__img {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #F6F6F6;
+      flex-shrink: 0;
+
+      img { width: 100%; height: 100%; object-fit: cover; }
+      &-placeholder { 
+        width: 100%; height: 100%; 
+        display: flex; align-items: center; justify-content: center; 
+        font-size: 24px;
+      }
+    }
+
+    &__info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 6px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+
+    &__tags {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+
+      &--light { background: #F6F6F6; color: #999; }
+      &--orange { background: var(--color-primary-10); color: var(--color-primary); }
+    }
+
+    &__actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #F6F6F6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: #FFFFFF;
+      cursor: pointer;
+
+      &--danger { color: #EF4444; &:hover { background: #FEF2F2; } }
+      &:hover { background: #F9FAFB; }
+    }
+  }
+
+  .empty-state {
+    padding: 60px;
+    text-align: center;
+    background: #FFFFFF;
+    border-radius: 32px;
+    border: 2px dashed #EEE;
+
+    &__icon { font-size: 48px; margin-bottom: 16px; }
+    &__text { font-size: 20px; font-weight: 800; color: #CCC; }
+    &__sub { color: #DDD; margin-top: 8px; }
+  }
+</style>

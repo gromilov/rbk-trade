@@ -1,0 +1,230 @@
+---
+export const prerender = false;
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Contact from "../components/Contact.astro";
+import db from "../lib/db";
+
+const showrooms = db.prepare('SELECT * FROM stores').all();
+
+function getMapUrl(url) {
+  if (!url) return '';
+  if (url.includes('yandex.ru/maps') && !url.includes('map-widget')) {
+    return url.replace('yandex.ru/maps', 'yandex.ru/map-widget/v1');
+  }
+  return url;
+}
+---
+
+<Layout title="Наши магазины | RBK Trade">
+  <Header theme="dark" />
+
+  <main class="showrooms-page">
+    <section class="showrooms-hero">
+      <div class="showrooms-hero__container">
+        <h1 class="showrooms-hero__title">Наши магазины</h1>
+      </div>
+    </section>
+
+    {showrooms.map((room) => (
+      <section class="showroom">
+        <div class="showroom__container">
+          <h2 class="showroom__title">{room.title}</h2>
+          
+          <div class="showroom__info-grid">
+            <div class="showroom__map">
+              <iframe 
+                src={getMapUrl(room.map_url)} 
+                width="100%" 
+                height="100%" 
+                frameborder="0"
+                style="border-radius: 20px;"
+              ></iframe>
+            </div>
+            
+            <div class="showroom__details">
+              <div class="showroom__detail-item">
+                <span class="label">Адрес</span>
+                <p>{room.address}</p>
+              </div>
+              <div class="showroom__details-row">
+                <div class="showroom__detail-item">
+                  <span class="label">Телефон</span>
+                  <p>{room.phone}</p>
+                </div>
+                <div class="showroom__detail-item">
+                  <span class="label">E-mail</span>
+                  <p>{room.email}</p>
+                </div>
+              </div>
+              <div class="showroom__details-row">
+                <div class="showroom__detail-item">
+                  <span class="label">График работы</span>
+                  <p class="whitespace-pre">{room.work_time}</p>
+                </div>
+                <div class="showroom__detail-item">
+                  <span class="label">Мессенджеры</span>
+                  <div class="showroom__socials">
+                    <a href="#" class="social-link">
+                      <img src="/images/banner-tg.svg" alt="TG" />
+                      Telegram
+                    </a>
+                    <a href="#" class="social-link">
+                      <img src="/images/banner-max.svg" alt="Max" />
+                      Max
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="showroom__gallery">
+            <img src={room.image_path} alt={room.title} class="showroom__big-img" />
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <Contact />
+  </main>
+
+  <Footer />
+</Layout>
+
+<style lang="scss">
+  .showrooms-page {
+    padding-top: 140px;
+    background-color: #FFFFFF;
+  }
+
+  .showrooms-hero {
+    padding: 60px 0 40px;
+    text-align: center;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__title {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 700;
+      color: #111111;
+    }
+  }
+
+  .showroom {
+    padding: 60px 0;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__title {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 60px;
+      line-height: 1.1;
+    }
+
+    &__info-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+
+      @media (max-width: 991px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__map {
+      height: 400px;
+      background-color: #F6F6F6;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    &__details {
+      background-color: #F6F6F6;
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    &__details-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &__detail-item {
+      .label {
+        display: block;
+        font-size: 14px;
+        color: #525152;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+      p {
+        font-size: 18px;
+        font-weight: 600;
+        color: #111111;
+        line-height: 1.4;
+      }
+      .whitespace-pre {
+        white-space: pre-line;
+      }
+    }
+
+    &__socials {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .social-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #111111;
+        text-decoration: none;
+
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    &__gallery {
+      width: 100%;
+      height: 600px;
+      border-radius: 24px;
+      overflow: hidden;
+
+      @media (max-width: 768px) {
+        height: 300px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,219 @@
+---
+import "../styles/global.scss";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+
+const menuItems = [
+  { icon: "🏠", label: "Главная", href: "/manager" },
+  { icon: "💼", label: "Работы (Кейсы)", href: "/manager/cases" },
+  { icon: "🏢", label: "Магазины", href: "/manager/stores" },
+  { icon: "❓", label: "Вопросы (FAQ)", href: "/manager/faq" },
+  { icon: "⚙️", label: "Настройки", href: "/manager/settings" },
+  { icon: "🌐", label: "На сайт", href: "/" },
+];
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} | Admin RBK</title>
+</head>
+<body class="manager-body">
+  <div class="manager-layout">
+    <!-- Sidebar -->
+    <aside class="manager-sidebar">
+      <div class="manager-sidebar__header">
+        <h1 class="manager-sidebar__logo">RBK <span>MANAGER</span></h1>
+      </div>
+      <nav class="manager-nav">
+        {menuItems.map(item => (
+          <a href={item.href} class="manager-nav__link">
+            <span class="manager-nav__icon">{item.icon}</span>
+            <span class="manager-nav__label">{item.label}</span>
+          </a>
+        ))}
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="manager-main">
+      <div class="manager-container">
+        <header class="manager-header">
+          <h2 class="manager-header__title">{title}</h2>
+        </header>
+        <div class="manager-content">
+          <slot />
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
+
+<style lang="scss" is:global>
+  .manager-body {
+    background-color: #F6F6F6;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  .manager-layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+
+    @media (min-width: 1024px) {
+      flex-direction: row;
+    }
+  }
+
+  .manager-sidebar {
+    width: 100%;
+    background: #FFFFFF;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    flex-shrink: 0;
+
+    @media (min-width: 1024px) {
+      width: 280px;
+      border-bottom: none;
+      border-right: 1px solid rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    &__header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    &__logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: #111111;
+      margin: 0;
+      
+      span {
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  .manager-nav {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 12px;
+    gap: 8px;
+
+    @media (min-width: 1024px) {
+      flex-direction: column;
+      overflow-x: visible;
+      padding: 16px;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #525152;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--color-primary-10);
+        color: var(--color-primary);
+      }
+    }
+
+    &__icon {
+      font-size: 20px;
+    }
+  }
+
+  .manager-main {
+    flex: 1;
+    padding: 24px;
+    
+    @media (min-width: 1024px) {
+      padding: 48px;
+    }
+  }
+
+  .manager-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .manager-header {
+    margin-bottom: 40px;
+
+    &__title {
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 800;
+      color: #111111;
+      margin: 0;
+    }
+  }
+
+  // Общие стили для форм в админке
+  .manager-content {
+    .bg-white {
+      background: #FFFFFF;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: #F9FAFB;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-color: var(--color-primary);
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+</style>

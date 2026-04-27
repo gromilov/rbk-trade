@@ -1,17 +1,14 @@
 ---
+import db from "../lib/db";
+
 const {
   variant = "reasons", // "reasons" or "manufacturers"
   title = "Почему клиенты возвращаются к нам?",
   subtitle = "Дизайнерские радиаторы, которым доверяют профессионалы",
 } = Astro.props;
 
-const manufacturers = [
-  { id: "sollira", name: "Sollira" },
-  { id: "kzto", name: "KZTO" },
-  { id: "vasco", name: "Vasco" },
-  { id: "carisa", name: "Carisa" },
-  { id: "rifar", name: "Rifar" },
-];
+// Получаем бренды из БД
+const manufacturers = db.prepare('SELECT id, name FROM manufacturers').all();
 
 const slides = [
   { image: "/images/carousel/Rectangle 153.png", alt: "Интерьер 1" },
@@ -110,7 +107,7 @@ const slides = [
       )
     }
 
-    <!-- Слайдер (общий для обоих вариантов, но разные стили) -->
+    <!-- Слайдер -->
     <div class="reasons__carousel swiper-reasons">
       <div class="swiper-wrapper">
         {
@@ -179,7 +176,6 @@ const slides = [
       padding: 0 var(--space-4);
     }
 
-    // --- Variant: Reasons (Original) ---
     &__header {
       display: flex;
       flex-direction: column;
@@ -222,7 +218,6 @@ const slides = [
       }
     }
 
-    // --- Variant: Manufacturers (New) ---
     &--manufacturers {
       .manufacturers-header {
         text-align: center;
@@ -393,17 +388,15 @@ const slides = [
       },
     });
 
-    // Modal trigger for CTA
     const cta = document.querySelector(".reasons__cta");
     if (cta) {
       cta.addEventListener("click", () => {
         const modalId = cta.getAttribute("data-modal");
-        const modal = document.getElementById(modalId);
+        const modal = modalId ? document.getElementById(modalId) : null;
         if (modal) modal.classList.add("active");
       });
     }
 
-    // Tabs active state
     const tabs = document.querySelectorAll(".brand-tab");
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {

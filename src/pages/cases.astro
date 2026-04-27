@@ -1,26 +1,418 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Cases from '../components/Cases.astro';
-import Contact from '../components/Contact.astro';
-import Carousel from '../components/Carousel.astro';
-import Modal from '../components/UI/Modal.astro';
-import Form from '../components/Form.astro';
-import Case from '../components/Case.astro';
-import CasesPage from '../components/CasesPage.astro';
-import PrivacyPolicy from '../content/privacy-policy.md';
+export const prerender = false;
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Stores from "../components/Stores.astro";
+import FAQ from "../components/FAQ.astro";
+import Contact from "../components/Contact.astro";
+import BannerNew from "../components/BannerNew.astro";
+import CaseCard from "../components/CaseCard.astro";
+import db from "../lib/db";
+
+// Настройки пагинации
+const pageSize = 8;
+const currentPage = parseInt(Astro.url.searchParams.get("page") || "1");
+const offset = (currentPage - 1) * pageSize;
+
+// Фильтрация
+const typeId = Astro.url.searchParams.get("type");
+const manufacturerId = Astro.url.searchParams.get("manufacturer");
+
+const types = db.prepare('SELECT * FROM types').all();
+const manufacturers = db.prepare('SELECT * FROM manufacturers').all();
+
+// Формируем базовое условие
+let whereClause = "WHERE 1=1";
+const params = [];
+
+if (typeId) {
+  whereClause += " AND c.type_id = ?";
+  params.push(typeId);
+}
+if (manufacturerId) {
+  whereClause += " AND c.manufacturer_id = ?";
+  params.push(manufacturerId);
+}
+
+// Считаем общее количество для пагинации
+const totalCountReq = db.prepare(`SELECT COUNT(*) as total FROM cases c ${whereClause}`).get(...params);
+const totalCount = totalCountReq.total;
+const totalPages = Math.ceil(totalCount / pageSize);
+
+// Получаем проекты для текущей страницы
+let query = `
+  SELECT c.*, t.name as type_label, m.name as manufacturer_label 
+  FROM cases c
+  LEFT JOIN types t ON c.type_id = t.id
+  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
+  ${whereClause}
+  ORDER BY c.created_at DESC
+  LIMIT ? OFFSET ?
+`;
+
+const projects = db.prepare(query).all(...params, pageSize, offset);
+
+// Функция для генерации ссылок пагинации
+function getPaginationUrl(page) {
+    const url = new URL(Astro.url.href);
+    url.searchParams.set('page', page.toString());
+    return url.pathname + url.search;
+}
 ---
 
-<Layout>
-  <div class="max-w-[100%] overflow-x-hidden relative"> <!-- Отступ для фиксированного меню -->
-    <Header />
-    <CasesPage />
-    <Contact />
-    <Footer />
-    <Modal id="formModal">
-      <Form />
-    </Modal>
-  </div>
+<Layout title="Наши проекты | RBK Trade">
+  <Header theme="dark" />
+  
+  <main class="cases-page">
+    <section class="cases-hero">
+      <div class="cases-hero__container">
+        <h1 class="cases-hero__title">Наши проекты</h1>
+        <p class="cases-hero__subtitle">
+          Более 500 реализованных объектов разного масштаба и сложности
+        </p>
+        
+        <div class="cases-hero__dropdowns">
+          <div class="filter-dropdown">
+            <button class="filter-dropdown__btn" id="type-filter">
+              {typeId ? types.find(t => t.id == typeId)?.name : 'Тип объекта'}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-dropdown__content">
+              <a href={`/cases.html${manufacturerId ? '?manufacturer=' + manufacturerId : ''}`}>Все типы</a>
+              {types.map(t => (
+                <a href={`/cases.html?type=${t.id}${manufacturerId ? '&manufacturer=' + manufacturerId : ''}`}>{t.name}</a>
+              ))}
+            </div>
+          </div>
+
+          <div class="filter-dropdown">
+            <button class="filter-dropdown__btn" id="brand-filter">
+              {manufacturerId ? manufacturers.find(m => m.id == manufacturerId)?.name : 'Производитель'}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="filter-dropdown__content">
+              <a href={`/cases.html${typeId ? '?type=' + typeId : ''}`}>Все бренды</a>
+              {manufacturers.map(m => (
+                <a href={`/cases.html?manufacturer=${m.id}${typeId ? '&type=' + typeId : ''}`}>{m.name}</a>
+              ))}
+            </div>
+          </div>
+          
+          {(typeId || manufacturerId) && (
+              <a href="/cases.html" class="filter-clear">Сбросить всё ×</a>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <section class="cases-grid">
+      <div class="cases-grid__container">
+        {projects.length > 0 ? (
+          <div class="cases-grid__items">
+            {projects.map((project) => (
+              <CaseCard 
+                id={project.id}
+                title={project.title}
+                image={project.main_image}
+                link={`/case.html?slug=${project.slug}`}
+                type={project.type_label}
+                tags={[project.manufacturer_label]}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="cases-empty">
+            <h3>Проектов не найдено</h3>
+            <p>Попробуйте изменить параметры фильтрации</p>
+          </div>
+        )}
+        
+        {totalPages > 1 && (
+          <div class="cases-grid__pagination">
+              <div class="pagination">
+                  {currentPage > 1 && (
+                    <a href={getPaginationUrl(currentPage - 1)} class="pagination__prev">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                  )}
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <a 
+                      href={getPaginationUrl(page)} 
+                      class={`pagination__btn ${currentPage === page ? 'active' : ''}`}
+                    >
+                      {page}
+                    </a>
+                  ))}
+
+                  {currentPage < totalPages && (
+                    <a href={getPaginationUrl(currentPage + 1)} class="pagination__next">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                  )}
+              </div>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <BannerNew 
+      title="Обсудим ваш проект? Напишите нам"
+      bgColor="#B33C2F"
+      bgImage="/images/Group 1171277658.png" 
+      imagePosition="side"
+      showSocial={true}
+    />
+
+    <Stores />
+    <FAQ />
+    <Contact title="Свяжитесь с нами" />
+  </main>
+
+  <Footer />
 </Layout>
 
+<style lang="scss">
+  .cases-page {
+    padding-top: 140px;
+    background-color: #FFFFFF;
+  }
+
+  .cases-hero {
+    padding: 60px 0 40px;
+    text-align: center;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__title {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 24px;
+      line-height: 1;
+    }
+
+    &__subtitle {
+      font-size: 18px;
+      color: #525152;
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &__dropdowns {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+  }
+
+  .filter-clear {
+      font-size: 14px;
+      font-weight: 600;
+      color: #EF4444;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 100px;
+      background: #FEF2F2;
+      transition: all 0.2s ease;
+      &:hover { background: #FEE2E2; }
+  }
+
+  .filter-dropdown {
+    position: relative;
+    
+    &__btn {
+      padding: 12px 24px;
+      border-radius: 100px;
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      font-size: 16px;
+      color: #111111;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #111111;
+      }
+      
+      svg {
+        transition: transform 0.3s ease;
+      }
+    }
+
+    &.active &__btn {
+      border-color: #111111;
+      svg { transform: rotate(180deg); }
+    }
+
+    &__content {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 17, 17, 0.12);
+      border-radius: 16px;
+      padding: 8px;
+      min-width: 200px;
+      z-index: 10;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+
+      a {
+        display: block;
+        padding: 10px 16px;
+        color: #525152;
+        text-decoration: none;
+        font-size: 14px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+
+        &:hover {
+          background: #F6F6F6;
+          color: #111111;
+        }
+      }
+    }
+
+    &.active &__content {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(16px);
+    }
+  }
+
+  .cases-grid {
+    padding: 20px 0 80px;
+
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__items {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    &__pagination {
+        margin-top: 60px;
+        display: flex;
+        justify-content: center;
+    }
+  }
+
+  .cases-empty {
+      text-align: center;
+      padding: 100px 0;
+      h3 { font-size: 24px; margin-bottom: 12px; }
+      p { color: #666; }
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &__btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: #111111;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: #111111;
+        }
+
+        &.active {
+            background: #111111;
+            color: #FFFFFF;
+            border-color: #111111;
+        }
+    }
+
+    &__prev, &__next {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1px solid rgba(17, 17, 17, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #111111;
+        text-decoration: none;
+
+        &:hover {
+            border-color: #111111;
+        }
+    }
+  }
+</style>
+
+<script>
+  function initFilters() {
+    const dropdowns = document.querySelectorAll('.filter-dropdown');
+    
+    dropdowns.forEach(dropdown => {
+      const btn = dropdown.querySelector('.filter-dropdown__btn');
+      
+      btn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Close other dropdowns
+        dropdowns.forEach(d => {
+          if (d !== dropdown) d.classList.remove('active');
+        });
+        
+        dropdown.classList.toggle('active');
+      });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', () => {
+      dropdowns.forEach(d => d.classList.remove('active'));
+    });
+  }
+
+  initFilters();
+  document.addEventListener('astro:after-swap', initFilters);
+</script>

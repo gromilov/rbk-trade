@@ -1,0 +1,125 @@
+---
+export const prerender = false;
+import ManagerLayout from "../../layouts/ManagerLayout.astro";
+import db from "../../lib/db";
+
+// Получаем статистику для дашборда
+const casesCount = db.prepare('SELECT COUNT(*) as count FROM cases').get().count;
+const storesCount = db.prepare('SELECT COUNT(*) as count FROM stores').get().count;
+const faqsCount = db.prepare('SELECT COUNT(*) as count FROM faqs').get().count;
+---
+
+<ManagerLayout title="Панель управления">
+  <div class="dashboard-stats">
+    <div class="stat-card">
+      <div class="stat-card__label">Работ в базе</div>
+      <div class="stat-card__value text-orange">{casesCount}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Магазинов</div>
+      <div class="stat-card__value text-blue">{storesCount}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card__label">Вопросов FAQ</div>
+      <div class="stat-card__value text-green">{faqsCount}</div>
+    </div>
+  </div>
+
+  <div class="welcome-banner">
+    <h3 class="welcome-banner__title">Добро пожаловать в RBK Manager!</h3>
+    <p class="welcome-banner__text">
+      Здесь вы можете управлять контентом вашего сайта. Все изменения сразу отображаются на основных страницах.
+    </p>
+    <div class="welcome-banner__actions">
+      <a href="/manager/cases" class="btn-action btn-action--white">
+        Добавить проект
+      </a>
+      <a href="/manager/settings" class="btn-action btn-action--dark">
+        Общие настройки
+      </a>
+    </div>
+  </div>
+</ManagerLayout>
+
+<style lang="scss">
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 40px;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .stat-card {
+    background: #FFFFFF;
+    padding: 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__label {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    &__value {
+      font-size: 40px;
+      font-weight: 800;
+      
+      &.text-orange { color: var(--color-primary); }
+      &.text-blue { color: #3B82F6; }
+      &.text-green { color: #10B981; }
+    }
+  }
+
+  .welcome-banner {
+    background: var(--color-primary);
+    padding: 40px;
+    border-radius: 32px;
+    color: #FFFFFF;
+
+    &__title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    &__text {
+      opacity: 0.9;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      max-width: 500px;
+    }
+
+    &__actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+
+      &--white {
+        background: #FFFFFF;
+        color: var(--color-primary);
+      }
+
+      &--dark {
+        background: rgba(0,0,0,0.2);
+        color: #FFFFFF;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+  }
+</style>

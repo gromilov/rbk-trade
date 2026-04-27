@@ -1,0 +1,159 @@
+---
+const { 
+  title, 
+  bgColor = '#B33C2F', // По умолчанию красный из макета
+  bgImage, 
+  imagePosition = 'side', // 'side', 'center', 'full'
+  showSocial = false,
+  className = ""
+} = Astro.props;
+---
+
+<section class={`banner-new ${className}`} style={`--banner-bg: ${bgColor}`}>
+  <div class="banner-new__container">
+    <div class={`banner-new__inner banner-new__inner--${imagePosition}`}>
+      <div class="banner-new__content">
+        <h2 class="banner-new__title" set:html={title} />
+        
+        {showSocial && (
+          <div class="banner-new__socials">
+            <a href="https://t.me/your_handle" class="banner-new__social-btn">
+              <span>Написать в Telegram</span>
+              <img src="/images/banner-tg.svg" alt="TG" />
+            </a>
+            <a href="https://wa.me/your_number" class="banner-new__social-btn">
+              <span>Написать в Max</span>
+              <img src="/images/banner-max.svg" alt="Max" />
+            </a>
+          </div>
+        )}
+      </div>
+
+      {bgImage && (
+        <div class="banner-new__image-wrapper">
+          <img src={bgImage} alt="" class="banner-new__image" />
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  .banner-new {
+    padding: var(--space-10) 0;
+    
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    &__inner {
+      position: relative;
+      background-color: var(--banner-bg);
+      border-radius: var(--radius-3xl);
+      overflow: hidden;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      padding: 60px;
+
+      @media (max-width: 1024px) {
+        flex-direction: column;
+        padding: 40px 20px;
+        min-height: auto;
+        text-align: center;
+      }
+
+      &--side {
+        justify-content: space-between;
+        .banner-new__content { max-width: 60%; z-index: 2; }
+        .banner-new__image-wrapper { 
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          height: 100%;
+          width: 50%;
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+        }
+        .banner-new__image {
+          height: 90%;
+          width: auto;
+          object-fit: contain;
+        }
+      }
+
+      &--center {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        .banner-new__content { max-width: 800px; z-index: 2; }
+        .banner-new__image-wrapper {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1;
+          opacity: 0.3;
+        }
+        .banner-new__image { width: 100%; height: 100%; object-fit: cover; }
+      }
+
+      &--full {
+        .banner-new__content { z-index: 2; position: relative; }
+        .banner-new__image-wrapper {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+        }
+        .banner-new__image { width: 100%; height: 100%; object-fit: cover; }
+      }
+    }
+
+    &__title {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.1;
+      margin-bottom: 40px;
+    }
+
+    &__socials {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+
+      @media (max-width: 1024px) {
+        justify-content: center;
+      }
+    }
+
+    &__social-btn {
+      display: flex;
+      align-items: center;
+      background: #FFFFFF;
+      border-radius: 100px;
+      color: #111111;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      padding: 0 4px 0 0;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      span {
+        padding: 16px 16px 16px 24px;
+      }
+
+      img {
+        display: block;
+      }
+    }
+  }
+</style>

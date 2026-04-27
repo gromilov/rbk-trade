@@ -1,0 +1,391 @@
+---
+export const prerender = false;
+import ManagerLayout from "../../../layouts/ManagerLayout.astro";
+import db from "../../../lib/db";
+
+const id = Astro.url.searchParams.get("id");
+const isEdit = !!id;
+
+let project: any = {
+  title: "",
+  slug: "",
+  subtitle: "",
+  type_id: "",
+  manufacturer_id: "",
+  main_image: "",
+  tasks: "[]",
+  result_text: "",
+  review_text: "",
+  review_author: "",
+};
+
+if (isEdit) {
+  project = db.prepare("SELECT * FROM cases WHERE id = ?").get(id);
+  if (!project) return Astro.redirect("/manager/cases");
+}
+
+const types = db.prepare("SELECT * FROM types").all();
+const manufacturers = db.prepare("SELECT * FROM manufacturers").all();
+const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?").all(id) : [];
+---
+
+<ManagerLayout title={isEdit ? "Редактировать проект" : "Новый проект"}>
+  <form id="projectForm" class="edit-form">
+    <input type="hidden" name="id" value={id} />
+
+    <!-- Основная инфо -->
+    <div class="form-section">
+      <h3 class="form-section__title">Основная информация</h3>
+      <div class="form-group">
+        <label>Заголовок (например: ЖК Art Residence)</label>
+        <input type="text" name="title" value={project.title} required id="titleInput" />
+      </div>
+      <div class="form-group">
+        <label>URLSlug (генерируется автоматически)</label>
+        <input type="text" name="slug" value={project.slug} required id="slugInput" />
+      </div>
+      <div class="form-group">
+        <label>Краткое описание (подзаголовок)</label>
+        <textarea name="subtitle" rows="2" required>{project.subtitle}</textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Тип объекта</label>
+          <select name="type_id" required>
+            <option value="">Выберите тип</option>
+            {types.map((t: any) => (
+              <option value={t.id} selected={project.type_id == t.id}>{t.name}</option>
+            ))}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Производитель</label>
+          <select name="manufacturer_id" required>
+            <option value="">Выберите бренд</option>
+            {manufacturers.map((m: any) => (
+              <option value={m.id} selected={project.manufacturer_id == m.id}>{m.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Изображения -->
+    <div class="form-section">
+      <h3 class="form-section__title">Главное фото</h3>
+      <div class="upload-area" id="mainUpload">
+        {project.main_image ? (
+          <img src={project.main_image} class="upload-area__preview" />
+        ) : (
+          <div class="upload-area__placeholder">
+            <span>📸</span> Нажмите, чтобы загрузить
+          </div>
+        )}
+        <input type="file" accept="image/*" class="hidden-input" id="mainFileInput" />
+        <input type="hidden" name="main_image" value={project.main_image} id="mainImagePath" />
+      </div>
+
+      <h3 class="form-section__title mt-8">Галерея проекта</h3>
+      <div class="gallery-grid" id="galleryGrid">
+        {gallery.map((img: any) => (
+          <div class="gallery-item">
+            <img src={img.image_path} />
+            <button type="button" class="btn-remove" onclick="this.parentElement.remove()">×</button>
+            <input type="hidden" name="gallery[]" value={img.image_path} />
+          </div>
+        ))}
+        <div class="upload-area upload-area--square" id="galleryAdd">
+             <span>+</span>
+             <input type="file" accept="image/*" class="hidden-input" multiple id="galleryFileInput" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Детали -->
+    <div class="form-section">
+      <h3 class="form-section__title">Проделанные работы (задачи)</h3>
+      <div id="tasksList" class="tasks-list">
+        {JSON.parse(project.tasks || "[]").map((task: string) => (
+          <div class="task-item">
+            <input type="text" name="tasks[]" value={task} placeholder="Задача..." />
+            <button type="button" class="btn-del-task" onclick="this.parentElement.remove()">Удалить</button>
+          </div>
+        ))}
+      </div>
+      <button type="button" class="btn-add-task" id="addTaskBtn">+ Добавить задачу</button>
+    </div>
+
+    <div class="form-section">
+      <h3 class="form-section__title">Результат и Отзыв</h3>
+      <div class="form-group">
+        <label>Итоговый результат (текст)</label>
+        <textarea name="result_text" rows="3">{project.result_text}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Отзыв заказчика</label>
+        <textarea name="review_text" rows="3">{project.review_text}</textarea>
+      </div>
+      <div class="form-group">
+        <label>Автор отзыва</label>
+        <input type="text" name="review_author" value={project.review_author} placeholder="Например: Максим П." />
+      </div>
+    </div>
+
+    <div class="sticky-footer">
+      <button type="submit" class="btn-primary w-full">Сохранить проект</button>
+    </div>
+  </form>
+</ManagerLayout>
+
+<script>
+  // Транслитерация для слага
+  const titleInput = document.getElementById('titleInput') as HTMLInputElement;
+  const slugInput = document.getElementById('slugInput') as HTMLInputElement;
+
+  function slugify(text: string) {
+    const map: any = {'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ы':'y','э':'e','ю':'yu','я':'ya'};
+    return text.toLowerCase().split('').map(c => map[c] || c).join('').replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  titleInput?.addEventListener('input', () => {
+    if (!slugInput.value || slugInput.value === slugify(projectTitleBefore)) {
+        slugInput.value = slugify(titleInput.value);
+    }
+  });
+  let projectTitleBefore = titleInput?.value || "";
+
+  // Добавление задач
+  const addTaskBtn = document.getElementById('addTaskBtn');
+  const tasksList = document.getElementById('tasksList');
+  addTaskBtn?.addEventListener('click', () => {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `<input type="text" name="tasks[]" placeholder="Новая задача..." /><button type="button" class="btn-del-task">Удалить</button>`;
+    tasksList?.appendChild(div);
+    div.querySelector('.btn-del-task')?.addEventListener('click', () => div.remove());
+  });
+
+  // Уменьшение фото в браузере перед загрузкой
+  async function resizeImage(file: File, maxWidth = 1200): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth) {
+            height = (maxWidth / width) * height;
+            width = maxWidth;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Загрузка фото
+  async function uploadFile(base64: string, filename: string) {
+    const res = await fetch('/api/manager/upload', { 
+      method: 'POST', 
+      body: JSON.stringify({
+        base64: base64,
+        filename: filename
+      }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    return data.path;
+  }
+
+  // Главное фото
+  const mainFileInput = document.getElementById('mainFileInput') as HTMLInputElement;
+  const mainUploadTrigger = document.getElementById('mainUpload');
+  mainUploadTrigger?.addEventListener('click', () => mainFileInput.click());
+  
+  mainFileInput?.addEventListener('change', async () => {
+    if (mainFileInput.files?.[0]) {
+      const base64 = await resizeImage(mainFileInput.files[0]);
+      const path = await uploadFile(base64, mainFileInput.files[0].name);
+      const preview = mainUploadTrigger?.querySelector('.upload-area__preview') as HTMLImageElement || document.createElement('img');
+      preview.className = 'upload-area__preview';
+      preview.src = path;
+      if (!mainUploadTrigger?.querySelector('.upload-area__preview')) {
+        mainUploadTrigger?.querySelector('.upload-area__placeholder')?.remove();
+        mainUploadTrigger?.appendChild(preview);
+      }
+      (document.getElementById('mainImagePath') as HTMLInputElement).value = path;
+    }
+  });
+
+  // Галерея
+  const galleryFileInput = document.getElementById('galleryFileInput') as HTMLInputElement;
+  const galleryGrid = document.getElementById('galleryGrid');
+  const galleryAdd = document.getElementById('galleryAdd');
+  galleryAdd?.addEventListener('click', () => galleryFileInput.click());
+
+  galleryFileInput?.addEventListener('change', async () => {
+    if (galleryFileInput.files) {
+      for (const file of Array.from(galleryFileInput.files)) {
+        const base64 = await resizeImage(file);
+        const path = await uploadFile(base64, file.name);
+        const div = document.createElement('div');
+        div.className = 'gallery-item';
+        div.innerHTML = `<img src="${path}" /><button type="button" class="btn-remove">×</button><input type="hidden" name="gallery[]" value="${path}" />`;
+        galleryGrid?.insertBefore(div, galleryAdd);
+        div.querySelector('.btn-remove')?.addEventListener('click', () => div.remove());
+      }
+    }
+  });
+
+  // Финальная отправка формы
+  document.getElementById('projectForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target as HTMLFormElement);
+    const data: any = {};
+    
+    fd.forEach((value, key) => {
+      if (key.endsWith('[]')) {
+        const cleanKey = key.slice(0, -2);
+        if (!data[cleanKey]) data[cleanKey] = [];
+        data[cleanKey].push(value);
+      } else {
+        data[key] = value;
+      }
+    });
+
+    const res = await fetch('/api/manager/cases', { 
+        method: 'POST', 
+        body: JSON.stringify(data),
+        headers: { 'Content-Type': 'application/json' }
+    });
+    const result = await res.json();
+    if (result.success) window.location.href = '/manager/cases';
+    else alert('Ошибка сохранения: ' + (result.error || 'неизвестная ошибка'));
+  });
+</script>
+
+<style lang="scss">
+  .edit-form {
+    display: grid;
+    gap: 32px;
+    padding-bottom: 100px;
+  }
+
+  .form-section {
+    background: #FFFFFF;
+    padding: 32px;
+    border-radius: 32px;
+    border: 1px solid rgba(0,0,0,0.05);
+
+    &__title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      
+      &.mt-8 { margin-top: 32px; }
+    }
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+    &:last-child { margin-bottom: 0; }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @media (min-width: 640px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .upload-area {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #F9FAFB;
+    border: 2px dashed #DDD;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease;
+
+    &:hover { border-color: var(--color-primary); background: var(--color-primary-5); }
+    
+    &--square { aspect-ratio: 1/1; font-size: 32px; color: #CCC; }
+
+    &__preview { width: 100%; height: 100%; object-fit: cover; }
+    &__placeholder { text-align: center; color: #999; font-weight: 700; span { display: block; font-size: 32px; margin-bottom: 8px; } }
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .gallery-item {
+    aspect-ratio: 1/1;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    
+    img { width: 100%; height: 100%; object-fit: cover; }
+    .btn-remove {
+        position: absolute; top: 4px; right: 4px;
+        background: rgba(0,0,0,0.5); color: white;
+        border: none; width: 24px; height: 24px; border-radius: 50%;
+        cursor: pointer;
+    }
+  }
+
+  .tasks-list {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .task-item {
+    display: flex;
+    gap: 8px;
+    
+    .btn-del-task {
+      padding: 0 12px; font-size: 12px; color: #EF4444; background: #FEF2F2; border-radius: 8px;
+    }
+  }
+
+  .btn-add-task {
+    width: 100%; padding: 12px; border: 1px dashed #DDD; border-radius: 12px; color: #999; font-weight: 700;
+  }
+
+  .sticky-footer {
+    position: fixed; bottom: 20px; left: 24px; right: 24px; z-index: 100;
+    @media (min-width: 1024px) { left: 328px; right: 48px; }
+  }
+
+  .hidden-input { display: none; }
+</style>
