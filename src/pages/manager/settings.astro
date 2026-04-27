@@ -6,13 +6,18 @@ import db from "../../lib/db";
 // Получаем текущие настройки
 const settingsRaw = db.prepare('SELECT * FROM settings').all();
 const settings = Object.fromEntries(settingsRaw.map(s => [s.key, s.value]));
+
+// Получаем производителей и типы
+const manufacturers = db.prepare('SELECT * FROM manufacturers ORDER BY sort_order ASC').all();
+const types = db.prepare('SELECT * FROM types ORDER BY sort_order ASC').all();
 ---
 
 <ManagerLayout title="Общие настройки">
-  <form id="settingsForm" class="settings-form">
-    <div class="settings-section">
-      <h3 class="settings-section__title">Контакты</h3>
-      
+  <div class="settings-page">
+    
+    <!-- Контакты -->
+    <form id="settingsForm" class="settings-form card">
+      <h3 class="card-title">Глобальные контакты</h3>
       <div class="form-grid">
         <div class="form-group">
           <label>Телефон 1</label>
@@ -23,86 +28,149 @@ const settings = Object.fromEntries(settingsRaw.map(s => [s.key, s.value]));
           <input type="text" name="phone_2" value={settings.phone_2} />
         </div>
       </div>
-
       <div class="form-group">
         <label>E-mail</label>
         <input type="email" name="email" value={settings.email} />
       </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Telegram (ссылка)</label>
+          <input type="text" name="telegram" value={settings.telegram} placeholder="https://t.me/..." />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp / Max (ссылка)</label>
+          <input type="text" name="whatsapp" value={settings.whatsapp} placeholder="https://wa.me/..." />
+        </div>
+      </div>
+      <button type="submit" class="btn-primary btn-save-global" id="saveGlobalBtn">💾 Сохранить контакты</button>
+    </form>
+
+    <div class="dictionaries-grid">
+      <!-- Секция Типы объектов -->
+      <div class="dict-section card">
+        <h3 class="card-title">Типы объектов</h3>
+        <div class="dict-form">
+          <input type="text" id="new-type-name" placeholder="Новый тип..." />
+          <button class="btn-add" onclick="addDictItem('types')">+</button>
+        </div>
+        <div class="dict-list">
+          {types.map((t, idx) => (
+            <div class="dict-item">
+              <div class="dict-item__order">
+                <button onclick={`reorder('types', ${t.id}, 'up')`} disabled={idx === 0}>▲</button>
+                <button onclick={`reorder('types', ${t.id}, 'down')`} disabled={idx === types.length - 1}>▼</button>
+              </div>
+              <input type="text" value={t.name} onchange={`updateDictItem('types', ${t.id}, this.value)`} />
+              <button class="btn-del" onclick={`deleteDictItem('types', ${t.id})`}>×</button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Секция Производители -->
+      <div class="dict-section card">
+        <h3 class="card-title">Бренды / Производители</h3>
+        <div class="dict-form">
+          <input type="text" id="new-man-name" placeholder="Новый бренд..." />
+          <button class="btn-add" onclick="addDictItem('manufacturers')">+</button>
+        </div>
+        <div class="dict-list">
+          {manufacturers.map((m, idx) => (
+            <div class="dict-item">
+              <div class="dict-item__order">
+                <button onclick={`reorder('manufacturers', ${m.id}, 'up')`} disabled={idx === 0}>▲</button>
+                <button onclick={`reorder('manufacturers', ${m.id}, 'down')`} disabled={idx === manufacturers.length - 1}>▼</button>
+              </div>
+              <input type="text" value={m.name} onchange={`updateDictItem('manufacturers', ${m.id}, this.value)`} />
+              <button class="btn-del" onclick={`deleteDictItem('manufacturers', ${m.id})`}>×</button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
 
-    <div class="settings-section">
-      <h3 class="settings-section__title">Соцсети и Мессенджеры</h3>
-      
-      <div class="form-group">
-        <label>Telegram (ссылка)</label>
-        <input type="text" name="telegram" value={settings.telegram} placeholder="https://t.me/..." />
-      </div>
-      <div class="form-group">
-        <label>WhatsApp / Max (ссылка)</label>
-        <input type="text" name="whatsapp" value={settings.whatsapp} placeholder="https://wa.me/..." />
-      </div>
-    </div>
-
-    <button type="submit" class="btn-primary btn-save" id="saveBtn">
-      Сохранить изменения
-    </button>
-  </form>
+  </div>
 </ManagerLayout>
 
 <script>
+  // Глобальные настройки
   const form = document.getElementById('settingsForm') as HTMLFormElement;
-  const saveBtn = document.getElementById('saveBtn') as HTMLButtonElement;
+  const saveBtn = document.getElementById('saveGlobalBtn') as HTMLButtonElement;
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!saveBtn) return;
-    
     saveBtn.disabled = true;
     saveBtn.innerText = 'Сохранение...';
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
-    try {
-      const res = await fetch('/api/manager/settings', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-      const result = await res.json();
-      if (result.success) {
-        saveBtn.innerText = '✅ Сохранено!';
-        setTimeout(() => {
-          saveBtn.disabled = false;
-          saveBtn.innerText = 'Сохранить изменения';
-        }, 2000);
-      } else {
-        alert('Ошибка: ' + result.error);
-        saveBtn.disabled = false;
-        saveBtn.innerText = 'Сохранить изменения';
-      }
-    } catch (err) {
-      alert('Ошибка соединения с сервером');
-      saveBtn.disabled = false;
-      saveBtn.innerText = 'Сохранить изменения';
+    const res = await fetch('/api/manager/settings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    if (res.ok) {
+        saveBtn.innerText = '✅ Сохранено';
+        setTimeout(() => { saveBtn.disabled = false; saveBtn.innerText = '💾 Сохранить контакты'; }, 2000);
     }
   });
+
+  // Функции для словарей
+  (window as any).addDictItem = async (table: string) => {
+    const input = document.getElementById(table === 'types' ? 'new-type-name' : 'new-man-name') as HTMLInputElement;
+    if (!input.value) return;
+
+    await fetch('/api/manager/dictionaries', {
+      method: 'POST',
+      body: JSON.stringify({ table, name: input.value }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    window.location.reload();
+  };
+
+  (window as any).updateDictItem = async (table: string, id: number, name: string) => {
+    await fetch('/api/manager/dictionaries', {
+      method: 'POST',
+      body: JSON.stringify({ table, id, name }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+  };
+
+  (window as any).deleteDictItem = async (table: string, id: number) => {
+    if (!confirm('Удалить? Это может затронуть связанные проекты.')) return;
+    await fetch('/api/manager/dictionaries', {
+      method: 'POST',
+      body: JSON.stringify({ table, id, action: 'delete' }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    window.location.reload();
+  };
+
+  (window as any).reorder = async (table: string, id: number, direction: string) => {
+    await fetch('/api/manager/dictionaries', {
+      method: 'POST',
+      body: JSON.stringify({ table, id, direction, action: 'reorder' }),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    window.location.reload();
+  };
 </script>
 
 <style lang="scss">
-  .settings-form {
+  .settings-page {
     display: grid;
-    gap: 24px;
+    gap: 32px;
   }
 
-  .settings-section {
+  .card {
     background: #FFFFFF;
     padding: 32px;
     border-radius: 32px;
     border: 1px solid rgba(0,0,0,0.05);
-
-    &__title {
+    
+    &-title {
       font-size: 14px;
       font-weight: 800;
       color: #999;
@@ -112,29 +180,82 @@ const settings = Object.fromEntries(settingsRaw.map(s => [s.key, s.value]));
     }
   }
 
+  .dictionaries-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+
+    @media (max-width: 991px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .form-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
-
-    @media (min-width: 640px) {
-      grid-template-columns: 1fr 1fr;
-    }
+    margin-bottom: 16px;
+    @media (max-width: 640px) { grid-template-columns: 1fr; }
   }
 
   .form-group {
     margin-bottom: 16px;
-    &:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 12px; font-weight: 800; color: #999; margin-bottom: 6px; }
+    input { width: 100%; background: #F6F6F6; border: 1px solid transparent; padding: 12px; border-radius: 12px; font-size: 16px; }
   }
 
-  .btn-save {
-    width: 100%;
-    box-shadow: 0 10px 20px var(--color-primary-20);
-    transition: all 0.2s ease;
-    
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
+  .dict-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    input { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #EEE; }
+    .btn-add { background: var(--color-primary); color: white; border: none; width: 44px; height: 44px; border-radius: 12px; font-size: 24px; cursor: pointer; }
+  }
+
+  .dict-list {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dict-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #F9FAFB;
+    padding: 8px 12px;
+    border-radius: 12px;
+
+    &__order {
+      display: flex;
+      flex-direction: column;
+      button { 
+        background: transparent; border: none; font-size: 10px; cursor: pointer; color: #CCC;
+        &:hover:not(:disabled) { color: #111; }
+        &:disabled { opacity: 0; }
+      }
     }
+
+    input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      color: #111;
+      &:focus { outline: none; border-bottom: 1px solid var(--color-primary); }
+    }
+
+    .btn-del {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: #DDD;
+      cursor: pointer;
+      &:hover { color: #EF4444; }
+    }
+  }
+
+  .btn-save-global {
+      width: 100% !important;
+      margin-top: 20px;
   }
 </style>

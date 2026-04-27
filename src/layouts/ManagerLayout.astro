@@ -28,12 +28,12 @@ const menuItems = [
   <div class="manager-layout">
     <!-- Sidebar -->
     <aside class="manager-sidebar">
-      <div class="manager-sidebar__header">
+      <div class="manager-sidebar__header hide-mobile">
         <h1 class="manager-sidebar__logo">RBK <span>MANAGER</span></h1>
       </div>
       <nav class="manager-nav">
         {menuItems.map(item => (
-          <a href={item.href} class="manager-nav__link">
+          <a href={item.href} class={`manager-nav__link ${Astro.url.pathname === item.href ? 'active' : ''}`}>
             <span class="manager-nav__icon">{item.icon}</span>
             <span class="manager-nav__label">{item.label}</span>
           </a>
@@ -44,7 +44,7 @@ const menuItems = [
     <!-- Main Content -->
     <main class="manager-main">
       <div class="manager-container">
-        <header class="manager-header">
+        <header class="manager-header hide-mobile">
           <h2 class="manager-header__title">{title}</h2>
         </header>
         <div class="manager-content">
@@ -57,6 +57,10 @@ const menuItems = [
 </html>
 
 <style lang="scss" is:global>
+  .hide-mobile {
+    @media (max-width: 1023px) { display: none; }
+  }
+
   .manager-body {
     background-color: #F6F6F6;
     margin: 0;
@@ -78,6 +82,7 @@ const menuItems = [
     background: #FFFFFF;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     flex-shrink: 0;
+    z-index: 100;
 
     @media (min-width: 1024px) {
       width: 280px;
@@ -110,40 +115,50 @@ const menuItems = [
     flex-direction: row;
     overflow-x: auto;
     padding: 12px;
-    gap: 8px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar { display: none; }
 
     @media (min-width: 1024px) {
       flex-direction: column;
       overflow-x: visible;
       padding: 16px;
+      gap: 8px;
     }
 
     &__link {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       border-radius: 12px;
       text-decoration: none;
       color: #525152;
       font-weight: 600;
       white-space: nowrap;
       transition: all 0.2s ease;
+      font-size: 14px;
 
-      &:hover {
+      @media (min-width: 1024px) {
+          font-size: 16px;
+          padding: 12px 16px;
+      }
+
+      &:hover, &.active {
         background: var(--color-primary-10);
         color: var(--color-primary);
       }
     }
 
     &__icon {
-      font-size: 20px;
+      font-size: 18px;
+      @media (min-width: 1024px) { font-size: 20px; }
     }
   }
 
   .manager-main {
     flex: 1;
-    padding: 24px;
+    padding: 16px; // Less padding on mobile
     
     @media (min-width: 1024px) {
       padding: 48px;

@@ -8,17 +8,38 @@ const {
 } = Astro.props;
 
 // Получаем бренды из БД
-const manufacturers = db.prepare('SELECT id, name FROM manufacturers').all();
+const manufacturers = db
+  .prepare("SELECT * FROM manufacturers ORDER BY sort_order ASC")
+  .all();
 
-const slides = [
-  { image: "/images/carousel/Rectangle 153.png", alt: "Интерьер 1" },
-  { image: "/images/carousel/Rectangle 154.png", alt: "Интерьер 2" },
-  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
-  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
-  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
-  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
-  { image: "/images/carousel/Rectangle 155.png", alt: "Интерьер 3" },
-];
+// Получаем фото проектов, сгруппированные по брендам
+const projects = db
+  .prepare(
+    `
+  SELECT main_image, manufacturer_id 
+  FROM cases 
+  WHERE main_image IS NOT NULL AND main_image != ''
+`,
+  )
+  .all();
+
+const brandData = {};
+manufacturers.forEach((m) => {
+  brandData[m.id] = projects
+    .filter((p) => p.manufacturer_id === m.id)
+    .map((p) => p.main_image);
+});
+
+// Начальный набор слайдов (первый бренд или заглушки)
+const initialBrandId = manufacturers[0]?.id;
+const initialSlides =
+  brandData[initialBrandId]?.length > 0
+    ? brandData[initialBrandId]
+    : [
+        "/images/carousel/Rectangle 153.png",
+        "/images/carousel/Rectangle 154.png",
+        "/images/carousel/Rectangle 155.png",
+      ];
 ---
 
 <section
@@ -109,14 +130,14 @@ const slides = [
 
     <!-- Слайдер -->
     <div class="reasons__carousel swiper-reasons">
-      <div class="swiper-wrapper">
+      <div class="swiper-wrapper" id="swiperWrapper">
         {
-          slides.map((slide) => (
+          initialSlides.map((img) => (
             <div class="swiper-slide">
               <div
                 class={variant === "manufacturers" ? "slide-card-manuf" : ""}
               >
-                <img src={slide.image} alt={slide.alt} class="reasons__img" />
+                <img src={img} alt="Проект" class="reasons__img" />
               </div>
             </div>
           ))
@@ -162,6 +183,10 @@ const slides = [
       )
     }
   </div>
+
+  <script is:inline define:vars={{ brandData }}>
+    window.BRAND_DATA = brandData;
+  </script>
 </section>
 
 <style lang="scss">
@@ -171,9 +196,29 @@ const slides = [
     overflow: hidden;
 
     &__container {
-      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 0 var(--space-4);
+      position: relative;
+    }
+
+    &__carousel {
+      width: 100%;
+      position: relative;
+      // overflow: hidden; // We need visible slides on the right but fade out
+
+      &--fog::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: -10px;
+        width: 300px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, white 80%);
+        pointer-events: none;
+        z-index: 10;
+        @media (max-width: 1023px) {
+          width: 100px;
+        }
+      }
     }
 
     &__header {
@@ -258,9 +303,13 @@ const slides = [
       }
 
       .slide-card-manuf {
+        width: 384px;
         aspect-ratio: 1/1;
         border-radius: 24px;
         overflow: hidden;
+        @media (max-width: 767px) {
+          width: 100%;
+        }
         .reasons__img {
           width: 100%;
           height: 100%;
@@ -291,15 +340,6 @@ const slides = [
         &:hover {
           transform: scale(1.02);
         }
-      }
-    }
-
-    &__carousel {
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-      @media (min-width: 768px) {
-        overflow: visible;
       }
     }
 
@@ -368,8 +408,18 @@ const slides = [
   import "swiper/css/navigation";
   import "swiper/css/pagination";
 
+  let swiper: any = null;
+
   function initReasonsSlider() {
-    new Swiper(".swiper-reasons", {
+    const swiperEl = document.querySelector(".swiper-reasons") as HTMLElement;
+    if (!swiperEl) return;
+
+    // Add fog class if manufacturers variant
+    if (swiperEl.closest(".reasons--manufacturers")) {
+      swiperEl.classList.add("reasons__carousel--fog");
+    }
+
+    swiper = new Swiper(".swiper-reasons", {
       modules: [Navigation, Pagination, Autoplay],
       slidesPerView: 1,
       spaceBetween: 24,
@@ -400,10 +450,46 @@ const slides = [
     const tabs = document.querySelectorAll(".brand-tab");
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
+        const brandId = tab.getAttribute("data-brand");
+        if (!brandId) return;
+
         tabs.forEach((t) => t.classList.remove("active"));
         tab.classList.add("active");
+
+        updateSlides(brandId);
       });
     });
+  }
+
+  function updateSlides(brandId: string) {
+    const data = (window as any).BRAND_DATA || {};
+    const images = data[brandId] || [];
+
+    // Fallback if no images
+    const finalImages =
+      images.length > 0
+        ? images
+        : [
+            "/images/carousel/Rectangle 153.png",
+            "/images/carousel/Rectangle 154.png",
+            "/images/carousel/Rectangle 155.png",
+          ];
+
+    if (swiper) {
+      swiper.removeAllSlides();
+      const slides = finalImages.map(
+        (img: string) => `
+        <div class="swiper-slide">
+          <div class="slide-card-manuf">
+            <img src="${img}" alt="Проект" class="reasons__img" loading="lazy" />
+          </div>
+        </div>
+      `,
+      );
+      swiper.appendSlide(slides);
+      swiper.slideTo(0);
+      swiper.update();
+    }
   }
 
   initReasonsSlider();

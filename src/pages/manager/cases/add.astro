@@ -24,8 +24,8 @@ if (isEdit) {
   if (!project) return Astro.redirect("/manager/cases");
 }
 
-const types = db.prepare("SELECT * FROM types").all();
-const manufacturers = db.prepare("SELECT * FROM manufacturers").all();
+const types = db.prepare("SELECT * FROM types ORDER BY sort_order ASC").all();
+const manufacturers = db.prepare("SELECT * FROM manufacturers ORDER BY sort_order ASC").all();
 const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?").all(id) : [];
 ---
 
@@ -216,14 +216,19 @@ const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?
   mainFileInput?.addEventListener('change', async () => {
     if (mainFileInput.files?.[0]) {
       const base64 = await resizeImage(mainFileInput.files[0]);
-      const path = await uploadFile(base64, mainFileInput.files[0].name);
-      const preview = mainUploadTrigger?.querySelector('.upload-area__preview') as HTMLImageElement || document.createElement('img');
-      preview.className = 'upload-area__preview';
-      preview.src = path;
-      if (!mainUploadTrigger?.querySelector('.upload-area__preview')) {
+      
+      // СРАЗУ показываем превью из base64
+      let preview = mainUploadTrigger?.querySelector('.upload-area__preview') as HTMLImageElement;
+      if (!preview) {
         mainUploadTrigger?.querySelector('.upload-area__placeholder')?.remove();
+        preview = document.createElement('img');
+        preview.className = 'upload-area__preview';
         mainUploadTrigger?.appendChild(preview);
       }
+      preview.src = base64;
+
+      // Спокойно загружаем на сервер
+      const path = await uploadFile(base64, mainFileInput.files[0].name);
       (document.getElementById('mainImagePath') as HTMLInputElement).value = path;
     }
   });
@@ -238,11 +243,16 @@ const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?
     if (galleryFileInput.files) {
       for (const file of Array.from(galleryFileInput.files)) {
         const base64 = await resizeImage(file);
-        const path = await uploadFile(base64, file.name);
+        
+        // Показываем превью заглушку
         const div = document.createElement('div');
         div.className = 'gallery-item';
-        div.innerHTML = `<img src="${path}" /><button type="button" class="btn-remove">×</button><input type="hidden" name="gallery[]" value="${path}" />`;
+        div.innerHTML = `<img src="${base64}" style="opacity: 0.5" /><button type="button" class="btn-remove">×</button>`;
         galleryGrid?.insertBefore(div, galleryAdd);
+
+        // Загружаем
+        const path = await uploadFile(base64, file.name);
+        div.innerHTML = `<img src="${base64}" /><button type="button" class="btn-remove">×</button><input type="hidden" name="gallery[]" value="${path}" />`;
         div.querySelector('.btn-remove')?.addEventListener('click', () => div.remove());
       }
     }

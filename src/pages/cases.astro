@@ -19,8 +19,8 @@ const offset = (currentPage - 1) * pageSize;
 const typeId = Astro.url.searchParams.get("type");
 const manufacturerId = Astro.url.searchParams.get("manufacturer");
 
-const types = db.prepare('SELECT * FROM types').all();
-const manufacturers = db.prepare('SELECT * FROM manufacturers').all();
+const types = db.prepare('SELECT * FROM types ORDER BY sort_order ASC').all();
+const manufacturers = db.prepare('SELECT * FROM manufacturers ORDER BY sort_order ASC').all();
 
 // Формируем базовое условие
 let whereClause = "WHERE 1=1";
