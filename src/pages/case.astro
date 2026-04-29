@@ -17,10 +17,10 @@ if (!slug) {
 const project = db
   .prepare(
     `
-  SELECT c.*, t.name as type_label, m.name as manufacturer_label 
+  SELECT c.*, t.name as type_label, 
+  (SELECT GROUP_CONCAT(m.name) FROM case_manufacturers cm JOIN manufacturers m ON cm.manufacturer_id = m.id WHERE cm.case_id = c.id) as manufacturer_labels
   FROM cases c
   LEFT JOIN types t ON c.type_id = t.id
-  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
   WHERE c.slug = ?
 `,
   )
@@ -57,7 +57,9 @@ try {
         <p class="case-hero__subtitle">{project.subtitle}</p>
         <div class="case-hero__tags">
           <span class="tag">{project.type_label}</span>
-          <span class="tag">{project.manufacturer_label}</span>
+          {project.manufacturer_labels && project.manufacturer_labels.split(',').map(label => (
+            <span class="tag">{label}</span>
+          ))}
         </div>
 
         <div class="case-gallery">

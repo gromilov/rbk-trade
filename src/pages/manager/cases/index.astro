@@ -4,10 +4,10 @@ import ManagerLayout from "../../../layouts/ManagerLayout.astro";
 import db from "../../../lib/db";
 
 const projects = db.prepare(`
-  SELECT c.*, t.name as type_name, m.name as manufacturer_name 
+  SELECT c.*, t.name as type_name, 
+  (SELECT GROUP_CONCAT(m.name) FROM case_manufacturers cm JOIN manufacturers m ON cm.manufacturer_id = m.id WHERE cm.case_id = c.id) as manufacturer_names
   FROM cases c
   LEFT JOIN types t ON c.type_id = t.id
-  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
   ORDER BY c.created_at DESC
 `).all();
 ---
@@ -41,7 +41,11 @@ const projects = db.prepare(`
             <h4 class="project-item__title">{item.title}</h4>
             <div class="project-item__tags">
               <span class="tag tag--light">{item.type_name || 'Без типа'}</span>
-              <span class="tag tag--orange">{item.manufacturer_name || 'Без бренда'}</span>
+              {item.manufacturer_names ? item.manufacturer_names.split(',').map((name: string) => (
+                <span class="tag tag--orange">{name}</span>
+              )) : (
+                <span class="tag tag--orange">Без бренда</span>
+              )}
             </div>
           </div>
           <div class="project-item__actions">

@@ -19,9 +19,11 @@ export const POST = async ({ request }) => {
 
     const { 
       id, title, slug, subtitle, main_image, 
-      type_id, manufacturer_id, tasks, gallery = [],
+      type_id, manufacturer_ids = [], tasks, gallery = [],
       result_text, review_text, review_author 
     } = data;
+
+    const manufacturer_id = manufacturer_ids[0] || null;
 
     const tasksJson = JSON.stringify(tasks || []);
 
@@ -49,6 +51,13 @@ export const POST = async ({ request }) => {
           insertImg.run(id, img);
       }
 
+      // Синхронизация производителей
+      db.prepare('DELETE FROM case_manufacturers WHERE case_id = ?').run(id);
+      const insertMan = db.prepare('INSERT INTO case_manufacturers (case_id, manufacturer_id) VALUES (?, ?)');
+      for (const mid of manufacturer_ids) {
+          insertMan.run(id, mid);
+      }
+
     } else {
       // Создание
       const stmt = db.prepare(`
@@ -69,6 +78,12 @@ export const POST = async ({ request }) => {
       const insertImg = db.prepare('INSERT INTO case_images (case_id, image_path) VALUES (?, ?)');
       for (const img of gallery) {
           insertImg.run(newId, img);
+      }
+
+      // Вставка производителей для нового
+      const insertMan = db.prepare('INSERT INTO case_manufacturers (case_id, manufacturer_id) VALUES (?, ?)');
+      for (const mid of manufacturer_ids) {
+          insertMan.run(newId, mid);
       }
     }
 

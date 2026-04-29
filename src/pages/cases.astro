@@ -30,7 +30,7 @@ if (typeId) {
   params.push(typeId);
 }
 if (manufacturerId) {
-  whereClause += " AND c.manufacturer_id = ?";
+  whereClause += " AND c.id IN (SELECT case_id FROM case_manufacturers WHERE manufacturer_id = ?)";
   params.push(manufacturerId);
 }
 
@@ -41,10 +41,10 @@ const totalPages = Math.ceil(totalCount / pageSize);
 
 // Получаем проекты для текущей страницы
 let query = `
-  SELECT c.*, t.name as type_label, m.name as manufacturer_label 
+  SELECT c.*, t.name as type_label, 
+  (SELECT GROUP_CONCAT(m.name) FROM case_manufacturers cm JOIN manufacturers m ON cm.manufacturer_id = m.id WHERE cm.case_id = c.id) as manufacturer_labels
   FROM cases c
   LEFT JOIN types t ON c.type_id = t.id
-  LEFT JOIN manufacturers m ON c.manufacturer_id = m.id
   ${whereClause}
   ORDER BY c.created_at DESC
   LIMIT ? OFFSET ?
@@ -120,7 +120,7 @@ function getPaginationUrl(page) {
                 image={project.main_image}
                 link={`/case?slug=${project.slug}`}
                 type={project.type_label}
-                tags={[project.manufacturer_label]}
+                tags={project.manufacturer_labels ? project.manufacturer_labels.split(',') : []}
               />
             ))}
           </div>

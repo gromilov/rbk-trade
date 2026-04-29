@@ -129,11 +129,11 @@ const initialSlides =
     }
 
     <!-- Слайдер -->
-    <div class="reasons__carousel swiper-reasons">
-      <div class="swiper-wrapper" id="swiperWrapper">
+    <div class="reasons__slider-container">
+      <div class="reasons__slider" id="reasonsSlider">
         {
           initialSlides.map((img) => (
-            <div class="swiper-slide">
+            <div class="reasons__slide">
               <div
                 class={variant === "manufacturers" ? "slide-card-manuf" : ""}
               >
@@ -157,7 +157,9 @@ const initialSlides =
             <path d="M15 19l-7-7 7-7"></path>
           </svg>
         </button>
-        <div class="reasons__pagination"></div>
+        <div class="reasons__progress-container">
+          <div class="reasons__progress-bar"></div>
+        </div>
         <button class="reasons__nav-btn reasons__nav-btn--next">
           <svg
             width="24"
@@ -200,42 +202,83 @@ const initialSlides =
       position: relative;
       max-width: var(--container-max);
       padding: 0 var(--space-4);
-      overflow: hidden;
     }
 
-    &__carousel {
+    &__slider-container {
       width: 100%;
       position: relative;
-      // overflow: hidden; // We need visible slides on the right but fade out
 
-      &--fog::after {
+      &::before {
         content: "";
         position: absolute;
         top: 0;
-        right: -20px;
+        left: -1px;
         width: 100px;
         height: 100%;
-        background: linear-gradient(to right, transparent, white 80%);
+        background: linear-gradient(to right, var(--color-white), transparent);
+        z-index: 2;
         pointer-events: none;
-        z-index: 10;
         @media (max-width: 1023px) {
-          width: 50px;
+          width: 40px;
         }
       }
 
-      &--fog::before {
+      &::after {
         content: "";
         position: absolute;
         top: 0;
-        left: -20px;
+        right: -1px;
         width: 100px;
         height: 100%;
-        background: linear-gradient(to left, transparent, white 80%);
+        background: linear-gradient(to left, var(--color-white), transparent);
+        z-index: 2;
         pointer-events: none;
-        z-index: 10;
         @media (max-width: 1023px) {
-          width: 50px;
+          width: 40px;
         }
+      }
+    }
+
+    &__slider {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-behavior: smooth;
+      padding-bottom: 10px;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      
+      :global(.reasons__slide) {
+        flex: 0 0 384px;
+        scroll-snap-align: start;
+        @media (max-width: 767px) {
+          flex: 0 0 100%;
+        }
+      }
+
+      :global(.slide-card-manuf) {
+        width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 24px;
+        overflow: hidden;
+        
+        :global(.reasons__img) {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      :global(.reasons__img) {
+        width: 100%;
+        height: 384px;
+        object-fit: cover;
+        border-radius: var(--radius-2xl);
       }
     }
 
@@ -320,30 +363,6 @@ const initialSlides =
         }
       }
 
-      .slide-card-manuf {
-        width: 384px;
-        aspect-ratio: 1/1;
-        border-radius: 24px;
-        overflow: hidden;
-        @media (max-width: 767px) {
-          width: 100%;
-        }
-        .reasons__img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-
-      .reasons__pagination {
-        max-width: 400px;
-        height: 2px !important;
-        background: rgba(17, 17, 17, 0.08);
-        :global(.swiper-pagination-progressbar-fill) {
-          background: #de6d20 !important;
-        }
-      }
-
       .reasons__cta {
         background: #111111;
         color: #ffffff;
@@ -359,13 +378,6 @@ const initialSlides =
           transform: scale(1.02);
         }
       }
-    }
-
-    &__img {
-      width: 384px;
-      height: 384px;
-      object-fit: cover;
-      border-radius: var(--radius-2xl);
     }
 
     &__controls {
@@ -394,15 +406,22 @@ const initialSlides =
       }
     }
 
-    &__pagination {
-      width: 100% !important;
+    &__progress-container {
+      width: 100%;
       max-width: 400px;
-      height: 2px !important;
+      height: 2px;
       background: #e5e7eb;
-      position: relative !important;
-      :global(.swiper-pagination-progressbar-fill) {
-        background: var(--color-primary) !important;
-      }
+      position: relative;
+    }
+
+    &__progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: var(--color-primary);
+      transition: width 0.2s ease;
     }
 
     &__footer {
@@ -410,76 +429,75 @@ const initialSlides =
       justify-content: center;
     }
   }
-
-  .swiper-slide {
-    width: auto !important;
-    @media (max-width: 767px) {
-      width: 100% !important;
-    }
-  }
 </style>
 
 <script>
-  import Swiper from "swiper";
-  import { Navigation, Pagination, Autoplay } from "swiper/modules";
-  import "swiper/css";
-  import "swiper/css/navigation";
-  import "swiper/css/pagination";
+  function initReasonsSections() {
+    const reasonsSections = document.querySelectorAll(".reasons");
+    
+    reasonsSections.forEach((section: any) => {
+      const slider = section.querySelector(".reasons__slider") as HTMLElement;
+      const progressBar = section.querySelector(".reasons__progress-bar") as HTMLElement;
+      const prevBtn = section.querySelector(".reasons__nav-btn--prev");
+      const nextBtn = section.querySelector(".reasons__nav-btn--next");
+      
+      if (!slider) return;
 
-  let swiper: any = null;
+      // Update progress bar
+      const updateProgress = () => {
+        if (!progressBar) return;
+        const scrollLeft = slider.scrollLeft;
+        const scrollWidth = slider.scrollWidth - slider.clientWidth;
+        const progress = scrollWidth > 0 ? (scrollLeft / scrollWidth) * 100 : 0;
+        progressBar.style.width = `${progress}%`;
+      };
 
-  function initReasonsSlider() {
-    const swiperEl = document.querySelector(".swiper-reasons") as HTMLElement;
-    if (!swiperEl) return;
+      slider.addEventListener("scroll", updateProgress);
+      window.addEventListener("resize", updateProgress);
+      updateProgress();
 
-    // Add fog class if manufacturers variant
-    // if (swiperEl.closest(".reasons--manufacturers")) {
-    swiperEl.classList.add("reasons__carousel--fog");
-    // }
+      // Navigation
+      if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+          const scrollAmount = slider.clientWidth > 800 ? 408 : slider.clientWidth;
+          slider.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        });
+      }
 
-    swiper = new Swiper(".swiper-reasons", {
-      modules: [Navigation, Pagination, Autoplay],
-      slidesPerView: 1,
-      spaceBetween: 24,
-      loop: false,
-      navigation: {
-        nextEl: ".reasons__nav-btn--next",
-        prevEl: ".reasons__nav-btn--prev",
-      },
-      pagination: {
-        el: ".reasons__pagination",
-        type: "progressbar",
-      },
-      breakpoints: {
-        768: { slidesPerView: "auto" },
-        1024: { slidesPerView: "auto" },
-      },
-    });
+      if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+          const scrollAmount = slider.clientWidth > 800 ? 408 : slider.clientWidth;
+          slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        });
+      }
 
-    const cta = document.querySelector(".reasons__cta");
-    if (cta) {
-      cta.addEventListener("click", () => {
-        const modalId = cta.getAttribute("data-modal");
-        const modal = modalId ? document.getElementById(modalId) : null;
-        if (modal) modal.classList.add("active");
+      // Tabs
+      const tabs = section.querySelectorAll(".brand-tab");
+      tabs.forEach((tab: HTMLElement) => {
+        tab.addEventListener("click", () => {
+          const brandId = tab.getAttribute("data-brand");
+          if (!brandId) return;
+
+          tabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+
+          updateSlides(slider, brandId);
+        });
       });
-    }
 
-    const tabs = document.querySelectorAll(".brand-tab");
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const brandId = tab.getAttribute("data-brand");
-        if (!brandId) return;
-
-        tabs.forEach((t) => t.classList.remove("active"));
-        tab.classList.add("active");
-
-        updateSlides(brandId);
-      });
+      // CTA
+      const cta = section.querySelector(".reasons__cta");
+      if (cta) {
+        cta.addEventListener("click", () => {
+          const modalId = cta.getAttribute("data-modal");
+          const modal = modalId ? document.getElementById(modalId) : null;
+          if (modal) modal.classList.add("active");
+        });
+      }
     });
   }
 
-  function updateSlides(brandId: string) {
+  function updateSlides(slider: HTMLElement, brandId: string) {
     const data = (window as any).BRAND_DATA || {};
     const images = data[brandId] || [];
 
@@ -493,23 +511,23 @@ const initialSlides =
             "/images/carousel/Rectangle 155.png",
           ];
 
-    if (swiper) {
-      swiper.removeAllSlides();
-      const slides = finalImages.map(
-        (img: string) => `
-        <div class="swiper-slide">
-          <div class="slide-card-manuf">
-            <img src="${img}" alt="Проект" class="reasons__img" loading="lazy" />
-          </div>
+    const slidesHtml = finalImages.map(
+      (img: string) => `
+      <div class="reasons__slide">
+        <div class="slide-card-manuf">
+          <img src="${img}" alt="Проект" class="reasons__img" loading="lazy" />
         </div>
-      `,
-      );
-      swiper.appendSlide(slides);
-      swiper.slideTo(0);
-      swiper.update();
-    }
+      </div>
+    `,
+    ).join('');
+    
+    slider.innerHTML = slidesHtml;
+    slider.scrollLeft = 0;
   }
 
-  initReasonsSlider();
-  document.addEventListener("astro:after-swap", initReasonsSlider);
+  // Run on initial load
+  initReasonsSections();
+  
+  // Run on View Transitions navigation
+  document.addEventListener("astro:after-swap", initReasonsSections);
 </script>

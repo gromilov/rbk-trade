@@ -27,6 +27,10 @@ if (isEdit) {
 const types = db.prepare("SELECT * FROM types ORDER BY sort_order ASC").all();
 const manufacturers = db.prepare("SELECT * FROM manufacturers ORDER BY sort_order ASC").all();
 const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?").all(id) : [];
+
+const selectedManufacturers = isEdit 
+  ? db.prepare("SELECT manufacturer_id FROM case_manufacturers WHERE case_id = ?").all(id).map((m: any) => m.manufacturer_id)
+  : [];
 ---
 
 <ManagerLayout title={isEdit ? "Редактировать проект" : "Новый проект"}>
@@ -59,14 +63,22 @@ const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?
             ))}
           </select>
         </div>
-        <div class="form-group">
-          <label>Производитель</label>
-          <select name="manufacturer_id" required>
-            <option value="">Выберите бренд</option>
-            {manufacturers.map((m: any) => (
-              <option value={m.id} selected={project.manufacturer_id == m.id}>{m.name}</option>
-            ))}
-          </select>
+      </div>
+
+      <div class="form-group mt-6">
+        <label>Производители (можно выбрать несколько)</label>
+        <div class="manufacturers-grid">
+          {manufacturers.map((m: any) => (
+            <label class="checkbox-item">
+              <input 
+                type="checkbox" 
+                name="manufacturer_ids[]" 
+                value={m.id} 
+                checked={selectedManufacturers.includes(m.id)}
+              />
+              <span>{m.name}</span>
+            </label>
+          ))}
         </div>
       </div>
     </div>
@@ -321,7 +333,32 @@ const gallery = isEdit ? db.prepare("SELECT * FROM case_images WHERE case_id = ?
     gap: 16px;
 
     @media (min-width: 640px) {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .manufacturers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #eee;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+
+    input {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
     }
   }
 
