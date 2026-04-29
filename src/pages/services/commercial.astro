@@ -2,94 +2,379 @@
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import Hero from "../../components/Hero.astro";
-import Projects from "../../components/Projects.astro";
-import Reasons from "../../components/Reasons.astro";
-import Stores from "../../components/Stores.astro";
-import WorkProcess from "../../components/WorkProcess.astro";
+import Button from "../../components/UI/Button.astro";
 import Gallery from "../../components/Gallery.astro";
-import Carousel from "../../components/Carousel.astro";
-import Review from "../../components/Review.astro";
-import Designers from "../../components/Designers.astro";
+import Reasons from "../../components/Reasons.astro";
 import FAQ from "../../components/FAQ.astro";
 import Contact from "../../components/Contact.astro";
 import Footer from "../../components/Footer.astro";
 import Modal from "../../components/UI/Modal.astro";
 import Form from "../../components/Form.astro";
 
-//  Контент
-const itemsReview = [
+// Контент для преимуществ (Блок 2)
+const advantages = [
+  { 
+    title: "Прямые контракты с заводами", 
+    text: "Обеспечиваем лучшие цены без посредников и гарантированные сроки отгрузки.", 
+    icon: "/images/icons/projects/Group 1171277575.svg" 
+  },
+  { 
+    title: "Соответствие ГОСТ и СНиП", 
+    text: "Вся продукция сертифицирована и адаптирована под российские теплосети.", 
+    icon: "/images/icons/projects/Group 1171277576.svg" 
+  },
+  { 
+    title: "Складская программа в МО", 
+    text: "Большой запас популярных моделей в наличии на складе для быстрой комплектации.", 
+    icon: "/images/icons/projects/Group 1171277575 — копия.svg" 
+  },
+  { 
+    title: "Персональный менеджер 24/7", 
+    text: "Полное сопровождение сделки и оперативное решение любых вопросов на объекте.", 
+    icon: "/images/icons/projects/Group 1171277576-1.svg" 
+  }
+];
+
+// Контент для типов объектов (Блок 3)
+const solutions = [
   {
-    name: "Дмитрий В.",
-    position: "Технический директор БЦ 'Омега'",
-    text: "Оперативно подобрали мощные радиаторы для отопления офисных помещений. Сертификаты и закрывающие документы предоставили в тот же день. Монтаж выполнен строго в нерабочее время.",
-    image: "/images/Avatar.png",
+    title: "Для застройщиков",
+    desc: "Радиаторы для МОП и квартир в едином стиле.",
+    image: "/images/categories/commercial.png"
   },
   {
-    name: "Игорь Р.",
-    position: "Застройщик ЖК 'Сказка'",
-    text: "Заказывали оптовую партию радиаторов для нового ЖК. Работают быстро, отличные скидки за объем и гибкий график поставок. Надежные партнеры.",
-    image: "/images/Avatar.png",
+    title: "Для HoReCa",
+    desc: "Дизайнерские модели для ресторанов и гостиниц с высокой износостойкостью.",
+    image: "/images/categories/designers.png"
   },
+  {
+    title: "Для офисов",
+    desc: "Внутрипольные конвекторы для панорамного остекления БЦ.",
+    image: "/images/categories/residential.png"
+  }
+];
+
+// Технический сервис (Блок 4)
+const techServices = [
+  { title: "Помощь в подборе", desc: "Подбор оборудования и импортозамещение по вашим спецификациям." },
+  { title: "Расчет теплопотерь", desc: "Профессиональный теплотехнический расчет для эффективного отопления." },
+  { title: "BIM-модели", desc: "Предоставляем готовые семейства для проектирования в Revit и Archicad." }
 ];
 ---
 
-<Layout title="Коммерческая недвижимость | РБК Трейд">
+<Layout title="Комплексное оснащение коммерческих объектов | РБК Трейд">
   <div class="max-w-[100%] overflow-x-hidden relative">
     <Header />
+    
+    <!-- Блок 1: Hero -->
     <Hero
-      title="Тепловые решения<br>для коммерческой недвижимости"
-      text="Проектирование и поставка мощного отопительного оборудования для торговых центров, офисов и производств."
-      buttonText="ОСТАВИТЬ ЗАЯВКУ БИЗНЕСУ"
-      bgImage="/images/radiators/hero-main.png"
-    />
-    <Projects />
-    
-    <Reasons
-      variant="manufacturers"
-      title="Поставляем оборудование от проверенных заводов"
-    />
-    <Stores />
-    
-    <WorkProcess 
-      title="Работа с бизнес-объектами"
-      steps={[
-        { number: "01", text: "Анализ проектной документации и теплопотерь" },
-        { number: "02", text: "Подбор промышленных радиаторов по нормативам" },
-        { number: "03", text: "Согласование спецификаций и сметы" },
-        { number: "04", text: "Оптовая поставка и логистика на объект" },
-        { number: "05", text: "Монтаж, опрессовка и сдача технадзору" }
-      ]}
-      buttonText="ЗАПРОСИТЬ РАСЧЕТ ПРОЕКТА"
+      title="Комплексное оснащение коммерческих объектов дизайнерским отоплением"
+      text="Оптовые поставки радиаторов для ЖК, БЦ и отелей в Москве и по всей России. Работаем с НДС, соблюдаем сроки по договору."
+      buttonText="Получить спецпредложение для объекта"
+      bgImage="/images/core/overlay.png"
     />
 
-    <Gallery />
-    
-    <Carousel title="Отзывы партнеров">
-      {itemsReview.map((item) => (
-          <div class="swiper-slide">
-            <Review item={item} />
+    <!-- Блок 2: Преимущества -->
+    <section class="comm-advantages">
+      <div class="comm-advantages__container">
+        <div class="comm-advantages__grid">
+          <div class="comm-advantages__main">
+            {advantages.map(adv => (
+              <div class="comm-adv-card">
+                <div class="comm-adv-card__icon"><img src={adv.icon} alt="" /></div>
+                <div class="comm-adv-card__content">
+                  <h3 class="comm-adv-card__title">{adv.title}</h3>
+                  <p class="comm-adv-card__text">{adv.text}</p>
+                </div>
+              </div>
+            ))}
           </div>
-      ))}
-    </Carousel>
 
-    <Designers 
-      title="Почему бизнес выбирает нас"
-      subtitle="Прозрачные условия, работаем с НДС, предоставляем полный пакет закрывающих документов."
-      items={[
-        { text: "Оптовые скидки на оборудование", icon: "/images/icons/design/Group 1171277575.svg" },
-        { text: "Строгое соблюдение сроков поставки", icon: "/images/icons/design/Group 1171277576.svg" },
-        { text: "Полная техническая документация и сертификаты", icon: "/images/icons/design/Group 1171277576-1.svg" },
-        { text: "Гарантийное и постгарантийное обслуживание", icon: "/images/icons/design/Group-1171277576-2.svg" }
-      ]}
-      buttonText="ПОЛУЧИТЬ ПРАЙС"
-    />
+          <!-- Оранжевый блок -->
+          <div class="comm-advantages__featured">
+            <h3 class="comm-featured-title">Работаем с любыми бюджетами и подберем под каждый стиль</h3>
+            <ul class="comm-featured-list">
+              <li>Минимализм</li>
+              <li>Классика и Неоклассика</li>
+              <li>Лофт и сканди</li>
+              <li>Хайтек</li>
+            </ul>
+            <Button className="open-form" variant="dark">Обсудить проект</Button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок 3: Решения по типам объектов -->
+    <section class="comm-solutions">
+      <div class="comm-solutions__container">
+        <h2 class="comm-section-title">Решения по типам объектов</h2>
+        <div class="comm-solutions__grid">
+          {solutions.map(sol => (
+            <div class="comm-sol-card">
+              <div class="comm-sol-card__bg" style={`background-image: url(${sol.image})`}></div>
+              <div class="comm-sol-card__content">
+                <h3 class="comm-sol-card__title">{sol.title}</h3>
+                <p class="comm-sol-card__desc">{sol.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок 4: Технический сервис -->
+    <section class="comm-tech">
+      <div class="comm-tech__container">
+        <h2 class="comm-section-title">Технический сервис (B2B поддержка)</h2>
+        <div class="comm-tech__grid">
+          {techServices.map(service => (
+            <div class="comm-tech-card">
+              <h3 class="comm-tech-card__title">{service.title}</h3>
+              <p class="comm-tech-card__desc">{service.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок 5: SEO-текст -->
+    <section class="comm-seo">
+      <div class="comm-seo__container">
+        <div class="comm-seo__content">
+          <h2>Профессиональная комплектация</h2>
+          <p>
+            Компания «РБК Трейд» осуществляет поставки отопительного оборудования на объекты коммерческой недвижимости в Москве, Московской области и других регионах РФ. Мы предлагаем конкурентные цены на оптовые партии и обеспечиваем полное сопровождение проекта — от согласования спецификации до логистики на стройплощадки Химок, Одинцово и Красногорска. Наши решения адаптированы под российские инженерные сети.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Блок 6: Реализованные кейсы -->
+    <Gallery />
+    <Reasons variant="manufacturers" title="Нам доверяют застройщики" />
+
+    <!-- Блок 7: Экспертность в деталях -->
+    <section class="comm-expert">
+      <div class="comm-expert__container">
+        <div class="comm-expert__card">
+          <h2>Экспертность в деталях</h2>
+          <p>
+            Компания «РБК Трейд» осуществляет профессиональную комплектацию инженерными системами объектов коммерческой недвижимости в Москве, Московской области и других регионах РФ. Мы понимаем специфику крупного строительства, поэтому предлагаем не просто оборудование, а готовые решения для административных зданий, торговых площадей и гостиничных комплексов. Наши специалисты обеспечат переподбор оборудования под ваш бюджет без потери качества, гарантируя соответствие всем строительным нормам и ГОСТам. Благодаря прямому сотрудничеству с заводами, мы предлагаем конкурентные цены на оптовые поставки дизайнерских радиаторов для застройщиков и генподрядчиков.
+          </p>
+        </div>
+      </div>
+    </section>
 
     <FAQ />
-    <Contact title="Ответим на заявку в течение часа" />
+
+    <!-- SEO Футер мелким шрифтом -->
+    <div class="comm-seo-footer">
+      <div class="comm-seo-footer__container">
+        <p>Поставки отопительного оборудования для бизнеса в ЦФО. Официальный дилер ведущих заводов. Складская программа в г. Москва. Оперативная логистика на строительные площадки Химок, Одинцово, Красногорска и всей России.</p>
+      </div>
+    </div>
+
+    <Contact title="Пришлите спецификацию на расчет" />
 
     <Footer />
+
+    <!-- Модалка с формой загрузки файлов -->
     <Modal id="formModal">
-      <Form title="Заявка для бизнеса" buttonText="ОТПРАВИТЬ" />
+      <div class="comm-file-form">
+        <h2>Пришлите спецификацию на расчет</h2>
+        <p>Заполните данные и прикрепите файл проекта или сметы</p>
+        <form class="comm-file-form__fields">
+          <input type="text" placeholder="Ваше имя" required />
+          <input type="tel" placeholder="Номер телефона" required />
+          <div class="file-upload">
+            <input type="file" id="project-file" class="file-upload__input" />
+            <label for="project-file" class="file-upload__label">
+              <span>Прикрепить проект/смету</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            </label>
+          </div>
+          <Button type="submit" variant="primary">ОТПРАВИТЬ</Button>
+        </form>
+      </div>
     </Modal>
   </div>
 </Layout>
+
+<style lang="scss" is:global>
+  .comm-section-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--color-dark);
+  }
+
+  /* Блок 2: Преимущества */
+  .comm-advantages {
+    padding: 100px 0;
+    background: #fff;
+    &__container { max-width: var(--container-max); margin: 0 auto; padding: 0 20px; }
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      @media (min-width: 1024px) { grid-template-columns: 2fr 1fr; }
+    }
+    &__main {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      @media (min-width: 640px) { grid-template-columns: 1fr 1fr; }
+    }
+    &__featured {
+      background: #DE6D20;
+      padding: 40px;
+      border-radius: 24px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      .comm-featured-title { font-size: 24px; font-weight: 700; margin-bottom: 30px; line-height: 1.2; }
+      .comm-featured-list {
+        flex: 1;
+        margin-bottom: 30px;
+        li {
+          padding: 12px 0;
+          border-bottom: 1px solid rgba(255,255,255,0.2);
+          font-weight: 500;
+          &:last-child { border: none; }
+        }
+      }
+    }
+  }
+
+  .comm-adv-card {
+    background: #f6f6f6;
+    padding: 32px;
+    border-radius: 24px;
+    &__icon { width: 48px; height: 48px; margin-bottom: 20px; img { width: 100%; height: 100%; object-fit: contain; } }
+    &__title { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+    &__text { font-size: 14px; opacity: 0.7; line-height: 1.5; }
+  }
+
+  /* Блок 3: Решения */
+  .comm-solutions {
+    padding: 100px 0;
+    background: #f9f9f9;
+    &__container { max-width: var(--container-max); margin: 0 auto; padding: 0 20px; }
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      @media (min-width: 768px) { grid-template-columns: repeat(3, 1fr); }
+    }
+  }
+
+  .comm-sol-card {
+    position: relative;
+    height: 400px;
+    border-radius: 24px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 32px;
+    &__bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+    &:hover &__bg { transform: scale(1.05); }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+    &__content { position: relative; z-index: 2; color: #fff; }
+    &__title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    &__desc { font-size: 14px; opacity: 0.9; }
+  }
+
+  /* Блок 4: Техсервис */
+  .comm-tech {
+    padding: 100px 0;
+    &__container { max-width: var(--container-max); margin: 0 auto; padding: 0 20px; }
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      @media (min-width: 768px) { grid-template-columns: repeat(3, 1fr); }
+    }
+    &-card {
+      border: 1px solid #eee;
+      padding: 40px;
+      border-radius: 24px;
+      text-align: center;
+      &__title { font-size: 20px; font-weight: 700; margin-bottom: 16px; color: #DE6D20; }
+      &__desc { font-size: 16px; opacity: 0.7; line-height: 1.6; }
+    }
+  }
+
+  /* Блок 5: SEO */
+  .comm-seo {
+    padding: 80px 0;
+    background: var(--color-dark);
+    color: #fff;
+    &__container { max-width: 800px; margin: 0 auto; padding: 0 20px; text-align: center; }
+    h2 { font-size: 32px; font-weight: 700; margin-bottom: 24px; }
+    p { font-size: 18px; line-height: 1.6; opacity: 0.8; }
+  }
+
+  /* Блок 7: Экспертность */
+  .comm-expert {
+    padding: 100px 0;
+    &__container { max-width: var(--container-max); margin: 0 auto; padding: 0 20px; }
+    &__card {
+      background: #f6f6f6;
+      padding: 60px;
+      border-radius: 32px;
+      h2 { font-size: 32px; font-weight: 700; margin-bottom: 30px; }
+      p { font-size: 18px; line-height: 1.7; opacity: 0.8; }
+      @media (max-width: 768px) { padding: 32px; h2 { font-size: 24px; } p { font-size: 16px; } }
+    }
+  }
+
+  /* SEO Footer */
+  .comm-seo-footer {
+    padding: 40px 0;
+    border-top: 1px solid #eee;
+    &__container { max-width: var(--container-max); margin: 0 auto; padding: 0 20px; }
+    p { font-size: 12px; color: #999; line-height: 1.5; text-align: center; max-width: 900px; margin: 0 auto; }
+  }
+
+  /* Форма с файлом */
+  .comm-file-form {
+    padding: 40px;
+    background: var(--color-dark);
+    color: #fff;
+    border-radius: 24px;
+    h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    p { opacity: 0.6; margin-bottom: 32px; }
+    &__fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      input {
+        width: 100%;
+        padding: 16px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        color: #fff;
+      }
+    }
+  }
+
+  .file-upload {
+    position: relative;
+    &__input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+    &__label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: rgba(255,255,255,0.1);
+      border: 2px dashed rgba(255,255,255,0.2);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      &:hover { background: rgba(255,255,255,0.15); border-color: #DE6D20; }
+    }
+  }
+</style>
