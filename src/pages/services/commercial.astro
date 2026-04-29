@@ -349,12 +349,30 @@ const techServices = [
 
   /* Блок 5: SEO */
   .comm-seo {
-    padding: 100px 0;
-    background: #111;
-    color: #fff;
-    &__container { max-width: 900px; margin: 0 auto; padding: 0 20px; text-align: center; }
-    h2 { font-size: 40px; font-weight: 700; margin-bottom: 32px; line-height: 1.2; }
-    p { font-size: 20px; line-height: 1.7; opacity: 0.8; }
+    padding: 120px 0;
+    background: #fff;
+    color: var(--color-dark);
+    &__container { max-width: 1000px; margin: 0 auto; padding: 0 20px; text-align: center; }
+    h2 { 
+      font-size: clamp(32px, 4vw, 48px); 
+      font-weight: 700; 
+      margin-bottom: 32px; 
+      line-height: 1.1; 
+      color: var(--color-dark);
+    }
+    p { 
+      font-size: 20px; 
+      line-height: 1.8; 
+      opacity: 0.8; 
+      color: #444;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      padding: 60px 0;
+      h2 { font-size: 28px; }
+      p { font-size: 16px; }
+    }
   }
 
   /* Блок 7: Экспертность */
