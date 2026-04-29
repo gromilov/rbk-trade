@@ -1,4 +1,6 @@
 ---
+import Button from "./UI/Button.astro";
+
 const categories = [
   {
     title: "Дизайнерам интерьеров",
@@ -23,30 +25,29 @@ const categories = [
 
 <section class="category-banners">
   <div class="category-banners__container">
-    <div class="category-banners__grid">
+    <div class="category-banners__list">
       {categories.map((cat) => (
-        <a href={cat.link} class="category-card">
-          <div class="category-card__bg" style={`background-image: url(${cat.image})`}>
-            <div class="category-card__overlay"></div>
+        <div class="category-banner">
+          <div class="category-banner__bg" style={`background-image: url(${cat.image})`}>
+            <div class="category-banner__overlay"></div>
           </div>
-          <div class="category-card__content">
-            <h3 class="category-card__title">{cat.title}</h3>
-            <p class="category-card__text">{cat.text}</p>
-            <div class="category-card__arrow">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+          <div class="category-banner__content">
+            <h3 class="category-banner__title">{cat.title}</h3>
+            <p class="category-banner__text">{cat.text}</p>
+            <div class="category-banner__footer">
+              <Button href={cat.link} variant="white" className="category-banner__btn">Подробнее</Button>
             </div>
           </div>
-        </a>
+        </div>
       ))}
     </div>
   </div>
 </section>
 
-<style lang="scss">
+<style lang="scss" is:global>
   .category-banners {
     padding: var(--space-10) 0;
+    background-color: #fff;
     
     &__container {
       max-width: var(--container-max);
@@ -54,35 +55,33 @@ const categories = [
       padding: 0 var(--space-4);
     }
     
-    &__grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-      
-      @media (min-width: 1024px) {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    &__list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
     }
   }
 
-  .category-card {
+  .category-banner {
     position: relative;
-    height: 400px;
-    border-radius: 24px;
+    min-height: 480px;
+    border-radius: 32px;
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
-    padding: 32px;
-    text-decoration: none;
+    align-items: center;
+    padding: 60px;
     transition: transform 0.3s ease;
-    background-color: #f6f6f6; // Заглушка фона
 
-    &:hover {
-      transform: translateY(-8px);
+    @media (max-width: 768px) {
+      padding: 40px 24px;
+      min-height: 400px;
+      align-items: flex-end;
     }
 
-    &:hover &__arrow {
-      transform: translateX(8px);
+    &:hover {
+      .category-banner__bg {
+        transform: scale(1.02);
+      }
     }
 
     &__bg {
@@ -90,43 +89,54 @@ const categories = [
       inset: 0;
       background-size: cover;
       background-position: center;
+      transition: transform 0.8s ease;
     }
 
     &__overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(17, 17, 17, 0.8) 0%, rgba(17, 17, 17, 0) 60%);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
+
+      @media (max-width: 768px) {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
+      }
     }
 
     &__content {
       position: relative;
       z-index: 2;
       color: #fff;
+      max-width: 640px;
     }
 
     &__title {
-      font-size: 28px;
+      font-size: clamp(32px, 5vw, 48px);
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 24px;
+      line-height: 1.1;
+      color: #fff;
     }
 
     &__text {
-      font-size: 16px;
-      opacity: 0.8;
-      margin-bottom: 24px;
-      line-height: 1.4;
+      font-size: 18px;
+      opacity: 0.9;
+      margin-bottom: 40px;
+      line-height: 1.5;
+      color: #fff;
+
+      @media (max-width: 768px) {
+        font-size: 16px;
+        margin-bottom: 32px;
+      }
     }
 
-    &__arrow {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
+    &__footer {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease;
+    }
+
+    &__btn {
+      min-width: 160px;
+      font-weight: 600;
     }
   }
 </style>
