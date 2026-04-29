@@ -31,7 +31,7 @@ export default defineConfig({
   integrations: [],
   build: {
     assets: 'assets',
-    format: 'preserve'
+    format: 'directory'
   },
 
   // Хук для форматирования HTML после сборки

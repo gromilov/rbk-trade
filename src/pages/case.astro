@@ -11,7 +11,7 @@ import db from "../lib/db";
 const slug = Astro.url.searchParams.get("slug");
 
 if (!slug) {
-  return Astro.redirect('/cases.html');
+  return Astro.redirect('/cases');
 }
 
 const project = db.prepare(`
@@ -23,7 +23,7 @@ const project = db.prepare(`
 `).get(slug);
 
 if (!project) {
-  return Astro.redirect('/cases.html');
+  return Astro.redirect('/cases');
 }
 
 // Получаем галерею

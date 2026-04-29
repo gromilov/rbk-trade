@@ -15,7 +15,7 @@ const projects = db.prepare(`
     
     <div class="gallery__grid">
       {projects.map((project, index) => (
-        <a href={`/case.html?slug=${project.slug}`} class={`gallery__item ${[1, 3, 5].includes(index) ? 'gallery__item--tall' : ''}`}>
+        <a href={`/case?slug=${project.slug}`} class={`gallery__item ${[1, 3, 5].includes(index) ? 'gallery__item--tall' : ''}`}>
           <img src={project.main_image} alt={project.title} />
           <div class="gallery__overlay">
             <h3 class="gallery__overlay-project">{project.title}</h3>
@@ -27,7 +27,7 @@ const projects = db.prepare(`
     </div>
     
     <div class="gallery__footer">
-        <a href="/cases.html" class="gallery__load-more">Все проекты</a>
+        <a href="/cases" class="gallery__load-more">Все проекты</a>
     </div>
   </div>
 </section>

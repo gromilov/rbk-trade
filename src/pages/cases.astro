@@ -80,9 +80,9 @@ function getPaginationUrl(page) {
               </svg>
             </button>
             <div class="filter-dropdown__content">
-              <a href={`/cases.html${manufacturerId ? '?manufacturer=' + manufacturerId : ''}`}>Все типы</a>
+              <a href={`/cases${manufacturerId ? '?manufacturer=' + manufacturerId : ''}`}>Все типы</a>
               {types.map(t => (
-                <a href={`/cases.html?type=${t.id}${manufacturerId ? '&manufacturer=' + manufacturerId : ''}`}>{t.name}</a>
+                <a href={`/cases?type=${t.id}${manufacturerId ? '&manufacturer=' + manufacturerId : ''}`}>{t.name}</a>
               ))}
             </div>
           </div>
@@ -95,15 +95,15 @@ function getPaginationUrl(page) {
               </svg>
             </button>
             <div class="filter-dropdown__content">
-              <a href={`/cases.html${typeId ? '?type=' + typeId : ''}`}>Все бренды</a>
+              <a href={`/cases${typeId ? '?type=' + typeId : ''}`}>Все бренды</a>
               {manufacturers.map(m => (
-                <a href={`/cases.html?manufacturer=${m.id}${typeId ? '&type=' + typeId : ''}`}>{m.name}</a>
+                <a href={`/cases?manufacturer=${m.id}${typeId ? '&type=' + typeId : ''}`}>{m.name}</a>
               ))}
             </div>
           </div>
           
           {(typeId || manufacturerId) && (
-              <a href="/cases.html" class="filter-clear">Сбросить всё ×</a>
+              <a href="/cases" class="filter-clear">Сбросить всё ×</a>
           )}
         </div>
       </div>
@@ -118,7 +118,7 @@ function getPaginationUrl(page) {
                 id={project.id}
                 title={project.title}
                 image={project.main_image}
-                link={`/case.html?slug=${project.slug}`}
+                link={`/case?slug=${project.slug}`}
                 type={project.type_label}
                 tags={[project.manufacturer_label]}
               />
