@@ -56,9 +56,21 @@ const solutions = [
 
 // Технический сервис (Блок 4)
 const techServices = [
-  { title: "Помощь в подборе", desc: "Подбор оборудования и импортозамещение по вашим спецификациям." },
-  { title: "Расчет теплопотерь", desc: "Профессиональный теплотехнический расчет для эффективного отопления." },
-  { title: "BIM-модели", desc: "Предоставляем готовые семейства для проектирования в Revit и Archicad." }
+  { 
+    title: "Помощь в подборе", 
+    desc: "Подбор оборудования и импортозамещение по вашим спецификациям.",
+    icon: "/images/icons/projects/Group 1171277633.svg"
+  },
+  { 
+    title: "Расчет теплопотерь", 
+    desc: "Профессиональный теплотехнический расчет для эффективного отопления.",
+    icon: "/images/icons/projects/Group 1171277634.svg"
+  },
+  { 
+    title: "BIM-модели", 
+    desc: "Предоставляем готовые семейства для проектирования в Revit и Archicad.",
+    icon: "/images/icons/projects/Group 1171277635.svg"
+  }
 ];
 ---
 
@@ -126,12 +138,18 @@ const techServices = [
     <!-- Блок 4: Технический сервис -->
     <section class="comm-tech">
       <div class="comm-tech__container">
-        <h2 class="comm-section-title">Технический сервис (B2B поддержка)</h2>
+        <h2 class="comm-section-title">
+          Технический сервис 
+          <span class="comm-section-title__note">B2B поддержка</span>
+        </h2>
         <div class="comm-tech__grid">
           {techServices.map(service => (
-            <div class="comm-tech-card">
-              <h3 class="comm-tech-card__title">{service.title}</h3>
-              <p class="comm-tech-card__desc">{service.desc}</p>
+            <div class="comm-adv-card">
+              <div class="comm-adv-card__icon"><img src={service.icon} alt="" /></div>
+              <div class="comm-adv-card__content">
+                <h3 class="comm-adv-card__title">{service.title}</h3>
+                <p class="comm-adv-card__text">{service.desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -209,6 +227,20 @@ const techServices = [
     margin-bottom: 60px;
     color: var(--color-dark);
     line-height: 1.1;
+
+    &__note {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #DE6D20;
+      background: rgba(222, 109, 32, 0.1);
+      padding: 6px 16px;
+      border-radius: 8px;
+      width: fit-content;
+      margin: 16px auto 0;
+    }
   }
 
   /* Блок 2: Преимущества */
@@ -328,22 +360,6 @@ const techServices = [
       grid-template-columns: 1fr;
       gap: 32px;
       @media (min-width: 768px) { grid-template-columns: repeat(3, 1fr); }
-    }
-    &-card {
-      background: #fff;
-      border: 1px solid #eee;
-      padding: 48px 32px;
-      border-radius: 32px;
-      text-align: center;
-      transition: all 0.3s ease;
-      
-      &:hover {
-        border-color: #DE6D20;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-      }
-
-      &__title { font-size: 22px; font-weight: 700; margin-bottom: 20px; color: #DE6D20; }
-      &__desc { font-size: 16px; color: #666; line-height: 1.6; }
     }
   }
 
