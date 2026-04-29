@@ -1,5 +1,5 @@
 ---
-import Button from './UI/Button.astro';
+import Button from "./UI/Button.astro";
 
 const {
   title = "Как мы работаем",
@@ -8,10 +8,10 @@ const {
     { number: "02", text: "Мы подбираем 2–3 варианта радиаторов под бюджет" },
     { number: "03", text: "Отправляем КП + 3D-модели + референсы" },
     { number: "04", text: "Передаём координаты нашей монтажной бригады" },
-    { number: "05", text: "После монтажа — фото для вашего портфолио" }
+    { number: "05", text: "После монтажа — фото для вашего портфолио" },
   ],
-  buttonText = "ОБСУДИТЬ ПРОЕКТ",
-  image = "/images/radiators/work-process-new.png"
+  buttonText = "Oбсудить проект",
+  image = "/images/radiators/work-process-new.png",
 } = Astro.props;
 ---
 
@@ -21,106 +21,108 @@ const {
       <div class="work-process__content">
         <h2 class="work-process__title" set:html={title} />
         <div class="work-process__list">
-          {steps.map(step => (
-            <div class="work-process__item">
-              <span class="work-process__number">{step.number}</span>
-              <p class="work-process__text" set:html={step.text} />
-            </div>
-          ))}
+          {
+            steps.map((step) => (
+              <div class="work-process__item">
+                <span class="work-process__number">{step.number}</span>
+                <p class="work-process__text" set:html={step.text} />
+              </div>
+            ))
+          }
         </div>
         <div class="work-process__actions">
-            <Button className="open-form" variant="dark">{buttonText}</Button>
+          <Button className="open-form" variant="dark">{buttonText}</Button>
         </div>
       </div>
 
       <div class="work-process__image-wrapper">
-         <img src={image} alt="Процесс работы" class="work-process__image" />
+        <img src={image} alt="Процесс работы" class="work-process__image" />
       </div>
     </div>
   </div>
 </section>
 
 <style lang="scss">
-.work-process {
-  padding: var(--space-20) 0;
-  background-color: var(--color-white);
+  .work-process {
+    padding: var(--space-20) 0;
+    background-color: var(--color-white);
 
-  &__container {
-    max-width: var(--container-max);
-    margin: 0 auto;
-    padding: 0 var(--space-4);
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-12);
-    align-items: center;
-
-    @media (min-width: 1024px) {
-      grid-template-columns: 1fr 1fr;
+    &__container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 var(--space-4);
     }
-  }
 
-  &__title {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-bold);
-    color: var(--color-dark);
-    margin-bottom: var(--space-8);
+    &__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-12);
+      align-items: center;
 
-    @media (min-width: 768px) {
-      font-size: var(--text-5xl);
+      @media (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+      }
     }
-  }
 
-  &__list {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--space-12);
-  }
+    &__title {
+      font-size: var(--text-4xl);
+      font-weight: var(--font-bold);
+      color: var(--color-dark);
+      margin-bottom: var(--space-8);
 
-  &__item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-10);
-    padding: var(--space-5) 0;
-    border-top: 1px solid rgba(17, 17, 17, 0.16);
-    
-    &:last-child {
+      @media (min-width: 768px) {
+        font-size: var(--text-5xl);
+      }
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: var(--space-12);
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-10);
+      padding: var(--space-5) 0;
+      border-top: 1px solid rgba(17, 17, 17, 0.16);
+
+      &:last-child {
         border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+      }
+    }
+
+    &__number {
+      font-size: var(--text-xl);
+      font-weight: var(--font-medium);
+      color: var(--color-dark);
+      opacity: 0.32;
+      min-width: 32px;
+    }
+
+    &__text {
+      font-size: var(--text-lg);
+      color: var(--color-dark);
+      line-height: 1.4;
+    }
+
+    &__actions {
+      margin-top: var(--space-4);
+    }
+
+    &__image-wrapper {
+      width: 100%;
+      border-radius: var(--radius-3xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+    }
+
+    &__image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
     }
   }
-
-  &__number {
-    font-size: var(--text-xl);
-    font-weight: var(--font-medium);
-    color: var(--color-dark);
-    opacity: 0.32;
-    min-width: 32px;
-  }
-
-  &__text {
-    font-size: var(--text-lg);
-    color: var(--color-dark);
-    line-height: 1.4;
-  }
-
-  &__actions {
-      margin-top: var(--space-4);
-  }
-
-  &__image-wrapper {
-    width: 100%;
-    border-radius: var(--radius-3xl);
-    overflow: hidden;
-    box-shadow: var(--shadow-xl);
-  }
-
-  &__image {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-  }
-}
 </style>

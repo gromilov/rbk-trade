@@ -1,52 +1,52 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Projects from '../components/Projects.astro';
-import Partners from '../components/Partners.astro';
-import Reasons from '../components/Reasons.astro';
-import Stores from '../components/Stores.astro';
-import WorkProcess from '../components/WorkProcess.astro';
-import Gallery from '../components/Gallery.astro';
-import Carousel from '../components/Carousel.astro';
-import Review from '../components/Review.astro';
-import Designers from '../components/Designers.astro';
-import FAQ from '../components/FAQ.astro';
-import Result from '../components/Result.astro';
-import Contact from '../components/Contact.astro';
-import Footer from '../components/Footer.astro';
-import Modal from '../components/UI/Modal.astro';
-import Form from '../components/Form.astro';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Projects from "../components/Projects.astro";
+import Partners from "../components/Partners.astro";
+import Reasons from "../components/Reasons.astro";
+import Stores from "../components/Stores.astro";
+import WorkProcess from "../components/WorkProcess.astro";
+import Gallery from "../components/Gallery.astro";
+import Carousel from "../components/Carousel.astro";
+import Review from "../components/Review.astro";
+import Designers from "../components/Designers.astro";
+import FAQ from "../components/FAQ.astro";
+import Result from "../components/Result.astro";
+import Contact from "../components/Contact.astro";
+import Footer from "../components/Footer.astro";
+import Modal from "../components/UI/Modal.astro";
+import Form from "../components/Form.astro";
 
-//  Контент 
+//  Контент
 
 const itemsReview = [
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 
   {
     name: "Максим С.",
     position: "Президент АО «АвтоВАЗ»",
     text: "Большой выбор бизайнерских радиаторов, различных форм и моделей👏🏻 планируйте заказ заранее, так как на заводе их будут изготавливать под ваши запросы примерно 2-3 недели 🤘🏻 поэтому стоит задуматься заранее мастер нам все объяснил, показал и рассказал, обязательно вернемся за покупкой",
-    image: "/images/Avatar.png"
+    image: "/images/Avatar.png",
   },
 ];
 ---
@@ -54,28 +54,34 @@ const itemsReview = [
 <Layout title="РБК Трейд | Дизайнерские радиаторы в Казани">
   <div class="max-w-[100%] overflow-x-hidden relative">
     <Header />
-    <Hero 
-      title='Дизайнерские радиаторы<br>для интерьеров любой сложности' 
-      text='Поставка и установка отопительного оборудования в Казани и по всему Татарстану'
-      buttonText='ПЕРЕЙТИ В КАТАЛОГ'
+    <Hero
+      title="Дизайнерские радиаторы<br>для интерьеров любой сложности"
+      text="Поставка и установка отопительного оборудования в Казани и по всему Татарстану"
+      buttonText="Получить техническую консультацию"
       bgImage="/images/radiators/hero-home.png"
     />
-    <Projects /> <!-- Почему дизайнеры доверяют нам -->
-    <Reasons 
+    <Projects />
+    <!-- Почему дизайнеры доверяют нам -->
+    <Reasons
       variant="manufacturers"
-      title="Работаем с лучшими производителями радиаторов" 
+      title="Работаем с лучшими производителями радиаторов"
     />
     <Stores />
-    <WorkProcess /> <!-- Как мы работаем -->
-    <Gallery /> <!-- Наши работы -->
+    <WorkProcess />
+    <!-- Как мы работаем -->
+    <Gallery />
+    <!-- Наши работы -->
     <Carousel title="Отзывы">
-      {itemsReview.map((item, index) => (
-        <div class="swiper-slide">
-          <Review item={item} />
-        </div>
-      ))}
+      {
+        itemsReview.map((item, index) => (
+          <div class="swiper-slide">
+            <Review item={item} />
+          </div>
+        ))
+      }
     </Carousel>
-    <Designers /> <!-- Дизайнерам интерьеров -->
+    <Designers />
+    <!-- Дизайнерам интерьеров -->
     <FAQ />
     <Contact title="Рассчитаем ваш проект за 1 день" />
 
@@ -92,4 +98,3 @@ const itemsReview = [
     </Form> -->
   </div>
 </Layout>
-

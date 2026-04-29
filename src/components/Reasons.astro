@@ -198,6 +198,9 @@ const initialSlides =
     &__container {
       margin: 0 auto;
       position: relative;
+      max-width: var(--container-max);
+      padding: 0 var(--space-4);
+      overflow: hidden;
     }
 
     &__carousel {
@@ -209,14 +212,29 @@ const initialSlides =
         content: "";
         position: absolute;
         top: 0;
-        right: -10px;
-        width: 300px;
+        right: -20px;
+        width: 100px;
         height: 100%;
         background: linear-gradient(to right, transparent, white 80%);
         pointer-events: none;
         z-index: 10;
         @media (max-width: 1023px) {
-          width: 100px;
+          width: 50px;
+        }
+      }
+
+      &--fog::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -20px;
+        width: 100px;
+        height: 100%;
+        background: linear-gradient(to left, transparent, white 80%);
+        pointer-events: none;
+        z-index: 10;
+        @media (max-width: 1023px) {
+          width: 50px;
         }
       }
     }
@@ -239,13 +257,13 @@ const initialSlides =
       font-weight: 700;
       color: var(--color-dark);
       line-height: 1.1;
-      max-width: 900px;
+      max-width: 950px;
     }
 
     &__list {
       display: flex;
       flex-direction: column;
-      gap: var(--space-6);
+      gap: var(--space-4);
     }
 
     &__item {
@@ -415,9 +433,9 @@ const initialSlides =
     if (!swiperEl) return;
 
     // Add fog class if manufacturers variant
-    if (swiperEl.closest(".reasons--manufacturers")) {
-      swiperEl.classList.add("reasons__carousel--fog");
-    }
+    // if (swiperEl.closest(".reasons--manufacturers")) {
+    swiperEl.classList.add("reasons__carousel--fog");
+    // }
 
     swiper = new Swiper(".swiper-reasons", {
       modules: [Navigation, Pagination, Autoplay],

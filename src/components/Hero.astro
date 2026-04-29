@@ -44,9 +44,9 @@ const {
         )
       }
 
-      <!-- <div class="hero__actions">
-        <Button className="open-form" variant="primary">{buttonText}</Button>
-      </div> -->
+      <div v-if="buttonText" class="hero__actions">
+        <Button className="open-form" variant="white">{buttonText}</Button>
+      </div>
     </div>
   </div>
 </section>

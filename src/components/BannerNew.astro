@@ -1,11 +1,11 @@
 ---
-const { 
-  title, 
-  bgColor = '#B33C2F', // По умолчанию красный из макета
-  bgImage, 
-  imagePosition = 'side', // 'side', 'center', 'full'
+const {
+  title,
+  bgColor = "#B33C2F", // По умолчанию красный из макета
+  bgImage,
+  imagePosition = "side", // 'side', 'center', 'full'
   showSocial = false,
-  className = ""
+  className = "",
 } = Astro.props;
 ---
 
@@ -14,26 +14,33 @@ const {
     <div class={`banner-new__inner banner-new__inner--${imagePosition}`}>
       <div class="banner-new__content">
         <h2 class="banner-new__title" set:html={title} />
-        
-        {showSocial && (
-          <div class="banner-new__socials">
-            <a href="https://t.me/your_handle" class="banner-new__social-btn">
-              <span>Написать в Telegram</span>
-              <img src="/images/banner-tg.svg" alt="TG" />
-            </a>
-            <a href="https://wa.me/your_number" class="banner-new__social-btn">
-              <span>Написать в Max</span>
-              <img src="/images/banner-max.svg" alt="Max" />
-            </a>
-          </div>
-        )}
+
+        {
+          showSocial && (
+            <div class="banner-new__socials">
+              <a href="https://t.me/your_handle" class="banner-new__social-btn">
+                <span>Написать в Telegram</span>
+                <img src="/images/banner-tg.svg" alt="TG" />
+              </a>
+              <a
+                href="https://wa.me/your_number"
+                class="banner-new__social-btn"
+              >
+                <span>Написать в Max</span>
+                <img src="/images/banner-max.svg" alt="Max" />
+              </a>
+            </div>
+          )
+        }
       </div>
 
-      {bgImage && (
-        <div class="banner-new__image-wrapper">
-          <img src={bgImage} alt="" class="banner-new__image" />
-        </div>
-      )}
+      {
+        bgImage && (
+          <div class="banner-new__image-wrapper">
+            <img src={bgImage} alt="" class="banner-new__image" />
+          </div>
+        )
+      }
     </div>
   </div>
 </section>
@@ -41,7 +48,7 @@ const {
 <style lang="scss">
   .banner-new {
     padding: var(--space-10) 0;
-    
+
     &__container {
       max-width: var(--container-max);
       margin: 0 auto;
@@ -67,8 +74,11 @@ const {
 
       &--side {
         justify-content: space-between;
-        .banner-new__content { max-width: 60%; z-index: 2; }
-        .banner-new__image-wrapper { 
+        .banner-new__content {
+          max-width: 62%;
+          z-index: 2;
+        }
+        .banner-new__image-wrapper {
           position: absolute;
           right: 0;
           bottom: 0;
@@ -89,7 +99,10 @@ const {
         flex-direction: column;
         justify-content: center;
         text-align: center;
-        .banner-new__content { max-width: 800px; z-index: 2; }
+        .banner-new__content {
+          max-width: 800px;
+          z-index: 2;
+        }
         .banner-new__image-wrapper {
           position: absolute;
           inset: 0;
@@ -99,24 +112,35 @@ const {
           z-index: 1;
           opacity: 0.3;
         }
-        .banner-new__image { width: 100%; height: 100%; object-fit: cover; }
+        .banner-new__image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
 
       &--full {
-        .banner-new__content { z-index: 2; position: relative; }
+        .banner-new__content {
+          z-index: 2;
+          position: relative;
+        }
         .banner-new__image-wrapper {
           position: absolute;
           inset: 0;
           z-index: 1;
         }
-        .banner-new__image { width: 100%; height: 100%; object-fit: cover; }
+        .banner-new__image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
     }
 
     &__title {
       font-size: clamp(32px, 5vw, 64px);
       font-weight: 700;
-      color: #FFFFFF;
+      color: #ffffff;
       line-height: 1.1;
       margin-bottom: 40px;
     }
@@ -134,7 +158,7 @@ const {
     &__social-btn {
       display: flex;
       align-items: center;
-      background: #FFFFFF;
+      background: #ffffff;
       border-radius: 100px;
       color: #111111;
       text-decoration: none;
