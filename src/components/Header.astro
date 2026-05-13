@@ -21,6 +21,7 @@ const menuItems = [
     ]
   },
   { id: "cases", title: "Наши работы", link: "/cases" },
+  { id: "about", title: "О нас", link: "/about" },
   { id: "stores", title: "Магазины", link: "/showrooms" },
 ];
 
@@ -30,9 +31,10 @@ const phones = [settings.phone_1, settings.phone_2].filter(Boolean);
 <header class={`header ${theme === 'dark' ? 'header--dark' : ''}`}>
   <div class="header__container">
     <!-- Логотип -->
+     
     <a href="/" class="header__logo">
       <img
-        src="/images/logo-rbk.png"
+        src={theme === 'dark' ? '/images/logo-rbk-dark.png' : '/images/logo-rbk.png'  }
         alt="RBK Trade"
         class="header__logo-img"
       />
@@ -217,7 +219,7 @@ const phones = [settings.phone_1, settings.phone_2].filter(Boolean);
         color: var(--color-dark);
       }
       .header__logo-img:not(.header__logo-img--mobile) {
-        filter: brightness(0);
+        // filter: brightness(0);
       }
       .header__icon-link {
         rect { stroke: var(--color-dark); }
@@ -416,7 +418,7 @@ const phones = [settings.phone_1, settings.phone_2].filter(Boolean);
       img {
         height: 32px;
         width: auto;
-        filter: brightness(0); // Logo should be black on white menu
+        // filter: brightness(0); // Logo should be black on white menu
       }
     }
 

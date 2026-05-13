@@ -60,7 +60,7 @@ const {
       background-color: var(--banner-bg);
       border-radius: var(--radius-3xl);
       overflow: hidden;
-      min-height: 480px;
+      min-height: 516px;
       display: flex;
       align-items: center;
       padding: 60px;
@@ -120,6 +120,9 @@ const {
       }
 
       &--full {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
         .banner-new__content {
           z-index: 2;
           position: relative;
@@ -134,15 +137,21 @@ const {
           height: 100%;
           object-fit: cover;
         }
+
+        .banner-new__socials {
+          justify-content: center;
+        }
       }
+
+      
     }
 
     &__title {
-      font-size: clamp(32px, 5vw, 64px);
+      font-size: clamp(32px, 5vw, 56px);
       font-weight: 700;
       color: #ffffff;
       line-height: 1.1;
-      margin-bottom: 40px;
+      margin-bottom: 64px;
     }
 
     &__socials {

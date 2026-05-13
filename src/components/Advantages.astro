@@ -1,4 +1,5 @@
 ---
+import Designers from "./Designers.astro";
 ---
 
 <section class="advantages">
@@ -38,16 +39,35 @@
         <p class="advantages__text">Любой выбор радиаторов в наличии</p>
       </div>
 
-      <!-- Преимущество 5 -->
-      <div class="advantages__item">
-        <div class="advantages__icon-wrapper">
-          <img src="/images/icons/advantages/Group 1171277575-4.svg" alt="Бригады" class="advantages__icon" />
-        </div>
-        <p class="advantages__text">Свои монтажные бригады, стаж более 10 лет монтажа отопительных систем любой сложности</p>
-      </div>
+      
     </div>
   </div>
 </section>
+
+<Designers 
+  title="Преимущества работы с нами"
+  subtitle = ""
+  items = {[
+    {
+      text: "Монтаж от 1 дня в Казани",
+      icon: "/images/icons/design/Group 1171277575.svg",
+    },
+    {
+      text: "Консультация по подбору",
+      icon: "/images/icons/design/Group 1171277576.svg",
+    },
+    {
+      text: "Гибкие условия оплаты",
+      icon: "/images/icons/design/Group 1171277576-1.svg",
+    },
+    {
+      text: "Большой выбор радиаторов в наличии",
+      icon: "/images/icons/design/Group-1171277576-2.svg",
+    },
+  ]}
+  buttonText = "Получить спецпредложение",
+
+/>
 
 <style lang="scss">
 .advantages {
@@ -99,7 +119,7 @@
     }
 
     @media (min-width: 1024px) {
-      width: calc(33.33% - var(--space-20));
+      width: calc(25% - var(--space-20));
       
       // Специфическое выравнивание для 4 и 5 элементов
       &:nth-child(4) {
